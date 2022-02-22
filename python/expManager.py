@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-NAME: mrExp.py
+NAME: expManager.py
 AUTHOR: Doug Hogan
 
 """

@@ -62,10 +62,10 @@ def CameraToCard():
   
   #count the groups
   i = 1
-  groupName = 'rfxDepthCard1' 
-  while nuke.toNode('rfxDepthCard%s' % i):
+  groupName = 'DepthCard1' 
+  while nuke.toNode('DepthCard%s' % i):
     i += 1
-    groupName = 'rfxDepthCard%s' % i     
+    groupName = 'DepthCard%s' % i     
 
   #store current frame
   curFrame = nuke.frame()
