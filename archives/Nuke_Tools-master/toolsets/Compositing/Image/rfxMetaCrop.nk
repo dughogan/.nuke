@@ -1,0 +1,12 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+push $cut_paste_input
+Crop {
+ box {{"\[python nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/dataWindow\\\")\\\[0\\]]" x220 356 x224 367} {"\[python (nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/displayWindow\\\")\\\[3\\])-(nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/dataWindow\\\")\\\[3\\])]"} {"\[python nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/dataWindow\\\")\\\[2\\]]" x220 587} {"\[python (nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/displayWindow\\\")\\\[3\\])-(nuke.toNode(nuke.thisNode().dependencies()\\\[0\\]\\\['name'\\].value()).metadata(\\\"exr/dataWindow\\\")\\\[1\\])]" x220 566}}
+ reformat true
+ crop false
+ name rfxMetaCrop
+ selected true
+ xpos -40
+ ypos -194
+}

@@ -1,0 +1,220 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1920" h="1165" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <splitter orientation="2">
+                <split size="71"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar_Flipbook Tools.1">
+                    <page id="Toolbar_Flipbook Tools.1"/>
+                </dock>
+                <split size="1047"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+            </splitter>
+            <split size="1876" stretch="1"/>
+            <splitter orientation="2">
+                <split size="72"/>
+                <dock id="" activePageId="Toolbar_Main Tools.1">
+                    <page id="Toolbar_Main Tools.1"/>
+                    <page id="Toolbar_Lighting Toolbar.1"/>
+                </dock>
+                <split size="1046"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="Pixel Analyzer.1"/>
+                    <page id="uk.co.thefoundry.waveformscope.1"/>
+                    <page id="uk.co.thefoundry.histogram.1"/>
+                    <page id="uk.co.thefoundry.vectorscope.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+    <window x="1920" y="0" w="1617" h="1193" screen="1">
+        <splitter orientation="2">
+            <split size="1165"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="uk.co.thefoundry.scripteditor.1"/>
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /master_code/global/nuke/toolsets/10.0v3/ToolSets/Compositing/Paint/Project_and_Stick.nk
+ format "1920 1038 0 0 1920 1038 1 UGLY_comp"
+ proxy_type scale
+ proxy_format "1920 1038 0 0 1920 1038 1 UGLY_comp"
+ colorManagement Nuke
+ defaultViewerLUT "OCIO LUTs"
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 user_name l "last saved by: " T dhogan}
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0xaa0000ff
+ label "Project IMG and STICK!\n"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 30
+ selected true
+ xpos -327
+ ypos -361
+ bdwidth 520
+ bdheight 716
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0xe5e57e01
+ label "<left><img src=\"rfx_black.png\"> <strong>Note: (Oct 02 @ 16:27) </strong><br></br><br></br>If image looks weird, check that your object's UVs are laid out correctly"
+ note_font_size 13
+ selected true
+ xpos -319
+ ypos -297
+ bdwidth 170
+ bdheight 148
+}
+Dot {
+ inputs 0
+ name Dot14
+ label Camera
+ note_font_size 30
+ selected true
+ xpos 59
+ ypos -181
+}
+Dot {
+ name Dot5
+ selected true
+ xpos 59
+ ypos -131
+}
+set N569e6c0 [stack 0]
+Dot {
+ name Dot6
+ selected true
+ xpos 59
+ ypos 3
+}
+set N7d34860 [stack 0]
+Dot {
+ name Dot7
+ selected true
+ xpos 59
+ ypos 46
+}
+set N7e116c0 [stack 0]
+Dot {
+ name Dot9
+ selected true
+ xpos 59
+ ypos 220
+}
+push $N7e116c0
+push $N7d34860
+push $N569e6c0
+Dot {
+ inputs 0
+ name Dot12
+ selected true
+ xpos -96
+ ypos -250
+}
+Project3D2 {
+ inputs 2
+ name Project3D2
+ selected true
+ xpos -130
+ ypos -135
+}
+ReadGeo2 {
+ name ReadGeo1
+ label "Animated Geo"
+ selected true
+ xpos -130
+ ypos -66
+}
+set C7d87f30 [stack 0]
+UVProject {
+ inputs 2
+ projection off
+ name UVProject2
+ selected true
+ xpos -130
+ ypos -1
+}
+Reformat {
+ inputs 0
+ format "4096 4096 0 0 4096 4096 1.49995 "
+ name Reformat2
+ selected true
+ xpos -261
+ ypos 36
+}
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ projection_mode uv
+ motion_vectors_type distance
+ name ScanlineRender1
+ selected true
+ xpos -130
+ ypos 42
+}
+FrameHold {
+ first_frame 101
+ name FrameHold2
+ label "Frame # of Painted Frame"
+ selected true
+ xpos -130
+ ypos 92
+}
+clone $C7d87f30 {
+ xpos -130
+ ypos 160
+ selected true
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ name ScanlineRender4
+ selected true
+ xpos -130
+ ypos 216
+}
+Dot {
+ name Dot13
+ selected true
+ xpos -96
+ ypos 294
+}

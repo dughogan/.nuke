@@ -1,0 +1,305 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x19252bff
+ label "Stereo to 3x2 Cube Map"
+ note_font "Arial Bold Bold Bold Bold"
+ note_font_size 70
+ selected true
+ xpos 2394
+ ypos -220
+ bdwidth 907
+ bdheight 784
+}
+push $cut_paste_input
+Dot {
+ name Dot21
+ selected true
+ xpos 2863
+ ypos -304
+}
+SphericalTransform {
+ input "Lat Long map"
+ output Cube
+ out_rx {{curve x1 0 0 90 -90 0}}
+ out_ry {{curve x1 90 -90 0 0 0 -180}}
+ out_rz {{curve x1 0 0 0 0 0}}
+ format "1536 1536 0 0 1536 1536 1 1536_squared"
+ fix true
+ name SphericalTransform2
+ selected true
+ xpos 2829
+ ypos -85
+}
+Reformat {
+ format "3600 2400 0 0 3600 2400 1 3x2 Cube Map"
+ resize none
+ black_outside true
+ name Reformat2
+ selected true
+ xpos 2829
+ ypos -47
+}
+Dot {
+ name Dot22
+ selected true
+ xpos 2863
+ ypos 27
+}
+set Na232fa0 [stack 0]
+Dot {
+ name Dot26
+ selected true
+ xpos 2803
+ ypos 27
+}
+set N17093590 [stack 0]
+Dot {
+ name Dot27
+ selected true
+ xpos 2685
+ ypos 27
+}
+set N6c79e80 [stack 0]
+FrameHold {
+ first_frame 2
+ name FrameHold5
+ selected true
+ xpos 2651
+ ypos 80
+}
+Mirror2 {
+ flop true
+ name Mirror2_11
+ label -X
+ selected true
+ xpos 2651
+ ypos 118
+}
+Transform {
+ translate {1372 -432}
+ scale 0.7825
+ center {1032 432}
+ name Transform7
+ selected true
+ xpos 2651
+ ypos 156
+}
+push $Na232fa0
+Dot {
+ name Dot23
+ selected true
+ xpos 2918
+ ypos 27
+}
+set N15272d00 [stack 0]
+FrameHold {
+ first_frame 4
+ name FrameHold3
+ selected true
+ xpos 2884
+ ypos 80
+}
+Mirror2 {
+ flop true
+ name Mirror2_7
+ label -Y
+ selected true
+ xpos 2884
+ ypos 118
+}
+Transform {
+ translate {1372 770}
+ scale 0.7825
+ center {1032 432}
+ name Transform9
+ selected true
+ xpos 2884
+ ypos 156
+}
+push $N15272d00
+Dot {
+ name Dot24
+ selected true
+ xpos 3038
+ ypos 27
+}
+set N17045200 [stack 0]
+Dot {
+ name Dot25
+ selected true
+ xpos 3158
+ ypos 27
+}
+FrameHold {
+ first_frame 6
+ name FrameHold1
+ selected true
+ xpos 3124
+ ypos 80
+}
+Mirror2 {
+ name Mirror2_5
+ label +Z
+ selected true
+ xpos 3124
+ ypos 118
+}
+Transform {
+ translate {170 -432}
+ scale 0.7825
+ center {1032 432}
+ name Transform11
+ selected true
+ xpos 3124
+ ypos 156
+}
+push $N17093590
+FrameHold {
+ first_frame 3
+ name FrameHold4
+ selected true
+ xpos 2769
+ ypos 80
+}
+Mirror2 {
+ flip true
+ name Mirror2_8
+ label +Y
+ selected true
+ xpos 2769
+ ypos 118
+}
+Transform {
+ translate {170 770}
+ scale 0.7825
+ center {1032 432}
+ name Transform8
+ selected true
+ xpos 2769
+ ypos 156
+}
+push 0
+push $N6c79e80
+Dot {
+ name Dot28
+ selected true
+ xpos 2575
+ ypos 27
+}
+FrameHold {
+ first_frame 1
+ name FrameHold6
+ selected true
+ xpos 2541
+ ypos 79
+}
+Mirror2 {
+ name Mirror2_12
+ label +X
+ selected true
+ xpos 2541
+ ypos 117
+}
+Transform {
+ translate {-1032 -432}
+ scale 0.7825
+ center {1032 432}
+ name Transform6
+ selected true
+ xpos 2541
+ ypos 155
+}
+push $N17045200
+FrameHold {
+ first_frame 5
+ name FrameHold2
+ selected true
+ xpos 3004
+ ypos 80
+}
+Mirror2 {
+ flop true
+ name Mirror2_6
+ label -Z
+ selected true
+ xpos 3004
+ ypos 118
+}
+Transform {
+ translate {-1032 770}
+ scale 0.7825
+ center {1032 432}
+ name Transform10
+ selected true
+ xpos 3004
+ ypos 156
+}
+Merge2 {
+ inputs 6+1
+ maskChannelMask none
+ name Merge5
+ selected true
+ xpos 2835
+ ypos 256
+}
+Crop {
+ box {0 0 3600 2400}
+ name Crop3
+ selected true
+ xpos 2835
+ ypos 282
+}
+Reformat {
+ format "7200 2400 0 0 7200 2400 1 3x2CubeVR"
+ resize none
+ center false
+ name Reformat1
+ selected true
+ xpos 2835
+ ypos 366
+}
+set Na34ed80 [stack 0]
+OneView {
+ view right
+ name OneView4
+ selected true
+ xpos 2989
+ ypos 372
+}
+Transform {
+ translate {{input.width/2} 0}
+ center {9216 768}
+ name Transform12
+ selected true
+ xpos 2989
+ ypos 429
+}
+Dot {
+ name Dot30
+ selected true
+ xpos 3023
+ ypos 487
+}
+push $Na34ed80
+OneView {
+ name OneView7
+ selected true
+ xpos 2688
+ ypos 372
+}
+Dot {
+ name Dot31
+ selected true
+ xpos 2722
+ ypos 487
+}
+Merge2 {
+ inputs 2
+ name Merge7
+ selected true
+ xpos 2837
+ ypos 483
+}

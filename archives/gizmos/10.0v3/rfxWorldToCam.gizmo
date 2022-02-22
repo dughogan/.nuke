@@ -1,0 +1,89 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+add_layer {N N.red N.green N.blue N.alpha}
+Gizmo {
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {41 in l Channel: T Shuffle1.in}
+ addUserKnob {26 output_desc l "" +STARTLINE T "output channel will be \"Camera_Normal\""}
+}
+ Input {
+  inputs 0
+  name Camera
+  label "(expression linked)"
+  xpos 133
+  ypos 147
+  number 1
+ }
+ Input {
+  inputs 0
+  name Color
+  xpos 0
+  ypos 49
+ }
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos 1
+  ypos 147
+ }
+set Nc464fc0 [stack 0]
+ ColorMatrix {
+  channels all
+  matrix {
+      {{parent.input1.world_matrix.0} {parent.input1.world_matrix.1} {parent.input1.world_matrix.2}}
+      {{parent.input1.world_matrix.4} {parent.input1.world_matrix.5} {parent.input1.world_matrix.6}}
+      {{parent.input1.world_matrix.8} {parent.input1.world_matrix.9} {parent.input1.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos -109
+  ypos 147
+ }
+ Shuffle {
+  in N
+  in2 rgba
+  alpha alpha2
+  name Shuffle1
+  xpos -109
+  ypos 221
+ }
+push $Nc464fc0
+add_layer {Camera_Normal Camera_Normal.red Camera_Normal.green Camera_Normal.blue}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 Camera_Normal.red
+  from1 rgba.green
+  to1 Camera_Normal.green
+  from2 rgba.blue
+  to2 Camera_Normal.blue
+  maskChannelMask none
+  name Copy1
+  xpos 0
+  ypos 203
+ }
+ Premult {
+  channels all
+  name Premult1
+  selected true
+  xpos 0
+  ypos 288
+ }
+set Nd4b8c70 [stack 0]
+ Output {
+  name Output1
+  xpos 0
+  ypos 342
+ }
+push $Nd4b8c70
+ Viewer {
+  frame 83
+  frame_range 83-291
+  channels {rgba.red rgba.green rgba.blue rgba.alpha}
+  viewerProcess "Default (DreamColor)"
+  name Viewer1
+  xpos -235
+  ypos 307
+ }
+end_group

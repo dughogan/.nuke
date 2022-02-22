@@ -1,0 +1,132 @@
+#! /usr/local/Nuke6.0v3/Nuke6.0 -nx
+version 6.0 v3
+Gizmo {
+ label "v1.1 - dug"
+ addUserKnob {20 User}
+ addUserKnob {26 instructions l "" +STARTLINE T "For a realistic result, animate the \n\"bokeh amount\" slider to rack focus, \nand set the \"bokeh mix\" to 1."}
+ addUserKnob {26 bokeh_defocus_init l "@b;Defocus@b;"}
+ addUserKnob {7 bokeh_defocus l "intial defocus" t "This will defocus your background, which is sometimes needed to get the right depth of field effect." R 0 100}
+ bokeh_defocus 1
+ addUserKnob {26 bokeh l "@b;Bokeh@b;"}
+ addUserKnob {7 bokeh_size l "bokeh size" R 0 0.5}
+ bokeh_size 0.1
+ addUserKnob {7 bokeh_mix l "bokeh mix"}
+ bokeh_mix 1
+ addUserKnob {26 iris_shape l "@b;\"Camera\" Iris@b;"}
+ addUserKnob {41 corners T Flare1.corners}
+ addUserKnob {7 bokeh_edge_flattening l "edge flattening" R 0 100}
+ bokeh_edge_flattening 1
+ addUserKnob {7 bokeh_corner_sharpness l "corner sharpness"}
+ bokeh_corner_sharpness 1
+ addUserKnob {7 bokeh_rotate l rotate R -180 180}
+ addUserKnob {26 bokeh_noise l "@b;Noise@b;"}
+ addUserKnob {7 bokeh_noise_amt l noise}
+ bokeh_noise_amt 1
+ addUserKnob {7 bokeh_noise_speed l speed R 1 50}
+ bokeh_noise_speed 30
+}
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant4
+  xpos 660
+  ypos 365
+ }
+ Noise {
+  maskChannelMask none
+  size 10
+  zoffset {{frame/parent.bokeh_noise_speed i}}
+  gain 0.78
+  gamma 0.435
+  center {990 540}
+  name Noise1
+  xpos 660
+  ypos 439
+ }
+ Blur {
+  size 8
+  name Blur2
+  xpos 660
+  ypos 467
+ }
+ Flare {
+  inputs 0
+  position {{root.width/2 i} {root.height/2 i}}
+  radius {83.08 107.7 123.08}
+  size_mult {{parent.bokeh_size i}}
+  corners 6
+  flattening {{parent.bokeh_edge_flattening i}}
+  sharpness {{parent.bokeh_corner_sharpness i}}
+  corners_angle {{parent.bokeh_rotate i}}
+  name Flare1
+  xpos 799
+  ypos 412
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  mix {{parent.bokeh_noise_amt i}}
+  name Merge1
+  xpos 799
+  ypos 474
+ }
+ Sharpen {
+  name Sharpen6
+  xpos 799
+  ypos 543
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 909
+  ypos 342
+ }
+ Crop {
+  box {0 0 {width i} {height i}}
+  crop false
+  name Crop2
+  xpos 909
+  ypos 382
+  disable {{parent.bokeh_size==0?1:0 i}}
+ }
+ Defocus {
+  defocus {{parent.bokeh_defocus i}}
+  maskChannelMask none
+  name Defocus1
+  xpos 909
+  ypos 410
+  disable {{parent.bokeh_size==0?1:0 i}}
+ }
+ Convolve {
+  inputs 2
+  channels rgba
+  mix {{parent.bokeh_mix i}}
+  name Convolve1
+  xpos 909
+  ypos 550
+  disable {{parent.bokeh_size==0?1:0 i}}
+ }
+ Crop {
+  box {0 0 {width i} {height i}}
+  crop false
+  name Crop1
+  xpos 909
+  ypos 594
+  disable {{parent.bokeh_size==0?1:0 i}}
+ }
+ Output {
+  name Output1
+  xpos 909
+  ypos 633
+ }
+ Viewer {
+  frame_range 101-720
+  frame_range_lock true
+  input_process false
+  name Viewer1
+  selected true
+  xpos 1099
+  ypos 641
+ }
+end_group

@@ -1,0 +1,148 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name "Copy for More2"
+ tile_color 0x44444401
+ gl_color 0x44444401
+ label "Card\n"
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 855
+ ypos 442
+ bdwidth 395
+ bdheight 244
+}
+BackdropNode {
+ inputs 0
+ name Image3
+ tile_color 0x4e4e70ff
+ gl_color 0x44444401
+ label Image
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 983
+ ypos 62
+ bdwidth 280
+ bdheight 273
+}
+push 0
+Dot {
+ name Dot30
+ selected true
+ xpos 653
+ ypos 495
+}
+set N6a5c520 [stack 0]
+Dot {
+ name Dot31
+ selected true
+ xpos 653
+ ypos 750
+}
+push $N6a5c520
+Dot {
+ name Dot32
+ selected true
+ xpos 971
+ ypos 495
+}
+FrameHold {
+ first_frame 101
+ name FrameHold3
+ tile_color 0xffff
+ label "Frame to Project From"
+ selected true
+ xpos 937
+ ypos 549
+}
+Dot {
+ name Dot1
+ selected true
+ xpos 971
+ ypos 632
+}
+push $cut_paste_input
+Dot {
+ name Dot33
+ selected true
+ xpos 1119
+ ypos 271
+}
+Card {
+ z 10
+ lens_in_focal {{"\[value camera_name].focal"}}
+ lens_in_haperture {{"\[value camera_name].haperture"}}
+ xform_order RST
+ rot_order XYZ
+ scaling {1 {Card1.scaling.x} 1}
+ name Card1
+ label "\[value translate.z] from \[value camera_name]\nScale: \[value scaling.x]"
+ selected true
+ xpos 1085
+ ypos 529
+ addUserKnob {20 User}
+ addUserKnob {1 camera_name l "Camera Name:"}
+ camera_name Camera2
+}
+TransformGeo {
+ inputs 2
+ xform_order RST
+ rot_order XYZ
+ pivot {0 0 {input.translate.z}}
+ name TransformGeo1
+ selected true
+ xpos 1085
+ ypos 628
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ name ScanlineRender1
+ selected true
+ xpos 1085
+ ypos 746
+}
+set N6ab4c20 [stack 0]
+Expression {
+ channel0 depth
+ expr0 1/Z
+ maskChannelMask none
+ name Expression1
+ selected true
+ xpos 1085
+ ypos 772
+}
+set N6ad0820 [stack 0]
+push $N6ad0820
+add_layer {Z Z.red Z.green Z.blue Z.alpha}
+Copy {
+ inputs 2
+ from0 depth.Z
+ to0 Z.red
+ maskChannelMask none
+ name Copy1
+ selected true
+ xpos 1085
+ ypos 798
+}
+Premult {
+ channels Z
+ name Premult13
+ selected true
+ xpos 1085
+ ypos 836
+}
+push $N6ab4c20
+Viewer {
+ frame 111
+ frame_range 101-200
+ name Viewer1
+ selected true
+ xpos 1195
+ ypos 772
+}

@@ -1,0 +1,429 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x19252bff
+ label "Stereo to Cube Map"
+ note_font "Arial Bold Bold Bold Bold"
+ note_font_size 70
+ selected true
+ xpos 294
+ ypos 745
+ bdwidth 908
+ bdheight 812
+}
+push $cut_paste_input
+Reformat {
+ format "9216 4608 0 0 9216 4608 1 9k 2:1"
+ resize distort
+ name Reformat28
+ selected true
+ xpos 729
+ ypos 859
+}
+SphericalTransform {
+ input "Lat Long map"
+ output Cube
+ out_rx {{curve x1 0 0 90 -90 0}}
+ out_ry {{curve x1 90 -90 0 0 0 -180}}
+ out_rz {{curve x1 0 0 0 0 0}}
+ format "1536 1536 0 0 1536 1536 1 1536_squared"
+ fix true
+ name SphericalTransform22
+ selected true
+ xpos 729
+ ypos 900
+}
+Reformat {
+ format "1536 1536 0 0 1536 1536 1 1536_squared"
+ resize fill
+ name Reformat2
+ selected true
+ xpos 729
+ ypos 938
+}
+Dot {
+ name Dot13
+ selected true
+ xpos 763
+ ypos 992
+}
+set N31cea80 [stack 0]
+Dot {
+ name Dot19
+ selected true
+ xpos 818
+ ypos 992
+}
+set N31d3180 [stack 0]
+FrameHold {
+ first_frame 4
+ name FrameHold16
+ selected true
+ xpos 784
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_4
+ label -Y
+ selected true
+ xpos 784
+ ypos 1112
+}
+Transform {
+ scale {1 1}
+ center {769.5 769.5}
+ name Transform12
+ selected true
+ xpos 784
+ ypos 1176
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat7
+ selected true
+ xpos 784
+ ypos 1237
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop10
+ selected true
+ xpos 784
+ ypos 1275
+}
+Transform {
+ translate {10240 0}
+ center {1024 1024}
+ name Transform13
+ selected true
+ xpos 784
+ ypos 1301
+}
+push $N31cea80
+Dot {
+ name Dot16
+ selected true
+ xpos 703
+ ypos 992
+}
+set N3267f50 [stack 0]
+FrameHold {
+ first_frame 3
+ name FrameHold17
+ selected true
+ xpos 669
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_3
+ label +Y
+ selected true
+ xpos 669
+ ypos 1112
+}
+Transform {
+ scale {1 1}
+ center {769.5 769.5}
+ name Transform10
+ selected true
+ xpos 676
+ ypos 1173
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat6
+ selected true
+ xpos 676
+ ypos 1234
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop6
+ selected true
+ xpos 676
+ ypos 1272
+}
+Transform {
+ translate {8191 0}
+ center {1024 1024}
+ name Transform11
+ selected true
+ xpos 676
+ ypos 1298
+}
+push $N31d3180
+Dot {
+ name Dot18
+ selected true
+ xpos 938
+ ypos 992
+}
+set N31d7bd0 [stack 0]
+FrameHold {
+ first_frame 5
+ name FrameHold15
+ selected true
+ xpos 904
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_5
+ label -Z
+ selected true
+ xpos 904
+ ypos 1112
+}
+Transform {
+ scale {1 1}
+ center {769.5 769.5}
+ name Transform5
+ selected true
+ xpos 904
+ ypos 1161
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat5
+ selected true
+ xpos 904
+ ypos 1222
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop5
+ selected true
+ xpos 904
+ ypos 1260
+}
+Transform {
+ translate {6143 0}
+ center {1024 1024}
+ name Transform9
+ selected true
+ xpos 904
+ ypos 1286
+}
+push $N31d7bd0
+Dot {
+ name Dot17
+ selected true
+ xpos 1035
+ ypos 992
+}
+FrameHold {
+ first_frame 6
+ name FrameHold19
+ selected true
+ xpos 1001
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_6
+ label +Z
+ selected true
+ xpos 1001
+ ypos 1112
+}
+Transform {
+ rotate -180
+ scale {1 1}
+ center {769.5 769.5}
+ name Transform7
+ selected true
+ xpos 1001
+ ypos 1166
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat4
+ selected true
+ xpos 1001
+ ypos 1227
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop3
+ selected true
+ xpos 1001
+ ypos 1265
+}
+Transform {
+ translate {4095 0}
+ center {1024 1024}
+ name Transform8
+ selected true
+ xpos 1001
+ ypos 1291
+}
+push $N3267f50
+Dot {
+ name Dot15
+ selected true
+ xpos 607
+ ypos 992
+}
+set Nbaad6e0 [stack 0]
+FrameHold {
+ first_frame 2
+ name FrameHold18
+ selected true
+ xpos 573
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_2
+ label -X
+ selected true
+ xpos 573
+ ypos 1112
+}
+Transform {
+ rotate -90
+ center {769.5 769.5}
+ name Transform2
+ selected true
+ xpos 573
+ ypos 1187
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat3
+ selected true
+ xpos 573
+ ypos 1248
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop2
+ selected true
+ xpos 573
+ ypos 1286
+}
+Transform {
+ translate {2051 0}
+ center {1024 1024}
+ name Transform6
+ selected true
+ xpos 573
+ ypos 1312
+}
+push 0
+push $Nbaad6e0
+Dot {
+ name Dot14
+ selected true
+ xpos 475
+ ypos 992
+}
+FrameHold {
+ first_frame 1
+ name FrameHold20
+ selected true
+ xpos 441
+ ypos 1010
+}
+Mirror2 {
+ flop true
+ name Mirror2_1
+ label +X
+ selected true
+ xpos 441
+ ypos 1113
+}
+Transform {
+ rotate 90
+ center {769.5 769.5}
+ name Transform1
+ selected true
+ xpos 441
+ ypos 1184
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ resize fill
+ black_outside true
+ name Reformat1
+ selected true
+ xpos 441
+ ypos 1245
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop1
+ selected true
+ xpos 441
+ ypos 1283
+}
+Transform {
+ scale {1.004 1}
+ center {1024 1024}
+ name Transform14
+ selected true
+ xpos 441
+ ypos 1309
+}
+Reformat {
+ inputs 0
+ format "12288 2048 0 0 12288 2048 1 monster"
+ resize fill
+ name Reformat44
+ selected true
+ xpos 324
+ ypos 1343
+}
+Shuffle {
+ in2 alpha
+ red black
+ green black
+ blue black
+ alpha black
+ name Shuffle1
+ selected true
+ xpos 324
+ ypos 1381
+}
+Merge2 {
+ inputs 7+1
+ maskChannelMask none
+ name Merge1
+ selected true
+ xpos 698
+ ypos 1381
+}
+Crop {
+ box {0 0 12288 2048}
+ name Crop11
+ selected true
+ xpos 698
+ ypos 1432
+}
+Write {
+ channels rgba
+ file /people/sdaniel/ToSam/MON_cube.png
+ views {left}
+ file_type png
+ datatype "16 bit"
+ checkHashOnRead false
+ version 2
+ name Write1
+ selected true
+ xpos 698
+ ypos 1487
+}

@@ -1,0 +1,387 @@
+<!-- All menus reside under the menus tag -->
+<menus>
+  <menu label="Artist Tools">
+    <!-- Menus can be nested, but each time you must go another level in to access the tools -->
+    <item label="Run Comp Check!">
+      import plutonium.sniffer.main as sniffer
+      sniffer_ui = sniffer.run()
+    </item>
+    <divider />
+    <menu label="3D">
+      <item label="Cache Importer">
+        import cache_importer
+        cache_importer.create()
+      </item>
+    </menu>
+    <menu label="Animation">
+      <item label="Mark Nodes with Animation">
+        import tagAnimated
+        tagAnimated.main()
+        sys.stderr.write('Nodes with animation have been tagged.\n')
+      </item>
+      <item label="Remove Animation from Node">
+        import clearAnimation
+        clearAnimation.main()
+        sys.stderr.write('All animation cleared!\n')
+      </item>
+    </menu>
+    <menu label="Color">
+      <item label="Restore Default Colors">
+        import defaultColors
+        defaultColors.main()
+        sys.stderr.write('Default node colors restored!\n')
+      </item>
+    </menu>
+    <menu label="Expressions">
+      <item label="Expression Manager">
+        import mrExp
+        mrExp.main()
+        sys.stderr.write('Expression manager UI launched!\n')
+      </item>
+      <divider />
+      <item label="Bake Expressions">
+        import bakeExpressions
+        bakeExpressions.main()
+        sys.stderr.write('Expressions baked!\n')
+      </item>
+      <item label="Remove Expressions">
+        import clearExpression
+        clearExpression.main()
+        sys.stderr.write('Expressions removed!\n')
+      </item>
+    </menu>
+    <menu label="Reads">
+      <item label="Read Manager">
+        import readManager
+        readManager.main()
+      </item>
+      <divider />
+      <item label="Create Matte">
+        import mergeMatte
+        mergeMatte.main()
+      </item>
+      <divider />
+      <item label="simpleRV_plus" shortcut="ctrl+r">
+        import simpleRV_plus
+        simpleRV_plus.main()
+      </item>
+    </menu>
+    <menu label="Utility">
+      <!-- These are the menu items you will be adding -->
+      <menu label="Color">
+        <item label="Unpremultiply CC Node(s)" shortcut="shift+p">
+          import unpremult_selected
+          unpremult_selected.main()
+          sys.stderr.write('Selected CC nodes have been unpremulted!\n')
+        </item>
+      </menu>
+      <menu label="Debug Tools">
+        <item label="Get Channel Count">
+          import countChannels
+          countChannels.countChannels()
+        </item>
+      </menu> 
+      <menu label="Organization">
+        <item label="Enable Hotkey Editor" shortcut="">
+          import nuke
+          import shortcuteditor
+          shortcuteditor.nuke_setup()
+          nuke.message('Added Edit / Edit keyboard shortcuts')
+        </item>
+	<divider />
+        <item label="Label Selected Nodes" shortcut="shift+l">
+          import labelNodes_qt
+          labelNodes_qt.main()
+        </item>
+        <divider />
+        <item label="Create Backdrop" shortcut="shift+m">
+          import labelAutobackdrop
+          labelAutobackdrop.autoBackdrop()
+        </item>
+      </menu>
+      <divider />
+      <item label="Run Supertab" shortcut="ctrl+tab">
+          import plutonium.nuke_supertab.main as nuke_supertab
+          nuke_supertab.run()
+      </item>      
+      <item label="Search and Replace" shortcut="ctrl+f">
+          import searchReplace_qt
+          searchReplace_qt.main()
+      </item>
+      <item label="Display Nodes' Knob(s)">
+        import showKnobs
+        showKnobs.main()
+      </item>
+      <item label="Display Mix Value">
+        import showMixValue
+        showMixValue.main()
+      </item>
+      <item label="Axis Importer">
+        import axis_importer
+        axis_importer.create()
+      </item>
+      </menu>
+    <divider />
+    <menu label="Archived Tools">
+      <item label="Run Comp Check 1.0">
+        import preflight
+        preflight.main()
+      </item>
+      <menu label="Repair Shop">
+        <item label="Alignment Tools">
+          import nkAlignTools
+          nkAlignTools.main()
+        </item>
+        <item label="Auto-Align" shortcut="a">
+          import plutonium.core.autoalign as autoalign
+          autoalign.align_selected()
+        </item>
+        <item label="Cycle Alignment" shortcut="alt+a">
+          import plutonium.core.autoalign as autoalign
+          autoalign.cycle_wells()
+        </item>
+        <!-- TODO: we need to update this tool...
+        <menu label="Resources">
+          <item label="Resource Importer">
+            import nkGadget
+            nkGadget.loadRead()
+          </item>
+          <divider />
+          <item label="Import Previous Comp Versions">
+            import nkGadget
+            nkGadget.getVersions()
+          </item>
+          <item label="Import Latest Hero Animation">
+            import nkGadget
+            nkGadget.getLatestAni()
+          </item>
+          <item label="Import Latest Contact Sheet">
+            import nkGadget
+            nkGadget.getContactSheet()
+          </item>
+        </menu>
+        -->
+        <divider />
+      </menu>
+    </menu>
+  </menu>
+  <menu label="Supervisor Tools">
+    <item label="Contact Sheet Tools">
+      import plutonium.contact_sheets.main
+      plutonium.contact_sheets.main.run()
+    </item>
+    <divider />
+    <menu label="Notations">
+      <item label="Leave Note" shortcut="shift+n">
+        import leaveNote
+        leaveNote.main()
+      </item>
+      <divider />
+      <item label="Apply Update Timestamp" shortcut="shift+u">
+        import updateBackdrop
+        updateBackdrop.main()
+      </item>
+    </menu>
+  <divider />
+  </menu>
+
+  <menu label="Insight">
+    <item label="Enable Drag and Drop">
+      import nkInsight
+      nkInsight.enableDnD()
+    </item>
+    <item label="Open New Tab For This Shot">
+      import nkInsight
+      nkInsight.insightTab()
+    </item>
+    <item label="Open New Tab For This Sequence">
+      import nkInsight
+      nkInsight.insightTab(pageType='seq')
+    </item>
+    <item label="Open New Tab For A Different Shot">
+      import nkInsight
+      import nuke
+      seq,shot = nuke.getInput('seq_shot').split('_')
+      nkInsight.insightTab(seq=seq, shot=shot)
+    </item>
+    <item label="Open New Tab For A Different Sequence">
+      import nkInsight
+      import nuke
+      seq = nuke.getInput('sequence').zfill(4)
+      nkInsight.insightTab(seq=seq, pageType='seq')
+    </item>
+  </menu>
+
+  <menu label="Help">
+    <divider />
+    <item label="RFX Nuke Start-up Guide">
+      import webbrowser
+      webbrowser.open('https://confluence.reelfx.com:8443/display/LIGHT/Nuke')
+    </item>
+    <item label="Nuke Quick Tips">
+      import webbrowser
+      webbrowser.open('https://confluence.reelfx.com:8443/display/LIGHT/Nuke+Tips+and+Tricks')
+    </item>
+    <item label="RFX Gizmos">
+      import webbrowser
+      webbrowser.open('https://confluence.reelfx.com:8443/display/LIGHT/RFX+Nuke+Gizmos')
+    </item>
+    <item label="RFX Artist Tools">
+      import webbrowser
+      webbrowser.open('https://confluence.reelfx.com:8443/display/LIGHT/Reel+FX+Artist+Tools')
+    </item>
+    <item label="RFX Nuke Hotkeys">
+      import webbrowser
+      webbrowser.open('https://confluence.reelfx.com:8443/display/LIGHT/RFX+Nuke+Hotkeys')
+    </item>
+    <divider />
+  </menu>
+  <toolbar label="Lighting Toolbar">
+    <item type="Python" label="Build Shot" icon= 'build_shot.png'>
+      from nuke_tools.ui import build_shot_tool
+      build_shot_tool.main()
+    </item>
+    <item type="Python" label="Build Same As Shot" icon= 'build_same_shot.png'>
+      from nuke_tools import same_as
+      same_as.same_as()
+    </item>
+    <item type="Python" label="Submit To Farm" icon="qube.png">
+      from nuke_tools.ui import qube_submission
+      qube_submission.QubeGUI.launch()
+    </item>
+    <item type="Python" label="Publish Shot" icon='publish.png'>
+      from nuke_tools.ui import publish_shot_ui
+      publish_shot_ui.RPublish.launch()
+    </item>
+    <item type="Python" label="Version Up" icon="version_up.png">
+      from nuke_tools import script_utils
+      script_utils.version_up()
+    </item>
+    <item type="Python" label="Save" icon="WriteGeo.png">
+      import nuke_tools
+      nuke_tools.rfx_save()
+    </item>
+    <item type="Python" label="Save As" icon="Write.png">
+      import nuke_tools
+      nuke_tools.rfx_save_as()
+    </item>
+    <item type="Python" label="Search and Replace" icon="search.png">
+      /*import nuke_artist_tools
+      from nuke_tools import script_utils
+      from nuke_artist_tools import nuke_artist_tools
+      nuke_artist_tools.searchReplace()
+      */
+      import searchReplace_qt
+      searchReplace_qt.main()
+    </item>
+    <item type="Python" label="Make Read Node Stereoscopic" icon='make_3d.png'>
+      from nuke_tools import node_utils
+      node_utils.stereo_switch()
+    </item>
+    <item type="Python" label="Load Live Frames" icon='load_live.png'>
+      from nuke_tools import node_utils
+      node_utils.load_live_frames()
+    </item>
+    <item type="Python" label="Load Latest Frames" icon='load_latest.png'>
+      from nuke_tools import node_utils
+      node_utils.load_latest_frames()
+    </item>
+    <item type="Python" label="Load Archive Frames" icon='load_archive.png'>
+      from nuke_tools import node_utils
+      node_utils.load_archive_frames()
+    </item>
+    <item type="Python" label="Load Full Frame Range on Selected" icon='fframes.png'>
+    import nkGadget
+    nkGadget.loadFullFrames()
+    </item>
+    <!-- TODO: do we need this tool
+    <item type="Python" label="Unpremultiply CC Node(s)" icon='gb_tool_logo.png'>
+      import unpremult_selected
+      unpremult_selected.main()
+      sys.stderr.write('Selected CC nodes have been unpremulted!\n')
+    </item>
+    -->
+    <item type="Python" label="Read Manager" icon="readmgr.png">
+      import readManager
+      readManager.main()
+    </item>
+    <!-- TODO: updated version of getVersions
+    <item type="Python" label="Import Previous Comp Versions" icon='compver.png'>
+      import nkGadget
+      nkGadget.getVersions()
+    </item>
+    -->
+    <!-- TODO: updated version of getLatestAni
+    <item type="Python" label="Import Latest Hero Animation" icon='heroani.png'>
+      import nkGadget
+      nkGadget.getLatestAni()
+    </item>
+    -->
+    <!-- TODO: updated version of contact sheet importer
+    <item type="Python" label="Import Contact Sheet" icon='csheet.png'>
+      import nkGadget
+      nkGadget.getContactSheet()
+    </item>
+    -->
+    <!-- TODO: updated version of item importer
+    <item type="Python" label="Import Item" icon='generic.png'>
+      import nkGadget
+      nkGadget.loadRead()
+    </item>
+    -->
+  </toolbar>
+  <toolbar label="RFX Gizmos">
+    <item type="Python" label="rfxGrade" icon="maov.png" shortcut="shift+g">
+      import nuke
+      nuke.createNode('rfxGrade')
+    </item>
+    <item type="Python" label="rfxMultiMatte" icon="mmat.png">
+      import nuke
+      nuke.createNode('rfxMultiMatte')
+    </item>
+    <!-- TODO: new eye matte?
+    <item type="Python" label="rfxEyeMatte" icon="eyemat.png">
+      import nuke
+      nuke.createNode('rfxEyeMatte')
+    </item>
+    -->
+    <item type="Python" label="rfxShotCompare" icon="img_chk.png">
+      import nuke
+      nuke.createNode('rfxCompare')
+    </item>
+    <item type="Python" label="Luminance-Weighted Glow" icon="lumglow.png">
+      import nuke
+      nuke.createNode('rfxLumaGlow')
+    </item>
+    <item type="Python" label="Luminance-Weighted Wrap" icon="lumwrap.png">
+      import nuke
+      nuke.createNode('rfxLumaWrap')
+    </item>
+    <item type="Python" label="EXR Sheet" icon="cs_exr.png">
+      import nuke
+      nuke.createNode('ContactSheet_EXR')
+    </item>
+  </toolbar>
+  <toolbar label="Insight">
+    <item type="Python" label="Open New Tab For This Shot" icon="ins_shot.png">
+      import nkInsight
+      nkInsight.insightTab()
+    </item>
+    <item type="Python" label="Open New Tab For This Sequence" icon="ins_seq.png">
+      import nkInsight
+      nkInsight.insightTab(pageType='seq')
+    </item>
+    <item type="Python" label="Open New Tab For A Different Shot" icon="ins_shotetc.png">
+      import nkInsight
+      import nuke
+      seq,shot = nuke.getInput('seq_shot').split('_')
+      nkInsight.insightTab(seq=seq, shot=shot)
+    </item>
+    <item type="Python" label="Open New Tab For A Different Sequence" icon="ins_seqetc.png">
+      import nkInsight
+      import nuke
+      seq = nuke.getInput('sequence').zfill(4)
+      nkInsight.insightTab(seq=seq, pageType='seq')
+    </item>
+  </toolbar>
+</menus>

@@ -1,0 +1,57 @@
+#! /data/film/apps/d2/Nuke4.3.34_lin/nuke4.3 -nx
+version 4.3035
+Gizmo {
+ inputs 1
+ addUserKnob { 20 "" User } 
+ addUserKnob { 19 Grade8_multiply multiply R 0 4 } 
+ addUserKnob { 19 Grade8_add offset R -1 1 } 
+ addUserKnob { 7 vsize Size R 0 100 } 
+ addUserKnob { 6 Radial1_plinear "perceptually linear" } 
+ name Vignette
+ window {228 562 500 400 0 -426 -214 1}
+ Grade8_multiply 0.353
+ vsize 500
+ Radial1_plinear true
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -260
+  ypos -177
+ }
+add_layer {alpha rgba.alpha}
+ Radial {
+  channel alpha
+  replace true
+  invert true
+  clip_to_bbox true
+  area {{0-parent.vsize i} {0-parent.vsize i} {input.width+parent.vsize i} {input.height+parent.vsize i}}
+  softness 0.59
+  plinear {{parent.Radial1_plinear}}
+  p1 {100 400}
+  p0 {100 100}
+  name Radial1
+  tile_color 0xc0c0c000
+  label (alpha)
+  xpos -260
+  ypos -112
+  indicators 2
+ }
+ Grade {
+  multiply {{parent.Grade8_multiply.r i} {parent.Grade8_multiply.g i} {parent.Grade8_multiply.b i} {parent.Grade8_multiply.a i}}
+  add {{parent.Grade8_add.r i} {parent.Grade8_add.g i} {parent.Grade8_add.b i} {parent.Grade8_add.a i}}
+  mask rgba.alpha
+  name Grade8
+  tile_color 0x7aa9ff00
+  label "(rgb / rgba.alpha)"
+  selected true
+  xpos -260
+  ypos -57
+  indicators 2
+ }
+ Output {
+  name Output1
+  xpos -260
+  ypos 39
+ }
+end_group

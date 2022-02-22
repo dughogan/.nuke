@@ -1,0 +1,14 @@
+set cut_paste_input [stack 0]
+version 13.0 v4
+push $cut_paste_input
+ModifyMetaData {
+ metadata {
+  {set exr/cryptomatte/002a122/name View_Layer_CryptoMaterial}
+  {set exr/cryptomatte/b608a45/name View_Layer_CryptoObject}
+  {set exr/cryptomatte/c38c4ee/name View_Layer_CryptoAsset}
+ }
+ name ModifyMetaData1
+ selected true
+ xpos 152
+ ypos 117
+}

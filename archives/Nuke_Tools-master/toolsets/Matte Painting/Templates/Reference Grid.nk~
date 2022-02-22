@@ -1,0 +1,967 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1600" h="1163" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <splitter orientation="2">
+                <split size="71"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar_Flipbook Tools.1">
+                    <page id="Toolbar_Flipbook Tools.1"/>
+                </dock>
+                <split size="1045"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+            </splitter>
+            <split size="1556" stretch="1"/>
+            <splitter orientation="2">
+                <split size="72"/>
+                <dock id="" activePageId="Toolbar_Main Tools.1">
+                    <page id="Toolbar_Main Tools.1"/>
+                    <page id="Toolbar_Lighting Toolbar.1"/>
+                </dock>
+                <split size="1044"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="Pixel Analyzer.1"/>
+                    <page id="uk.co.thefoundry.waveformscope.1"/>
+                    <page id="uk.co.thefoundry.histogram.1"/>
+                    <page id="uk.co.thefoundry.vectorscope.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+    <window x="1600" y="0" w="1617" h="1191" screen="1">
+        <splitter orientation="2">
+            <split size="1163"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="uk.co.thefoundry.scripteditor.1"/>
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/code/global/nuke/toolsets/10.0v3/ToolSets/Matte Painting/Templates/Reference Grid.nk"
+ format "1920 1080 0 0 1920 1080 1 FIENDS_comp"
+ proxy_type scale
+ proxy_format "1920 1080 0 0 1920 1080 1 FIENDS_comp"
+ colorManagement Nuke
+ defaultViewerLUT "OCIO LUTs"
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 user_name l "last saved by: " T dhogan}
+}
+RotoPaint {
+ inputs 0
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x44700000 x44070000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Rectangle1 512 bezier
+     {{cc
+       {f 8192}
+       {px x42ca0000
+        {0 xc33eaaac}
+        {xc2cfffff x44000000}
+        {x434d5555 0}
+        {xc34d5554 0}
+        {x44000000 x44000000}
+        {0 xc33eaaac}
+        {0 x433eaaac}
+        {x44000000 xc2610000}
+        {xc34d5554 0}
+        {x434d5555 0}
+        {xc2cfffff xc2700000}
+        {0 x433eaaac}}}     idem}
+     {tx x42ca0000 x434c0000 x44468000}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 nv x40000000 view2 x40000000 ltn x42ca0000 ltm x42ca0000 tt x41000000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 tt 5 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 tt 6 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 tt 7 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 tt 8 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {960 540}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 101
+ lifetime_end 101
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name RotoPaint3
+ xpos -194
+ ypos -240
+}
+RotoPaint {
+ inputs 0
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44700000 x44070000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Rectangle1 512 bezier
+     {{cc
+       {f 8192}
+       {px x42ca0000
+        {0 xc33eaaac}
+        {xc2d00000 x44870000}
+        {x434d5555 0}
+        {xc34d5554 0}
+        {x44000000 x44870000}
+        {0 xc33eaaac}
+        {0 x433eaaac}
+        {x44000000 x43ffe000}
+        {xc34d5554 0}
+        {x434d5555 0}
+        {xc2d00000 x43fe0000}
+        {0 x433eaaac}}}
+      {cc
+       {f 8192}
+       {p
+        {{{x42ca0000 0}}
+      {{x42ca0000 xc33eaaac}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 x434d5555}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 xc34d5554}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 xc33eaaac}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 x433eaaac}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 xc34d5554}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 x434d5555}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 0}}}
+        {{{x42ca0000 0}}
+      {{x42ca0000 x433eaaac}}}}}}
+     {tx x42ca0000 x434c0000 x44468000}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 nv x40000000 view2 x40000000 ltn x42ca0000 ltm x42ca0000 tt x41000000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 tt 5 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 tt 6 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 tt 7 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 tt 8 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {960 540}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 101
+ lifetime_end 101
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name RotoPaint2
+ xpos -194
+ ypos -279
+}
+Read {
+ inputs 0
+ file /code/global/nuke/gizmos/8.0v5/sky_tools/grids/grid_square.jpg
+ format "1920 818 0 0 1920 818 1 RFX_RENDER_1_1"
+ proxy_format "1920 818 0 0 1920 818 1 RFX_RENDER_1_1"
+ origset true
+ version 18
+ name OverlayGrid_Read1
+ xpos -335
+ ypos -371
+}
+Grade {
+ inputs 1+1
+ white 0.3
+ multiply {4 -12 -12 0.1599999964}
+ name Grade7
+ xpos -335
+ ypos -279
+}
+Grade {
+ inputs 1+1
+ white 0.3
+ multiply {1 1 4 4}
+ gamma 0.6
+ name Grade8
+ xpos -335
+ ypos -240
+}
+Reformat {
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ name Reformat43
+ xpos -335
+ ypos -179
+}
+Shuffle {
+ in2 alpha
+ alpha white
+ name Shuffle19
+ xpos -335
+ ypos -141
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "34560 2160 0 0 34560 2160 1 "
+ name Constant1
+ xpos -476
+ ypos -118
+}
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge28
+ xpos -335
+ ypos -95
+}
+Dot {
+ name Dot54
+ xpos -301
+ ypos 23
+}
+Crop {
+ box {0 0 2048 2048}
+ name Crop36
+ xpos -335
+ ypos 122
+}
+set N7021160 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform2
+ xpos -207
+ ypos 122
+}
+set N702bfe0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform3
+ xpos -97
+ ypos 122
+}
+set N7039cc0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform4
+ xpos 19
+ ypos 122
+}
+set N70478e0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform6
+ xpos 148
+ ypos 122
+}
+set N7055490 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform7
+ xpos 269
+ ypos 122
+}
+set N7063040 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform8
+ xpos 398
+ ypos 116
+}
+set N7070c20 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform9
+ xpos 522
+ ypos 116
+}
+set N707e850 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform10
+ xpos 657
+ ypos 116
+}
+set N708c4b0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform11
+ xpos 794
+ ypos 116
+}
+set N7099fe0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform12
+ xpos 913
+ ypos 116
+}
+set N70a7c00 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform13
+ xpos 1028
+ ypos 116
+}
+set N70b5650 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform14
+ xpos 1142
+ ypos 116
+}
+set N70c3430 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform15
+ xpos 1259
+ ypos 116
+}
+set N70d1030 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform16
+ xpos 1378
+ ypos 116
+}
+set N70deb90 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform17
+ xpos 1497
+ ypos 116
+}
+set N70ec7b0 [stack 0]
+Transform {
+ translate {2048 0}
+ center {960 540}
+ name Transform1
+ xpos 1614
+ ypos 116
+}
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message Q
+ old_message {{81}
+   }
+ box {33278 417.75 34312 1622.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text21
+ xpos 1614
+ ypos 142
+}
+push $N70ec7b0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message P
+ old_message {{80}
+   }
+ box {31228 422.75 32262 1627.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text20
+ xpos 1497
+ ypos 142
+}
+push $N70deb90
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message O
+ old_message {{79}
+   }
+ box {29178 427.75 30212 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text19
+ xpos 1378
+ ypos 142
+}
+push $N70d1030
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message N
+ old_message {{78}
+   }
+ box {27128 437.75 28162 1642.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text18
+ xpos 1259
+ ypos 142
+}
+push $N70c3430
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message M
+ old_message {{77}
+   }
+ box {25088 427.75 26122 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text17
+ xpos 1142
+ ypos 142
+}
+push $N70b5650
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message L
+ old_message {{76}
+   }
+ box {23043 427.75 24077 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text16
+ xpos 1028
+ ypos 142
+}
+push $N70a7c00
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message K
+ old_message {{75}
+   }
+ box {20978 427.75 22012 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text15
+ xpos 913
+ ypos 142
+}
+set N71d9e00 [stack 0]
+push $N71d9e00
+push $N7099fe0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message J
+ old_message {{74}
+   }
+ box {18938 427.75 19972 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text14
+ xpos 794
+ ypos 142
+}
+push $N708c4b0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message I
+ old_message {{73}
+   }
+ box {16903 427.75 17937 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text13
+ xpos 657
+ ypos 142
+}
+push $N707e850
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message H
+ old_message {{72}
+   }
+ box {14843 422.75 15877 1627.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text12
+ xpos 522
+ ypos 142
+}
+push $N7070c20
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message G
+ old_message {{71}
+   }
+ box {12798 427.75 13832 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text11
+ xpos 398
+ ypos 142
+}
+push $N7063040
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message F
+ old_message {{70}
+   }
+ box {10753 432.75 11787 1637.25}
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text10
+ xpos 269
+ ypos 148
+}
+push $N7055490
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message E
+ old_message {{69}
+   }
+ box {8708 417.75 9742 1622.25}
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text9
+ xpos 148
+ ypos 148
+}
+push $N70478e0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message D
+ old_message {{68}
+   }
+ box {6658 417.75 7692 1622.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text8
+ xpos 19
+ ypos 148
+}
+push $N7039cc0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message C
+ old_message {{67}
+   }
+ box {4608 427.75 5642 1632.25}
+ xjustify center
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text7
+ xpos -97
+ ypos 148
+}
+push 0
+push $N7021160
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message A
+ old_message {{65}
+   }
+ box {513 422.75 1547 1627.25}
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ cursor_position 1
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text5
+ xpos -335
+ ypos 148
+}
+push $N702bfe0
+Text2 {
+ font_size_toolbar 1600
+ font_width_toolbar 100
+ font_height_toolbar 100
+ opacity 0.5
+ maskChannelMask none
+ message B
+ old_message {{66}
+   }
+ box {2558 422.75 3592 1627.25}
+ transforms {{0 2}
+   }
+ font_size_values {{0 1600}
+   }
+ font {{ Utopia : Bold : UtopiaBold.pfa : 0 }}
+ font_size 1600
+ scale {1 1}
+ cursor_initialised true
+ autofit_bbox false
+ initial_cursor_position {{505.9996338 1693.999878}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 17280 1080 0 0 1 1 0 0 0 0}
+   }
+ color 0.8
+ name Text6
+ xpos -207
+ ypos 148
+}
+Merge2 {
+ inputs 18+1
+ maskChannelMask none
+ name Merge27
+ xpos 721
+ ypos 281
+}
+Transform {
+ scale {1 1.054}
+ center {17280 0}
+ name Transform19
+ selected true
+ xpos 721
+ ypos 307
+}

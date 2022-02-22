@@ -1,0 +1,167 @@
+#! /data/film/apps/d2/Nuke4.5.21_lin/nuke4.5 -nx
+version 4.5021
+Gizmo {
+ inputs 1
+ addUserKnob {20 "" User}
+ addUserKnob {7 rot Rotation R 0 1}
+ rot {{root.RimLight1.rot.0 i}}
+ addUserKnob {7 offset Offset R 0 15}
+ offset 11.1
+ addUserKnob {7 softness Softness R 0 1}
+ softness 1
+ addUserKnob {26 "" Color}
+ addUserKnob {18 colorRim Rim R 0 1}
+ colorRim 1
+ addUserKnob {18 colorFalloff Falloff R 0 1}
+ colorFalloff {0 0 1}
+ addUserKnob {26 "" ""}
+ addUserKnob {6 alphaBypass "alpha bypass"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 142
+  ypos -624
+ }
+ Dot {
+  name Dot1
+  tile_color 0x9597bf00
+  xpos 176
+  ypos -525
+ }
+set Na3786318 [stack 0]
+ Dot {
+  name Dot3
+  tile_color 0x9597bf00
+  xpos 337
+  ypos -525
+ }
+set Na3786b40 [stack 0]
+ Erode {
+  name Erode1
+  xpos 303
+  ypos -474
+ }
+add_layer {alpha rgba.alpha}
+ DirBlurWrapper {
+  BlurType linear
+  BlurLayer alpha
+  BlurCenter {{parent.format.w/2 i} {parent.format.h/2 i}}
+  BlurLength {{parent.offset}}
+  target {{(parent.format.w/2)-(cos(parent.rot*2*pi)*parent.offset)+.1 i} {(parent.format.h/2)-(sin(parent.rot*2*pi)*parent.offset)+.1 i}}
+  UseTarget true
+  name DirBlurWrapper1
+  xpos 303
+  ypos -407
+ }
+set Na3789028 [stack 0]
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 479
+  ypos -407
+ }
+ Grade {
+  channels alpha
+  gamma {{"1 - (parent.softness*.78)"}}
+  name Grade1
+  xpos 479
+  ypos -279
+ }
+push $Na3789028
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos 303
+  ypos -228
+ }
+ Grade {
+  white {{colorFalloff.r i} {colorFalloff.g i} {colorFalloff.b i} {curve}}
+  name Grade2
+  xpos 303
+  ypos -149
+ }
+push $Na3786318
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle4
+  xpos 142
+  ypos -125
+ }
+ Grade {
+  white {{colorRim.r i} {colorRim.g i} {colorRim.b i} 1}
+  name Grade3
+  xpos 142
+  ypos -85
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 303
+  ypos -85
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 479
+  ypos -92
+ }
+ Premult {
+  name Premult2
+  xpos 479
+  ypos -25
+ }
+set Na3795dc8 [stack 0]
+push $Na3786b40
+ Dot {
+  name Dot4
+  tile_color 0x9597bf00
+  xpos 660
+  ypos -525
+ }
+push $Na3795dc8
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos 626
+  ypos -32
+ }
+ Premult {
+  name Premult1
+  xpos 626
+  ypos 23
+ }
+ ChannelMerge {
+  inputs 2
+  operation intersect
+  name ChannelMerge1
+  selected true
+  xpos 626
+  ypos 83
+  disable {{parent.alphaBypass}}
+ }
+set N8eb28e8 [stack 0]
+ Viewer {
+  frame_range 101,199
+  roi {-0.5 -0.3 0.5 0.3}
+  window {912 94 956 628 1 0 0 0}
+  name Viewer1
+  xpos 168
+  ypos -268
+ }
+push $N8eb28e8
+ Output {
+  name Output1
+  xpos 626
+  ypos 207
+ }
+end_group

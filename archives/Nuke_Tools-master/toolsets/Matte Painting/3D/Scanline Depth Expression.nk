@@ -1,0 +1,32 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+push $cut_paste_input
+Expression {
+ channel0 depth
+ expr0 1/Z
+ maskChannelMask none
+ name Expression1
+ selected true
+ xpos -2994
+ ypos 853
+}
+set N224d83b0 [stack 0]
+push $N224d83b0
+add_layer {Z Z.red Z.green Z.blue Z.alpha}
+Copy {
+ inputs 2
+ from0 depth.Z
+ to0 Z.red
+ maskChannelMask none
+ name Copy10
+ selected true
+ xpos -2994
+ ypos 879
+}
+Premult {
+ channels Z
+ name Premult16
+ selected true
+ xpos -2994
+ ypos 917
+}

@@ -1,0 +1,106 @@
+﻿set cut_paste_input [stack 0]
+version 12.0 v5
+push $cut_paste_input
+Dot {
+ name Dot1
+ selected true
+ xpos 423
+ ypos -194
+}
+set N605c7400 [stack 0]
+Dot {
+ name Dot2
+ selected true
+ xpos 533
+ ypos -194
+}
+push $N605c7400
+Invert {
+ channels alpha
+ name Invert2
+ selected true
+ xpos 389
+ ypos -176
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue black
+ name Shuffle1
+ selected true
+ xpos 389
+ ypos -144
+}
+Matrix {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ matrix {
+     {-1 0 1}
+     {-2 0 2}
+     {-1 0 1}
+   }
+ name Matrix1
+ selected true
+ xpos 389
+ ypos -120
+}
+Matrix {
+ channels {-rgba.red rgba.green -rgba.blue none}
+ matrix {
+     {1 2 1}
+     {0 0 0}
+     {-1 -2 -1}
+   }
+ name Matrix2
+ selected true
+ xpos 389
+ ypos -96
+}
+Expression {
+ temp_name0 thresh
+ temp_expr0 0.1
+ expr0 a>thresh?r:0
+ expr1 a>thresh?g:0
+ expr2 0
+ expr3 a>thresh?1:0
+ name Expression1
+ selected true
+ xpos 389
+ ypos -72
+}
+OFXcom.fleetingimage.finormalize_v1 {
+ name fiNormalize2
+ selected true
+ xpos 389
+ ypos -48
+}
+OFXcom.fleetingimage.fidiffuse_v3 {
+ maskthreshold 0.05
+ autocrop true
+ autocroppad 0
+ skipunpremult false
+ name fiDiffuse1
+ selected true
+ xpos 389
+ ypos 2
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ name Copy3
+ selected true
+ xpos 499
+ ypos -2
+}
+OFXcom.fleetingimage.fibfromrg_v1 {
+ name fiBfromRG2
+ selected true
+ xpos 499
+ ypos 50
+}
+Premult {
+ name Premult4
+ selected true
+ xpos 499
+ ypos 74
+}

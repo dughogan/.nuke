@@ -1,0 +1,274 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+Group {
+ inputs 0
+ name rfxVR_frameCount
+ selected true
+ xpos 673
+ ypos 484
+ addUserKnob {20 User}
+ addUserKnob {6 left_right l left/right +STARTLINE}
+ left_right true
+ addUserKnob {6 top_bottom l top/bottom -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 color l "text color" T Text1.color}
+}
+ BackdropNode {
+  inputs 0
+  name "LAT to Oculus3"
+  tile_color 0x44444401
+  gl_color 0x44444401
+  label "LAT to Oculus"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos 680
+  ypos -218
+  bdwidth 356
+  bdheight 295
+ }
+ BackdropNode {
+  inputs 0
+  name "Oculus Top/Bottom to Stereo1"
+  tile_color 0x44444401
+  gl_color 0x44444401
+  label "Stereo to Oculus Top/Bottom"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos 1142
+  ypos -219
+  bdwidth 417
+  bdheight 243
+ }
+ Camera2 {
+  inputs 0
+  name Camera1
+  xpos 925
+  ypos -350
+ }
+ Axis2 {
+  inputs 0
+  rotate {-10 180 0}
+  name Axis1
+  xpos 1186
+  ypos -440
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "2048 2048 0 0 2048 2048 1 square_2K"
+  name Constant1
+  xpos 1052
+  ypos -608
+ }
+ Text2 {
+  font_size_toolbar 1000
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "\[frame]"
+  old_message {{49 48 49}
+    }
+  old_expression_markers {{0 2}
+    }
+  box {254.5 585.5 1845.5 1586.5}
+  transforms {{0 2}
+    }
+  font_size_values {{0 1000 1 1000 2 1000 0 500 1 500 2 500}
+    }
+  font_size 1000
+  scale {1 1}
+  cursor_initialised true
+  initial_cursor_position {{254.5 1586.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 519 0 0 1 1 0 0 0 0}
+    }
+  name Text1
+  xpos 1052
+  ypos -489
+ }
+ Card2 {
+  translate {0 -400999.9688 0}
+  rotate {90 0 0}
+  scaling {-1 1 1}
+  uniform_scale 150000
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  xpos 1052
+  ypos -463
+ }
+ TransformGeo {
+  inputs 2
+  name TransformGeo1
+  xpos 1052
+  ypos -420
+ }
+ Reformat {
+  inputs 0
+  format "2048 2048 0 0 2048 2048 1 square_2K"
+  name Reformat1
+  xpos 1188
+  ypos -336
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  projection_mode spherical
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos 1052
+  ypos -330
+ }
+ Dot {
+  name Dot3
+  xpos 1086
+  ypos -262
+ }
+set N17f615b0 [stack 0]
+push $N17f615b0
+ Dot {
+  name Dot4
+  xpos 1347
+  ypos -262
+ }
+ Dot {
+  name Dot6
+  xpos 1347
+  ypos -137
+ }
+set N1098a900 [stack 0]
+ Transform {
+  scale {1 0.5}
+  center {{input.width/2} {input.height}}
+  name Transform3
+  xpos 1186
+  ypos -141
+ }
+ Dot {
+  name Dot7
+  xpos 1220
+  ypos -37
+ }
+push $N1098a900
+ Transform {
+  scale {1 0.5}
+  center {{input.width/2} {input.height-input.height}}
+  name Transform4
+  xpos 1446
+  ypos -141
+ }
+ Dot {
+  name Dot8
+  xpos 1480
+  ypos -37
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge2
+  xpos 1308
+  ypos -41
+ }
+ Dot {
+  name Dot10
+  xpos 1342
+  ypos 120
+ }
+push $N17f615b0
+ Dot {
+  name Dot5
+  xpos 828
+  ypos -262
+ }
+ Crop {
+  box {0 0 {input.height} {input.width}}
+  crop false
+  name Crop6
+  xpos 794
+  ypos -158
+ }
+ Shuffle {
+  in2 alpha
+  alpha red
+  name Shuffle10
+  xpos 794
+  ypos -132
+ }
+ Dot {
+  name Dot2
+  xpos 828
+  ypos -91
+ }
+set N1b3d5390 [stack 0]
+ Dot {
+  name Dot1
+  xpos 938
+  ypos -91
+ }
+ Transform {
+  scale {0.5 1}
+  center {{input.width} {input.height/2}}
+  name Transform7
+  xpos 904
+  ypos -41
+ }
+ Dot {
+  name Dot33
+  xpos 938
+  ypos 29
+ }
+push $N1b3d5390
+ Transform {
+  scale {0.5 1}
+  center {{input.width-input.width} {input.height/2}}
+  black_outside false
+  shutter 0
+  shuttercustomoffset -1
+  name Transform8
+  xpos 794
+  ypos -40
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge4
+  xpos 794
+  ypos 25
+ }
+ Dot {
+  name Dot9
+  xpos 828
+  ypos 120
+ }
+ Switch {
+  inputs 3
+  which {{parent.top_bottom==1?1:parent.left_right==1?0:2}}
+  name Switch1
+  xpos 1052
+  ypos 116
+ }
+ Output {
+  name Output1
+  xpos 1052
+  ypos 226
+ }
+end_group
+push 0
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge1
+ selected true
+ xpos 812
+ ypos 484
+}

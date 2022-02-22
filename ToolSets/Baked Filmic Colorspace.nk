@@ -1,0 +1,20 @@
+set cut_paste_input [stack 0]
+version 13.0 v4
+push $cut_paste_input
+OCIOColorSpace {
+ in_colorspace default
+ out_colorspace color_timing
+ name OCIOColorSpace2
+ selected true
+ xpos 137
+ ypos 1844
+}
+OCIOFileTransform {
+ file "C:/Program Files/Blender Foundation/Blender 2.93/2.93/datafiles/colormanagement/filmic/filmic_to_0-70_1-03.spi1d"
+ version 6
+ working_space scene_linear
+ name OCIOFileTransform2
+ selected true
+ xpos 137
+ ypos 1868
+}

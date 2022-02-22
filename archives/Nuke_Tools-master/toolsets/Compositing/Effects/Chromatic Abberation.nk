@@ -1,0 +1,253 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+push $cut_paste_input
+Dot {
+ name Dot13
+ selected true
+ xpos -3081
+ ypos 2875
+}
+set N6044010 [stack 0]
+Remove {
+ channels alpha
+ name Remove2
+ selected true
+ xpos -2849
+ ypos 2865
+}
+set N6e71fc0 [stack 0]
+Remove {
+ channels {rgba.red rgba.green -rgba.blue none}
+ name Blue
+ selected true
+ xpos -2703
+ ypos 2931
+}
+Shuffle {
+ black blue
+ out2 alpha
+ name Blue_Alpha
+ selected true
+ xpos -2703
+ ypos 3035
+}
+LensDistortion1_0 {
+ serializeKnob ""
+ serialiseKnob "22 serialization::archive 9 0 0 0 0 0 0 0 0 0 0 0 0"
+ distortion1 0.04
+ cardScale {1.060847521 1.060847521 1}
+ a -0.08303721249
+ b 0.04396037385
+ c -0.01538031548
+ name Blue_Aberration
+ selected true
+ xpos -2703
+ ypos 3119
+}
+Transform {
+ translate {3 0}
+ scale {1.03 1}
+ center {960 409}
+ name Transform7
+ selected true
+ xpos -2703
+ ypos 3145
+}
+Blur {
+ size {0 10}
+ name Blur9
+ selected true
+ xpos -2703
+ ypos 3171
+}
+push $N6e71fc0
+Remove {
+ channels {rgba.red -rgba.green rgba.blue none}
+ name Green
+ selected true
+ xpos -2849
+ ypos 2931
+}
+Shuffle {
+ black green
+ out2 alpha
+ name Green_Alpha
+ selected true
+ xpos -2849
+ ypos 3032
+}
+LensDistortion1_0 {
+ serializeKnob ""
+ serialiseKnob "22 serialization::archive 9 0 0 0 0 0 0 0 0 0 0 0 0"
+ distortion1 0.035
+ cardScale {1.037687898 1.037687898 1}
+ a -0.011247674
+ b -0.01854742132
+ c -0.008158384822
+ name Green_Aberration
+ selected true
+ xpos -2849
+ ypos 3103
+}
+Transform {
+ scale {1 1.03}
+ center {960 409}
+ name Transform8
+ selected true
+ xpos -2849
+ ypos 3129
+}
+Blur {
+ size {0 10}
+ name Blur10
+ selected true
+ xpos -2849
+ ypos 3155
+}
+push $N6e71fc0
+Remove {
+ channels {-rgba.red rgba.green rgba.blue none}
+ name Red
+ selected true
+ xpos -2984
+ ypos 2931
+}
+Shuffle {
+ black red
+ out2 alpha
+ name Red_Alpha
+ selected true
+ xpos -2988
+ ypos 3032
+}
+LensDistortion1_0 {
+ serializeKnob ""
+ serialiseKnob "22 serialization::archive 9 0 0 0 0 0 0 0 0 0 0 0 0"
+ distortion1 0.11
+ "Card Parameters" 1
+ cardScale {1.143947959 1.143947959 1}
+ a -0.09372394532
+ b -0.00878599938
+ c -0.04278805479
+ name Red_Aberration
+ selected true
+ xpos -2988
+ ypos 3116
+}
+Transform {
+ translate {-3 0}
+ scale {1.03 1}
+ center {960 409}
+ name Transform9
+ selected true
+ xpos -2988
+ ypos 3142
+}
+Blur {
+ size {0 10}
+ name Blur11
+ selected true
+ xpos -2988
+ ypos 3168
+}
+Merge2 {
+ inputs 2
+ operation screen
+ name Red_and_Green
+ selected true
+ xpos -2922
+ ypos 3224
+}
+Merge2 {
+ inputs 2
+ operation screen
+ name Red_and_Green_and_Blue
+ selected true
+ xpos -2800
+ ypos 3224
+}
+set N6c5d460 [stack 0]
+push $N6e71fc0
+Dot {
+ name Dot14
+ selected true
+ xpos -2588
+ ypos 2875
+}
+set N6c6cb30 [stack 0]
+Shuffle {
+ alpha white
+ name Shuffle3
+ selected true
+ xpos -2487
+ ypos 2872
+}
+Dot {
+ name Dot15
+ selected true
+ xpos -2453
+ ypos 3301
+}
+Merge2 {
+ inputs 2
+ operation average
+ invert_mask true
+ mix 0.4
+ name MIX
+ selected true
+ xpos -2800
+ ypos 3298
+}
+push $N6044010
+Dot {
+ name Dot16
+ selected true
+ xpos -3081
+ ypos 3356
+}
+set N71dd300 [stack 0]
+Merge2 {
+ inputs 2
+ operation difference
+ maskChannelMask none
+ name Merge6
+ selected true
+ xpos -2800
+ ypos 3352
+}
+Blur {
+ size {20 0}
+ name Blur8
+ selected true
+ xpos -2800
+ ypos 3378
+}
+set N61cd870 [stack 0]
+push $N71dd300
+Merge2 {
+ inputs 2
+ operation screen
+ maskChannelMask none
+ mix 0.4
+ name Merge7
+ selected true
+ xpos -3115
+ ypos 3384
+}
+push $N6c6cb30
+push $N6c5d460
+Difference {
+ inputs 2
+ name Matte_Aberration
+ selected true
+ xpos -2622
+ ypos 3218
+}
+push $N61cd870
+Viewer {
+ frame_range 101-200
+ name Viewer1
+ selected true
+ xpos -2800
+ ypos 3250
+}

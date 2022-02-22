@@ -1,0 +1,49 @@
+#! /data/film/apps/d2/Nuke4.3.34_temp_lin/nuke4.3 -nx
+version 4.3035
+Gizmo {
+ inputs 1
+ addUserKnob { 20 "" User } 
+ addUserKnob { 7 Merge12_mix mix R 0 1 } 
+ name AmbOclMix
+ tile_color 0x7171c600
+ Merge12_mix 1
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 124
+  ypos -175
+ }
+set N87bb330 [stack 0]
+ Dot {
+  name Dot17
+  tile_color 0x9597bf00
+  xpos 268
+  ypos -172
+ }
+push $N87bb330
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle3
+  tile_color 0x9e3c6300
+  label "Fixes Edge Problems"
+  xpos 124
+  ypos -123
+ }
+ Merge {
+  inputs 2
+  mix {{parent.Merge12_mix}}
+  name Merge12
+  tile_color 0x4b5ec600
+  xpos 234
+  ypos -107
+ }
+ Output {
+  name Output1
+  xpos 234
+  ypos -73
+ }
+end_group

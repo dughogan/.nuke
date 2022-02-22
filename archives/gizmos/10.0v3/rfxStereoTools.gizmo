@@ -1,0 +1,125 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Gizmo {
+ tile_color 0x51ce00ff
+ label "v1.2 - dug"
+ addUserKnob {20 User}
+ addUserKnob {20 tool_introduction l "Read Me" n 1}
+ tool_introduction 0
+ addUserKnob {26 tool_tips l "" +STARTLINE T "Attach this node after your rfxOffset\n(Recommend placement: \nattached off to the side of your rfxOffset).\n\n*Do not place in the comp stream, only off \nto the side!*\n\nThen use the \"3D Viewing Method\" pull down \nmenu to see your stereo shot in either a \n\"side by side\" configuration  for viewing with \na mirror setup, or Anaglyph to view it with \nred & blue glasses.\n\n*Requires rfxOffset to work correctly*"}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {4 rfxStereoTools_methods l "3D Viewing Method" t "Use this pull down menu to see your \nstereo shot in either a \"side by side\"\n configuration for viewing with a mirror \nsetup, or Anaglyph to view it with red & blue glasses." M {"Side by Side" Anaglyph "" "" ""}}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 612
+  ypos 260
+ }
+ Dot {
+  name Dot32
+  xpos 646
+  ypos 427
+ }
+set Nebe0880 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1086
+  ypos 427
+ }
+ Crop {
+  box {{curve i} {curve i} {"\[value root.width]" i} {"\[value root.height]" i}}
+  name Crop1
+  xpos 1052
+  ypos 550
+ }
+ Anaglyph {
+  views {left right}
+  name Anaglyph1
+  label "Pulls in the rfxOffset1 horizontal offset value"
+  xpos 1052
+  ypos 578
+ }
+ Dot {
+  name Dot2
+  xpos 1086
+  ypos 798
+ }
+push $Nebe0880
+ Crop {
+  box {{curve} {curve} {"\[value root.width]"} {"\[value root.height]"}}
+  name Crop2
+  xpos 612
+  ypos 471
+ }
+ Dot {
+  name Dot8
+  xpos 647
+  ypos 563
+ }
+set N15a7c4c0 [stack 0]
+ Dot {
+  name Dot9
+  xpos 768
+  ypos 563
+ }
+ OneView {
+  view right
+  name OneView2
+  label Right
+  xpos 734
+  ypos 588
+ }
+ Transform {
+  scale {-1 1}
+  center {{width/2} {height/2}}
+  name Transform1
+  xpos 734
+  ypos 635
+ }
+push $N15a7c4c0
+ OneView {
+  name OneView3
+  label Left
+  xpos 613
+  ypos 589
+ }
+ ContactSheet {
+  inputs 2
+  width {{input.width*2}}
+  height {{input.height}}
+  rows 1
+  columns 2
+  name ContactSheet1
+  xpos 613
+  ypos 635
+ }
+set Nd9b9140 [stack 0]
+ Dot {
+  name Dot1
+  xpos 647
+  ypos 798
+ }
+ Switch {
+  inputs 2
+  which {{parent.rfxStereoTools_methods i}}
+  name Switch1
+  xpos 833
+  ypos 795
+ }
+ Output {
+  name Output1
+  xpos 833
+  ypos 906
+ }
+push $Nd9b9140
+ Viewer {
+  frame_range 70-144
+  viewerProcess "Scoob LUT (DreamColor)"
+  name Viewer1
+  selected true
+  xpos 734
+  ypos 661
+ }
+end_group

@@ -1,0 +1,421 @@
+Group {
+ name rfxWeightedGlow1
+ knobChanged "import nk_gizmoMask\nreload(nk_gizmoMask)\nnk_gizmoMask.nodeUpdate(nuke.thisKnob())"
+ tile_color 0xcc7f4dff
+ selected true
+ addUserKnob {20 weightedGlow}
+ addUserKnob {41 channels T Grade1.channels}
+ addUserKnob {19 tint}
+ tint 1
+ addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 tolerance}
+ addUserKnob {7 brightness R 0 5}
+ brightness 1
+ addUserKnob {7 saturation}
+ saturation 1
+ addUserKnob {6 lumBased l "preserve saturation" -STARTLINE}
+ lumBased true
+ addUserKnob {26 mask l "width channel" T ""}
+ addUserKnob {41 maskChannelMask l INVISIBLE -STARTLINE +INVISIBLE T Grade3.maskChannelMask}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Grade3.maskChannelInput}
+ addUserKnob {6 effectOnly l "effect only" -STARTLINE}
+ addUserKnob {6 clamp l "clamp input" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 size R 0 400}
+ size 15
+ addUserKnob {7 center l "center weight" R 0 4}
+ addUserKnob {6 crop l "crop to format" +STARTLINE}
+ crop true
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannel1 l mask +HIDDEN T Keymix1.maskChannel}
+ addUserKnob {41 invertMask1 l invert -STARTLINE +HIDDEN T Keymix1.invertMask}
+ addUserKnob {41 maskChannel2 l mask T Keymix2.maskChannel}
+ addUserKnob {41 invertMask2 l invert -STARTLINE T Keymix2.invertMask}
+ addUserKnob {7 mix}
+ mix 1
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x5c6377ff
+  label mask
+  note_font_size 42
+  xpos 147
+  ypos -110
+  bdwidth 778
+  bdheight 327
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 170
+  ypos 51
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 534
+  ypos -1019
+ }
+ NoOp {
+  name NoOp1
+  xpos 534
+  ypos -975
+  addUserKnob {20 User}
+  addUserKnob {7 size R 0 100}
+  addUserKnob {7 center R 0 4}
+ }
+set Ne4d8d40 [stack 0]
+ Grade {
+  white 0
+  maskChannelMask none
+  invert_mask true
+  name Grade3
+  label "\[value white]"
+  xpos 534
+  ypos -941
+  disable {{!Grade3.mask}}
+ }
+ Clamp {
+  channels rgb
+  minimum_enable false
+  maximum_enable {{parent.clamp}}
+  maskChannelMask none
+  name Clamp1
+  xpos 534
+  ypos -893
+ }
+ Dot {
+  name Dot4
+  xpos 568
+  ypos -848
+ }
+set N3880a620 [stack 0]
+ Dot {
+  name Dot8
+  xpos 690
+  ypos -848
+ }
+ Saturation {
+  saturation 0
+  maskChannelMask none
+  name Saturation2
+  label "\[value saturation]"
+  xpos 656
+  ypos -804
+ }
+set Ne303290 [stack 0]
+ Grade {
+  blackpoint {{parent.tolerance.left}}
+  white {{parent.brightness.left}}
+  maskChannelMask none
+  name Grade4
+  knobChanged "\nprint 'knob has been changed'\nnodes= \[]\nnodes.append(nuke.toNode('parent.Grade3'))\nnodes.append(nuke.toNode('parent.Clamp1'))\nnodes.append(nuke.toNode('parent.Saturation1'))\nnodes.append(nuke.toNode('parent.Grade2'))\nnodes.append(nuke.toNode('parent.Merge1'))\n\nfor i in nodes:\n    print i\n    if i.Class() == \"Merge2\":\n        i.knob('Achannels').setValue(nuke.thisNode().knob('channels').value())\n        i.knob('Bchannels').setValue(nuke.thisNode().knob('channels').value())\n        i.knob('output').setValue(nuke.thisNode().knob('channels').value())\n    else:\n        i.knob('channels').setValue(nuke.thisNode().knob('channels').value())\n"
+  label "tolerance\nbrightness"
+  xpos 656
+  ypos -763
+ }
+ Dot {
+  name Dot9
+  xpos 690
+  ypos -704
+ }
+push $N3880a620
+push $Ne303290
+ Merge2 {
+  inputs 2
+  operation divide
+  maskChannelMask none
+  name Merge2
+  xpos 534
+  ypos -798
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  maskChannelMask none
+  name Merge3
+  xpos 534
+  ypos -707
+ }
+push $N3880a620
+ Dot {
+  name Dot10
+  xpos 418
+  ypos -848
+ }
+ Grade {
+  blackpoint {{parent.tolerance.left}}
+  white {{parent.brightness.left}}
+  maskChannelMask none
+  name Grade1
+  knobChanged "\nprint 'knob has been changed'\nnodes= \[]\nnodes.append(nuke.toNode('parent.Grade3'))\nnodes.append(nuke.toNode('parent.Clamp1'))\nnodes.append(nuke.toNode('parent.Saturation1'))\nnodes.append(nuke.toNode('parent.Grade2'))\nnodes.append(nuke.toNode('parent.Merge1'))\n\nfor i in nodes:\n    print i\n    if i.Class() == \"Merge2\":\n        i.knob('Achannels').setValue(nuke.thisNode().knob('channels').value())\n        i.knob('Bchannels').setValue(nuke.thisNode().knob('channels').value())\n        i.knob('output').setValue(nuke.thisNode().knob('channels').value())\n    else:\n        i.knob('channels').setValue(nuke.thisNode().knob('channels').value())\n"
+  label "tolerance\nbrightness"
+  xpos 384
+  ypos -777
+ }
+ Dot {
+  name Dot11
+  xpos 418
+  ypos -649
+ }
+ Switch {
+  inputs 2
+  which {{parent.lumBased.left}}
+  name Switch2
+  label "luminance based?"
+  xpos 534
+  ypos -658
+ }
+ Saturation {
+  saturation {{parent.saturation.left}}
+  maskChannelMask none
+  name Saturation1
+  xpos 534
+  ypos -593
+ }
+ Grade {
+  white {{parent.tint} {parent.tint} {parent.tint} {parent.tint}}
+  maskChannelMask none
+  name Grade2
+  label tint
+  xpos 534
+  ypos -546
+ }
+ NoOp {
+  name NoOp3
+  xpos 534
+  ypos -494
+  addUserKnob {20 User}
+  addUserKnob {7 size R 0 100}
+  addUserKnob {7 center R 0 4}
+ }
+set Ne32cb50 [stack 0]
+ Blur {
+  size {{"parent.size*pow(parent.size, -(2.8*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur23
+  xpos 1056
+  ypos -326
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(2.6*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur22
+  xpos 946
+  ypos -327
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(2.4*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur21
+  xpos 834
+  ypos -326
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(2.2*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur20
+  xpos 724
+  ypos -327
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(2.0*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur19
+  xpos 615
+  ypos -325
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(1.8*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur18
+  xpos 504
+  ypos -325
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(1.6*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur17
+  xpos 395
+  ypos -327
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(1.4*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur16
+  xpos 285
+  ypos -328
+ }
+push 0
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(1.2*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur15
+  xpos 178
+  ypos -326
+ }
+push $Ne32cb50
+ Blur {
+  size {{"parent.size*pow(parent.size, -(1.0*parent.center*.1)) "}}
+  crop {{parent.crop}}
+  name Blur14
+  xpos 64
+  ypos -322
+ }
+ Blend {
+  inputs 10+1
+  maskChannelMask none
+  name Blend3
+  xpos 544
+  ypos -172
+ }
+ Dot {
+  name Dot13
+  xpos 578
+  ypos -30
+ }
+set N2c616220 [stack 0]
+push $Ne4d8d40
+ Dot {
+  name Dot1
+  xpos 1322
+  ypos -972
+ }
+ Dot {
+  name Dot15
+  xpos 1322
+  ypos -30
+ }
+set N15d9f5c0 [stack 0]
+ Dot {
+  name Dot14
+  xpos 775
+  ypos -30
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffle1
+  label 000
+  xpos 741
+  ypos -6
+ }
+ Dot {
+  name Dot12
+  xpos 775
+  ypos 54
+ }
+set Nd7703e0 [stack 0]
+ Keymix {
+  inputs 3
+  maskChannel none
+  name Keymix1
+  xpos 345
+  ypos 45
+ }
+push $N2c616220
+ Switch {
+  inputs 2
+  which {{"parent.Keymix1.maskChannel > 0 ? 1 : 0"}}
+  name Switch6
+  xpos 411
+  ypos 120
+ }
+push $Nd7703e0
+push $N2c616220
+push $Nd7703e0
+ Keymix {
+  inputs 3
+  maskChannel none
+  name Keymix2
+  xpos 598
+  ypos 86
+ }
+push $N2c616220
+ Switch {
+  inputs 2
+  which {{"parent.Keymix2.maskChannel > 0 ? 1 : 0"}}
+  name Switch5
+  xpos 544
+  ypos 136
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch4
+  xpos 544
+  ypos 190
+ }
+ Dot {
+  name Dot7
+  xpos 578
+  ypos 278
+ }
+set Ne4bcd10 [stack 0]
+ Dot {
+  name Dot5
+  xpos 471
+  ypos 278
+ }
+ Dot {
+  name Dot6
+  xpos 471
+  ypos 449
+ }
+push $Ne4bcd10
+push $N15d9f5c0
+ Dot {
+  name Dot3
+  xpos 1322
+  ypos 353
+ }
+set N14a76620 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  maskChannelMask none
+  name Merge1
+  xpos 544
+  ypos 350
+ }
+ Switch {
+  inputs 2
+  which {{parent.effectOnly}}
+  name Switch1
+  xpos 544
+  ypos 446
+ }
+push $N14a76620
+ Dot {
+  name Dot2
+  xpos 1322
+  ypos 570
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  maskChannelMask none
+  name Dissolve1
+  xpos 544
+  ypos 561
+ }
+ Output {
+  name Output1
+  xpos 544
+  ypos 676
+ }
+end_group

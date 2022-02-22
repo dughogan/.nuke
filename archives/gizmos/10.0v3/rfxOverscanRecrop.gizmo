@@ -1,0 +1,39 @@
+#! /usr/local/Nuke7.0v8/Nuke7.0 -nx
+version 7.0 v8
+Gizmo {
+ addUserKnob {20 User}
+ addUserKnob {4 overscan_recrop l "Overscan %" M {01 05 10 15 20 "" ""}}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 507
+  ypos 399
+ }
+set Naf75bd0 [stack 0]
+ Transform {
+  scale {{"1.\[value parent.overscan_recrop]"}}
+  center {{input.width/2} {input.height/2}}
+  black_outside false
+  name Transform5
+  xpos 507
+  ypos 480
+ }
+ Reformat {
+  name Reformat1
+  xpos 507
+  ypos 504
+ }
+ Output {
+  name Output1
+  xpos 507
+  ypos 571
+ }
+push $Naf75bd0
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos 748
+  ypos 522
+ }
+end_group

@@ -1,0 +1,76 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name "Patch Painting1"
+ tile_color 0x44444401
+ gl_color 0x44444401
+ label "Projection Camera Painting"
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 891
+ ypos -205
+ bdwidth 383
+ bdheight 428
+}
+push $cut_paste_input
+Camera2 {
+ file "GIVE ME A CAMERA FILE"
+ name Camera4
+ label "GIVE ME A CAMERA FILE"
+ selected true
+ xpos 930
+ ypos -116
+}
+set Nfc821a0 [stack 0]
+Dot {
+ name Dot1
+ selected true
+ xpos 954
+ ypos 149
+}
+push $Nfc821a0
+FrameHold {
+ first_frame 101
+ name FrameHold1
+ tile_color 0xffff
+ selected true
+ xpos 1028
+ ypos -102
+}
+push 0
+Project3D2 {
+ inputs 2
+ project_on front
+ name Project3D2
+ selected true
+ xpos 1150
+ ypos -96
+ addUserKnob {20 User}
+ addUserKnob {6 is_matte_painting -STARTLINE}
+ is_matte_painting true
+}
+ReadGeo2 {
+ file "GIVE ME A GEO FILE"
+ name ReadGeo3
+ selected true
+ xpos 1150
+ ypos -32
+}
+Scene {
+ name Scene3
+ selected true
+ xpos 1160
+ ypos 37
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ name ScanlineRender4
+ selected true
+ xpos 1150
+ ypos 145
+}

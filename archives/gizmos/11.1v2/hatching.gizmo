@@ -1,0 +1,368 @@
+﻿set cut_paste_input [stack 0]
+version 12.0 v5
+push $cut_paste_input
+Gizmo {
+ name Hatching
+ tile_color 0xff00bfff
+ selected true
+ xpos 5864
+ ypos 7719
+ addUserKnob {20 User}
+ addUserKnob {7 wobble}
+ wobble 0.5
+ addUserKnob {41 frequency l period t "period control size (spacing) of hatch" T logstripes1.frequency}
+ addUserKnob {26 ""}
+ addUserKnob {41 rotate T T.rotate}
+ addUserKnob {26 ""}
+ addUserKnob {41 multiply l "hatch color" T HatchColor.multiply}
+ addUserKnob {41 blackpoint l intensity T Grade33.blackpoint}
+ addUserKnob {26 ""}
+ addUserKnob {3 step_control l "Step Mode" t "0 = Exposure or xsheet based\n1 = Held\n2 = Force 2's"}
+ step_control {{parent.CONTROLS1.step_control}}
+ addUserKnob {4 step_mode l "" -STARTLINE M {exposure hold force_steps}}
+ step_mode {{"\[value step_control]"}}
+ addUserKnob {3 step_size l Step_Size}
+ step_size {{parent.CONTROLS1.step_size}}
+ addUserKnob {3 Randomizer}
+ Randomizer 10
+ addUserKnob {3 step_frame l "step frame" +INVISIBLE}
+ step_frame {{"\[if \{\[value step_mode] == \"exposure\"\} \{return \[frame]\} \{if \{\[value step_mode] == \"hold\" \} \{return 0\} \{return \[expr int(\[frame]/\[value step_size])*\[value step_size]]\} \} ]"}}
+ addUserKnob {3 Stepper +INVISIBLE}
+ Stepper 5000
+ addUserKnob {7 seed +INVISIBLE}
+ seed {{"\[expr \[jamXsheetHash xsheet \[value elementname] \[expr \[value step_frame ] + \[jamSceneSetupValueInt harmony_to_vfx_frame_offset]] \[value Randomizer]] % \[value Stepper]]"}}
+ addUserKnob {1 elementname l "element name" +INVISIBLE}
+ elementname "\[python nuke.thisNode().metadata('element_name', time=nuke.frame())]"
+}
+ BackdropNode {
+  inputs 0
+  name NoisyLines
+  tile_color 0x7171c600
+  note_font_size 42
+  xpos 413
+  ypos -400
+  bdwidth 245
+  bdheight 251
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 335
+  ypos -530
+ }
+ Dot {
+  name Dot1
+  xpos 369
+  ypos -487
+ }
+set N6ca88c00 [stack 0]
+ Dot {
+  name Dot2
+  xpos 369
+  ypos 295
+ }
+push $N6ca88c00
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle20
+  xpos 568
+  ypos -490
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression3
+  xpos 568
+  ypos -466
+ }
+ Expression {
+  temp_name0 ex
+  temp_expr0 "r - T.center.x - T.translate.x"
+  temp_name1 why
+  temp_expr1 "g -T.center.y - T.translate.y "
+  temp_name2 rx
+  temp_expr2 "crrot* ex - srrot * why"
+  temp_name3 ry
+  temp_expr3 " srrot * ex + crrot *why"
+  expr0 "rx / T.scale.w+ T.center.x"
+  expr1 "ry /T.scale.h + T.center.y - radius"
+  name Expression5
+  xpos 568
+  ypos -442
+  addUserKnob {20 User}
+  addUserKnob {7 radius R 0 1000}
+  radius 50000
+  addUserKnob {7 rrot}
+  rrot {{"-T.rotate * 3.1415926535 / 180.0"}}
+  addUserKnob {7 crrot}
+  crrot {{cos(rrot)}}
+  addUserKnob {7 srrot}
+  srrot {{sin(rrot)}}
+ }
+ Expression {
+  temp_name0 mag
+  temp_expr0 sqrt(r*r+g*g)
+  channel0 rgb
+  expr0 mag
+  name Expression2
+  xpos 568
+  ypos -418
+ }
+ Dot {
+  name Dot66
+  xpos 602
+  ypos -360
+ }
+set N6cabb400 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos 423
+  ypos -363
+ }
+ Noise {
+  size 135
+  zoffset {{"\[value this.parent.seed]"}}
+  octaves 1
+  translate {{parent.T.translate.x} {parent.T.translate.y}}
+  rotate {{parent.T.rotate}}
+  scale {{parent.T.scale}}
+  center {{parent.T.center.x} {parent.T.center.y}}
+  name Noise1
+  xpos 423
+  ypos -327
+ }
+ fiGradient {
+  name fiGradient1
+  xpos 423
+  ypos -294
+ }
+ Multiply {
+  value 1000
+  name Multiply1
+  xpos 423
+  ypos -270
+ }
+ Multiply {
+  value {{parent.wobble}}
+  name Multiply2
+  xpos 423
+  ypos -234
+ }
+ Expression {
+  expr0 (x+r)/width
+  expr1 (y+g)/height
+  name Expression1
+  xpos 423
+  ypos -191
+ }
+push $N6cabb400
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap2
+  xpos 568
+  ypos -197
+ }
+ Dot {
+  name Dot9
+  xpos 817
+  ypos -188
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha white
+  name Shuffle4
+  xpos 783
+  ypos -148
+ }
+set N6caf4400 [stack 0]
+ Expression {
+  expr0 "min(1.414/fabs(r(x+1,y+1) - r), 1./fabs(r(x+1,y)-r), 1.414/fabs(r(x+1,y-1)-r), 1./fabs(r(x,y-1)-r), 1.414/fabs(r(x-1,y-1)-r) , 1./fabs(r(x-1,y)-r) , 1.414/fabs(r(x-1,y+1)-r) , 1./fabs(r(x,y+1)-r))"
+  name Expression6
+  xpos 783
+  ypos -64
+ }
+ Expression {
+  temp_name0 rfreq
+  temp_expr0 frequency
+  expr0 log(r/rfreq)/log(2)
+  channel2 {-rgba.red -rgba.green rgba.blue none}
+  name logstripes1
+  xpos 783
+  ypos -16
+  addUserKnob {20 User}
+  addUserKnob {7 frequency R 0 100}
+  frequency 5
+ }
+set N6cb23c00 [stack 0]
+ Expression {
+  expr0 floor(r)
+  name ilogstripes1
+  xpos 783
+  ypos 8
+ }
+set N6cb23800 [stack 0]
+ Expression {
+  expr0 pow(2,r)
+  name stripes1
+  xpos 893
+  ypos 8
+ }
+push $N6caf4400
+ Dot {
+  name Dot10
+  xpos 1037
+  ypos -145
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name fstripes1
+  xpos 1003
+  ypos 8
+ }
+set N6cb22c00 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1147
+  ypos 11
+ }
+push $N6cb22c00
+ Expression {
+  expr0 floor(r)
+  expr1 floor(g)
+  name istripes1
+  selected true
+  xpos 1003
+  ypos 56
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name saw1
+  xpos 1113
+  ypos 56
+ }
+ Expression {
+  expr0 fabs(2*r-1)
+  expr1 fabs(2*g-1)
+  name tri1
+  xpos 1113
+  ypos 80
+ }
+push $N6cb23c00
+ Dot {
+  name Dot12
+  xpos 715
+  ypos -13
+ }
+ Dot {
+  name Dot13
+  xpos 715
+  ypos 107
+ }
+push $N6cb23800
+ Merge2 {
+  inputs 2
+  operation minus
+  name transition1
+  xpos 783
+  ypos 104
+ }
+set N6cb7f000 [stack 0]
+ Add {
+  channels rgb
+  value 1
+  name plus_one1
+  xpos 912
+  ypos 104
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name IMult1
+  xpos 1113
+  ypos 104
+ }
+push $N6cb7f000
+ Dot {
+  name Dot14
+  xpos 817
+  ypos 131
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name ISub2
+  xpos 1113
+  ypos 128
+ }
+ Expression {
+  expr0 fabs(r)
+  expr1 fabs(g)
+  name transtri1
+  xpos 1113
+  ypos 159
+ }
+ Grade {
+  blackpoint 0.6
+  white_clamp true
+  name Grade33
+  xpos 1113
+  ypos 200
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle5
+  xpos 1113
+  ypos 224
+ }
+ Grade {
+  multiply 0
+  unpremult rgba.alpha
+  name HatchColor
+  xpos 1113
+  ypos 248
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge31
+  xpos 1113
+  ypos 292
+ }
+ Output {
+  name Output1
+  xpos 1113
+  ypos 372
+ }
+ Transform {
+  inputs 0
+  translate {2355 1710}
+  rotate 40
+  name T
+  xpos 718
+  ypos -442
+ }
+push $N6ca88c00
+ Viewer {
+  frame_range 107-107
+  viewerProcess raw
+  name Viewer1
+  xpos 1240
+  ypos 292
+ }
+end_group

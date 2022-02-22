@@ -1,0 +1,16 @@
+Preferences {
+ inputs 0
+ name Preferences
+ localizationMode off
+ selectedGPUDeviceName "Quadro RTX 5000"
+ platformPathRemaps ""
+ colorPickerDefaultMode "floating color picker"
+ NodeColourClass11 "transform mirror crop distort reformat resize cornerpin stabilize upscale TransformRiggedGeo FaceTracker GeoTracker PinTool     "
+ ArrowColorLeft 0xff0000ff
+ ArrowColorUp 0xff0000ff
+ expression_arrows false
+ link_knob_arrows false
+ clone_arrows false
+ Viewer3DControlEmulation Maya
+ defaultFlipbook "Flipbook Viewer"
+}

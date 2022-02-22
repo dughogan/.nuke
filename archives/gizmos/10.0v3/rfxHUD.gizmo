@@ -1,0 +1,618 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Gizmo {
+ tile_color 0xff
+ addUserKnob {20 User}
+ addUserKnob {6 side_by_side l "Side by Side?" +STARTLINE}
+ addUserKnob {6 first_last l "First / Last Swap" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {6 insight_color l "Status Border Off?" -STARTLINE}
+ insight_color true
+ addUserKnob {3 hero_frame l INVISIBLE -STARTLINE +INVISIBLE}
+ hero_frame 102
+ addUserKnob {6 warning_border l "Out of Date Border Off?" -STARTLINE}
+ warning_border true
+ addUserKnob {6 minimal l "Minimal HUD?" -STARTLINE}
+ minimal true
+ addUserKnob {6 use_hero_frame l "Use Hero Frame?" -STARTLINE}
+ addUserKnob {20 data l Data}
+ addUserKnob {18 insight_color_tile}
+ insight_color_tile {{"(0xFF & \[value \[topnode].tile_color] >> 24) / 255.0"} {"(0xFF & \[value \[topnode].tile_color] >> 16) / 255.0"} {"(0xFF & \[value \[topnode].tile_color] >> 8) / 255.0"}}
+ addUserKnob {6 insight_color_tile_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {1 input_range}
+ input_range "\[value \[topnode].first]-\[value \[topnode].last]"
+ addUserKnob {6 insight_color_tile_panelDropped_1 l "panel dropped state" -STARTLINE}
+ addUserKnob {1 input_artist}
+ input_artist "\[value \[topnode].lighter]"
+ addUserKnob {1 input_first}
+ input_first "\[value \[topnode].first]"
+ addUserKnob {1 input_last}
+ input_last "\[value \[topnode].last]"
+ addUserKnob {1 input_label}
+ input_label "\[value \[topnode].label]"
+}
+ Dot {
+  inputs 0
+  name Dot15
+  xpos 956
+  ypos 303
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 659
+  ypos -1203
+ }
+ Dot {
+  name Dot17
+  xpos 693
+  ypos -1145
+ }
+set N80256b0 [stack 0]
+push $N80256b0
+ FrameHold {
+  first_frame {{parent.hero_frame}}
+  name hero_frame_hold
+  xpos 530
+  ypos -1155
+ }
+ Switch {
+  inputs 2
+  which {{!parent.use_hero_frame}}
+  name Switch12
+  selected true
+  xpos 659
+  ypos -1077
+ }
+ ModifyMetaData {
+  metadata {
+   {set input/range "\[value this.parent.input_range]"}
+   {set input/artist "\[value this.parent.input_artist]"}
+   {set input/InsightColorRed "\[value this.parent.insight_color_tile.r]"}
+   {set input/InsightColorGreen "\[value this.parent.insight_color_tile.g]"}
+   {set input/InsightColorBlue "\[value this.parent.insight_color_tile.b]"}
+   {set input/first "\[value this.parent.input_first]"}
+   {set input/last "\[value this.parent.input_last]"}
+   {set input/label "\[value this.parent.input_label]"}
+  }
+  name ModifyMetaData16
+  xpos 659
+  ypos -997
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  name Crop5
+  xpos 659
+  ypos -933
+ }
+ Dot {
+  name Dot10
+  xpos 693
+  ypos -859
+ }
+set N804eb00 [stack 0]
+ Dot {
+  name Dot1
+  xpos 516
+  ypos -859
+ }
+set N80535e0 [stack 0]
+ FrameHold {
+  first_frame {{"\[metadata input/first]"}}
+  name FrameHold1
+  xpos 417
+  ypos -818
+ }
+set N8058060 [stack 0]
+push $N80535e0
+ FrameHold {
+  first_frame {{"\[metadata input/last]"}}
+  name FrameHold2
+  xpos 540
+  ypos -818
+ }
+set N8060780 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.first_last}}
+  name Switch11
+  xpos 540
+  ypos -726
+ }
+push $N8060780
+push $N8058060
+ Switch {
+  inputs 2
+  which {{parent.first_last}}
+  name Switch9
+  xpos 417
+  ypos -724
+ }
+ ContactSheet {
+  inputs 2
+  width {{input.width*2}}
+  height {{input.height}}
+  rows 1
+  columns 2
+  center true
+  name ContactSheet1
+  xpos 482
+  ypos -669
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  name Crop2
+  xpos 482
+  ypos -643
+ }
+push $N8060780
+ Dot {
+  name Dot11
+  xpos 602
+  ypos -771
+ }
+push $N804eb00
+ Switch {
+  inputs 2
+  which {{parent.first_last}}
+  name Switch4
+  xpos 659
+  ypos -763
+ }
+ Switch {
+  inputs 2
+  which {{parent.side_by_side}}
+  name Switch1
+  xpos 659
+  ypos -643
+ }
+ Crop {
+  box {0 {-input.height/10} {input.width} {input.height+(input.height/10)}}
+  reformat true
+  crop false
+  name Crop6
+  xpos 659
+  ypos -605
+ }
+ Text {
+  maskChannelMask none
+  message "   Dept: Lighting\n   Insight Task: \[value parent.input.preferredtask]\n   WIP: \[lindex \[split \[metadata input/filename] /] 7]\n   STATUS: \[value parent.input.status]"
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/9}}
+  leading 0.2
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {input.height-input.height/4.75}}
+  center {1705 1080}
+  name Text22
+  label "\[value message]"
+  xpos 659
+  ypos -570
+  disable {{parent.minimal}}
+ }
+ Text {
+  maskChannelMask none
+  message "\[lindex \[split \[metadata input/filename] /] 2]   "
+  font /code/global/nuke/fonts/MYRIADPRO-BOLD.OTF
+  size {{((box.r/box.t)+box.y)/5}}
+  xjustify right
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {input.height-input.height/4.75}}
+  center {1705 1080}
+  color 0.5
+  name Text18
+  label "\[value message]"
+  xpos 659
+  ypos -496
+  disable {{parent.minimal}}
+ }
+ Text {
+  maskChannelMask none
+  message "\[metadata input/width]x\[metadata input/height]"
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/6}}
+  xjustify center
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {input.height-input.height/4.75}}
+  center {1705 1080}
+  name Text32
+  label "\[value message]"
+  xpos 659
+  ypos -458
+  disable {{parent.minimal}}
+ }
+ Text {
+  maskChannelMask none
+  message " A:   \[metadata input/artist]"
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/5}}
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/9}}
+  center {1705 1080}
+  color {{parent.minimal==1?.25:1}}
+  name Text5
+  label "\[value message]"
+  xpos 659
+  ypos -420
+ }
+ Text {
+  maskChannelMask none
+  message "\[lindex \[split \[metadata input/filename] /] 4]_\[lindex \[split \[metadata input/filename] /] 5]"
+  font /code/global/nuke/fonts/MYRIADPRO-SEMIBOLD.OTF
+  size {{((box.r/box.t)+box.y)/2.8}}
+  xjustify center
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/8}}
+  center {1705 1080}
+  color {{parent.minimal==1?.25:1}}
+  name Text17
+  label "\[value message]"
+  xpos 659
+  ypos -382
+ }
+ Dot {
+  name Dot5
+  xpos 693
+  ypos -322
+ }
+set N8119c00 [stack 0]
+ Dot {
+  name Dot9
+  xpos 837
+  ypos -322
+ }
+ Text {
+  maskChannelMask none
+  message " \[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 0 end-1]]]]    T-\[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 1 1]]]]     !OLD!\n"
+  font /code/global/nuke/fonts/MYRIADPRO-BOLD.OTF
+  size {{((box.r/box.t)+box.y)/7}}
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/6.55}}
+  center {1705 1080}
+  color {1 0 0 0.5}
+  name Text2
+  label "\[value message]"
+  xpos 803
+  ypos -291
+  disable {{parent.minimal}}
+  addUserKnob {20 User}
+  addUserKnob {7 ctime}
+  ctime {{"\[lindex \[split \[file tail \[split \[metadata input/ctime]]] - ] 2 0 ]"}}
+  addUserKnob {7 cur_day}
+  cur_day {{"\[lindex \[split \[file tail \[split \[date +%F]]] - ] 2 0 ]"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 gate}
+  gate {{"\[value ctime]-\[value cur_day]"}}
+ }
+ Dot {
+  name Dot6
+  xpos 837
+  ypos -204
+ }
+push $N8119c00
+ Text {
+  maskChannelMask none
+  message " \[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 0 end-1]]]]    T-\[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 1 1]]]]     STALE\n"
+  font /code/global/nuke/fonts/MYRIADPRO-SEMIBOLD.OTF
+  size {{((box.r/box.t)+box.y)/7}}
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/6.55}}
+  center {1705 1080}
+  color {0.5 0.75 0 0.5}
+  name Text3
+  label "\[value message]"
+  xpos 659
+  ypos -292
+  disable {{parent.minimal}}
+  addUserKnob {20 User}
+  addUserKnob {7 ctime}
+  ctime {{"\[lindex \[split \[file tail \[split \[metadata input/ctime]]] - ] 2 0 ]"}}
+  addUserKnob {7 cur_day}
+  cur_day {{"\[lindex \[split \[file tail \[split \[date +%F]]] - ] 2 0 ]"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 gate}
+  gate {{"\[value ctime]-\[value cur_day]"}}
+ }
+push $N8119c00
+ Dot {
+  name Dot8
+  xpos 554
+  ypos -322
+ }
+ Text {
+  maskChannelMask none
+  message " \[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 0 end-1]]]]    T-\[lindex \[split \[file tail \[lrange \[split \[metadata input/ctime]] 1 1]]]]    FRESH\n"
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/7}}
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/6.55}}
+  center {1705 1080}
+  color {0 0.4 0 0.5}
+  name Text1
+  label "\[value message]"
+  xpos 520
+  ypos -294
+  disable {{parent.minimal}}
+  addUserKnob {20 User}
+  addUserKnob {7 ctime}
+  ctime {{"\[lindex \[split \[file tail \[split \[metadata input/ctime]]] - ] 2 0 ]"}}
+  addUserKnob {7 cur_day}
+  cur_day {{"\[lindex \[split \[file tail \[split \[date +%F]]] - ] 2 0 ]"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 gate}
+  gate {{"\[value cur_day]-\[value ctime]"}}
+ }
+ Dot {
+  name Dot7
+  xpos 554
+  ypos -240
+ }
+ Switch {
+  inputs 2
+  which {{"\[value parent.Text1.gate]<3?0:1"}}
+  name Switch2
+  xpos 659
+  ypos -244
+ }
+ Switch {
+  inputs 2
+  which {{"\[value parent.Text1.gate]>7?1:0"}}
+  name Switch3
+  xpos 658
+  ypos -208
+ }
+ Text {
+  maskChannelMask none
+  message "FR:\[metadata input/range]    CF:\[metadata input/frame] "
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/7}}
+  xjustify right
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/7.15}}
+  center {1705 1080}
+  color {{parent.minimal==1?.25:1}}
+  name Text31
+  label "\[value message]"
+  xpos 658
+  ypos -156
+  disable {{parent.minimal}}
+ }
+ Text {
+  maskChannelMask none
+  message "\[lindex \[split \[file tail \[lrange \[split \[metadata input/filename] _ ] 7 9]] .] 0] "
+  font /code/global/nuke/fonts/MYRIADPRO-REGULAR.OTF
+  size {{((box.r/box.t)+box.y)/5}}
+  xjustify right
+  yjustify center
+  Transform 1
+  box {0 {input.height/7} {input.width} {input.height/5.25}}
+  translate {0 {-input.height/9}}
+  center {1705 1080}
+  color {{parent.minimal==1?.25:1}}
+  name Text16
+  label "\[value message]"
+  xpos 658
+  ypos -118
+ }
+ Dot {
+  name Dot12
+  xpos 692
+  ypos -65
+ }
+set N81aa510 [stack 0]
+ Dot {
+  name Dot2
+  xpos 692
+  ypos -19
+ }
+set N81aee20 [stack 0]
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle1
+  xpos 802
+  ypos -23
+ }
+set N81b3c10 [stack 0]
+ Crop {
+  box {{(input.width/300+input.height/300)} {(input.width/300+input.height/300)} {input.width-(input.width/300+input.height/300)} {input.height-(input.width/300+input.height/300)}}
+  name Crop4
+  xpos 742
+  ypos 9
+ }
+push $N81b3c10
+ Crop {
+  box {{(input.width/100+input.height/100)} {(input.width/100+input.height/100)} {input.width-(input.width/100+input.height/100)} {input.height-(input.width/100+input.height/100)}}
+  name Crop1
+  xpos 870
+  ypos 14
+ }
+ Switch {
+  inputs 2
+  which {{parent.insight_color}}
+  name Switch7
+  xpos 806
+  ypos 46
+ }
+ Invert {
+  name Invert1
+  xpos 806
+  ypos 70
+ }
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha red
+  name Shuffle2
+  xpos 806
+  ypos 108
+ }
+ Grade {
+  white {1 0 0 0}
+  name Grade1
+  xpos 806
+  ypos 134
+ }
+set N81fc630 [stack 0]
+push $N81fc630
+ Crop {
+  box {{(input.width/100+input.height/100)-15} {(input.width/100+input.height/100)-15} {input.width-(input.width/100+input.height/100)+15} {input.height-(input.width/100+input.height/100)+15}}
+  name Crop3
+  xpos 879
+  ypos 184
+ }
+ Switch {
+  inputs 2
+  which {{parent.insight_color}}
+  name Switch8
+  xpos 806
+  ypos 229
+ }
+ Switch {
+  inputs 2
+  which {{parent.warning_border}}
+  name Switch6
+  xpos 806
+  ypos 299
+ }
+ Dot {
+  name Dot3
+  xpos 840
+  ypos 346
+ }
+push $N81aa510
+ Dot {
+  name Dot13
+  xpos 461
+  ypos -65
+ }
+set N822cbe0 [stack 0]
+push $N822cbe0
+ Transform {
+  scale {{1-(input.width/100000)}}
+  center {{input.width/2} {input.height/2}}
+  name Transform1
+  xpos 342
+  ypos -69
+ }
+ Dot {
+  name Dot16
+  xpos 376
+  ypos 107
+ }
+ Switch {
+  inputs 2
+  which {{parent.warning_border}}
+  name Switch10
+  xpos 427
+  ypos 103
+ }
+ Dot {
+  name Dot14
+  xpos 461
+  ypos 213
+ }
+push $N81aee20
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle3
+  xpos 522
+  ypos -23
+ }
+ Crop {
+  box {{(input.width/100+input.height/100)} {(input.width/100+input.height/100)} {input.width-(input.width/100+input.height/100)} {input.height-(input.width/100+input.height/100)}}
+  name Crop7
+  xpos 522
+  ypos 3
+ }
+ Invert {
+  name Invert2
+  xpos 522
+  ypos 29
+ }
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha red
+  name Shuffle4
+  xpos 522
+  ypos 67
+ }
+set N82768f0 [stack 0]
+ Grade {
+  white {{"\[metadata input/InsightColorRed]"} {"\[metadata input/InsightColorGreen]"} {"\[metadata input/InsightColorBlue]"} {curve}}
+  name Grade2
+  xpos 522
+  ypos 93
+ }
+ Dot {
+  name Dot4
+  xpos 556
+  ypos 139
+ }
+push $N81aee20
+ Transform {
+  scale {{1-(input.width/50000)}}
+  center {{input.width/2} {input.height/2}}
+  name Transform2
+  xpos 658
+  ypos 45
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos 658
+  ypos 135
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  reformat true
+  name Crop8
+  xpos 658
+  ypos 161
+ }
+ Switch {
+  inputs 2
+  which {{parent.insight_color}}
+  name Switch5
+  xpos 658
+  ypos 209
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 658
+  ypos 342
+  disable {{parent.Switch3.which==0?1:0}}
+ }
+ Output {
+  name Output1
+  xpos 658
+  ypos 448
+ }
+push $N82768f0
+ ViewMetaData {
+  name ViewMetaData1
+  xpos 606
+  ypos 100
+ }
+end_group

@@ -1,0 +1,458 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Gizmo {
+ inputs 2
+ knobChanged 10
+ tile_color 0xff
+ addUserKnob {20 User l Setup}
+ addUserKnob {4 project_presets l "    Choose Project:" t "Select your Show for preset knob values." M {20554_SCOOBYDOO 21162_FIENDS2019 21729_MOTH "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {22 set_project_preset l "Apply Presets" t "Click this to apply the preset values selected to the left." -STARTLINE T "import os, sys\n\nimport nuke\n\nfrom pipe_core import PipeContext, Project\n\nproj = PipeContext.from_env().get_pipe_obj().project.name\n\nif nuke.thisNode()\['project_presets'].value() == \"20554_SCOOBYDOO\":\n    nuke.thisNode()\['dof_focus_range'].setValue(20)\n    nuke.thisNode()\['bloom_gamma'].setValue(0)\n    nuke.thisNode()\['bloom'].setValue(0)\n    nuke.toNode('depth_copy')\['from0'].setValue('other.rfx_depth')\n    nuke.thisNode()\['world_scale_unit'].setValue(2)\n    nuke.thisNode()\['edge_artifact_blur_size'].setValue(10)\n    print '20554_SCOOBYDOO DOF Preset Applied'\n\nif nuke.thisNode()\['project_presets'].value() == \"21162_FIENDS2019\":\n    nuke.thisNode()\['dof_focus_range'].setValue(100)\n    nuke.thisNode()\['bloom_gamma'].setValue(0)\n    nuke.thisNode()\['bloom'].setValue(0)\n    nuke.toNode('depth_copy')\['from0'].setValue('depth.Z')\n    nuke.thisNode()\['world_scale_unit'].setValue(0)\n    nuke.thisNode()\['edge_artifact_blur_size'].setValue(10)\n    print '21162_FIENDS2019 DOF Preset Applied'\n\nif nuke.thisNode()\['project_presets'].value() == \"21729_MOTH\":\n    nuke.thisNode()\['dof_focus_range'].setValue(20)\n    nuke.thisNode()\['bloom_gamma'].setValue(0)\n    nuke.thisNode()\['bloom'].setValue(0)\n    nuke.toNode('depth_copy')\['from0'].setValue('other.rfx_depth')\n    nuke.thisNode()\['world_scale_unit'].setValue(2)\n    nuke.thisNode()\['edge_artifact_blur_size'].setValue(10)\n    print '21729_MOTH DOF Preset Applied'"}
+ addUserKnob {41 output l "Pick Mode:" t "Different viewing modes used for debugging and adjustments." T rfxZDefocus.output}
+ addUserKnob {26 ""}
+ addUserKnob {41 focal_point l "    Pick Point" t "Use the focal_point knob in your viewer to select your focus subject." T rfxZDefocus.focal_point}
+ addUserKnob {26 ""}
+ addUserKnob {7 dof_blur l DOF t "This controls the amount of blur that will applied to your image. The lower the value, the less DOF. The higher the value, the more DOF. \n\nValues can be increased beyond the slider range if needed." R 0 30}
+ addUserKnob {41 center l INVISIBLE +INVISIBLE T rfxZDefocus.center}
+ addUserKnob {7 dof_focus_range l "Focus Range (+/-)" t "Adjust your focus plane. Blue / Red is out of focus. Green is always in focus." R 0 20}
+ dof_focus_range 20
+ addUserKnob {26 ""}
+ addUserKnob {4 filter_choice l "Filter Choice: " t "Choose aperture shape type" M {Custom "Iris 1" "Iris 2" "Iris 3" "Iris 4" "Iris 5" "" "" ""}}
+ filter_choice "Iris 1"
+ addUserKnob {41 scale l "    ::    Filter Shape  " t "Resize the aperture shape. Increase width value to achieve anamorphic lens effect." -STARTLINE T anamorph.scale}
+ addUserKnob {26 div_1 l "" +STARTLINE T " "}
+ addUserKnob {6 filter_noise l "Atmospheric Noise" t "SImulates atmospheric distubance seen in photographic bokeh." +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 bloom_gamma l "gamma correction" T rfxZDefocus.bloom_gamma}
+ addUserKnob {41 bloom -STARTLINE T rfxZDefocus.bloom}
+ addUserKnob {20 Advanced}
+ addUserKnob {26 world_scale l "@b;World Scale"}
+ addUserKnob {68 world_scale_unit l Scale M {mm cm in m ft}}
+ world_scale_unit in
+ addUserKnob {26 div_4 l "" +STARTLINE T " "}
+ addUserKnob {26 aper_shape l "@b;Custom Filter"}
+ addUserKnob {41 corners T Flare1.corners}
+ addUserKnob {41 flattening l "edge flattening" T Flare1.flattening}
+ addUserKnob {41 sharpness l "corner sharpness" T Flare1.sharpness}
+ addUserKnob {26 div_3 l "" +STARTLINE T " "}
+ addUserKnob {26 edge_blur l "@b;Edge Artifact Blur"}
+ addUserKnob {7 edge_artifact_blur_size l blur R 0 100}
+ edge_artifact_blur_size 10
+ addUserKnob {20 InstructionsTab l "How to Use"}
+ addUserKnob {26 InstructionsText1 l "" +STARTLINE T "* You MUST have a camera hooked up for this tool to work correctly! *\n\nAlso you must have a working and correctly layered depth pass"}
+ addUserKnob {26 ""}
+ addUserKnob {26 InstructionsText2 l "" +STARTLINE T "Step #1: HOOK UP CAMERA\n\n   -Attach directly to camera node, NOT a JoinViews.\n\nStep #2: SET PROJECT PRESETS\n\nStep #3: PICK FOCUS POINT\n\n   -Use the picker in the viewer to choose the focus subject point.\n\nStep #4: SET DEPTH OF FIELD\n\n   -The lower the DOF slider value, the less blur.\n"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 instructions_3 l "" +STARTLINE T "OPTIONAL SETTINGS:\n\nFilter Choice = Shape of the DOF bokeh\n\nWorld Scale = Overrides the scale units of the rendered zdepth.\n\nEdge Artifact Blur = Reduces edge artifacts that sometimes occur."}
+}
+ Input {
+  inputs 0
+  name L_camera
+  xpos 646
+  ypos 228
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 498
+  ypos 69
+ }
+ ModifyMetaData {
+  metadata {
+   {set exr/CameraFocalLength (input1.focal)}
+   {set exr/CameraFStop "\[value dof_fstop]"}
+   {set dof/dof "\[value fstop_calc]+\[value dof_focus_range]-0.20541448"}
+   {set dof/size "\[value dof_calc]>0.01?\[value dof_calc]:0.01"}
+   {set "" ""}
+  }
+  name ModifyMetaData1
+  xpos 498
+  ypos 149
+  addUserKnob {20 calculations l Calculations}
+  addUserKnob {3 fstop_calc l fstop}
+  fstop_calc {{"((input1.focal)/\[value parent.dof_fstop])/\[value fstop_weighting]" x151 0}}
+  addUserKnob {3 dof_calc l dof}
+  dof_calc {{"(exp(int(sin(rfxZDefocus.center/30))*int(cos(input1.focal)))*(((((input1.focal)/(\[value parent.dof_fstop]))*(exp(pi/(input1.focal))))))+\[value defocusAdjust])"}}
+  addUserKnob {3 fstop_weighting l weighting}
+  fstop_weighting {{"(input1.focal/\[value parent.dof_fstop])+(rfxZDefocus.center/30)"}}
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop1
+  xpos 498
+  ypos 219
+ }
+add_layer {rfxdepth rfxdepth.Z}
+ AddChannels {
+  channels rfxdepth
+  channels2 rgba
+  name AddChannels1
+  xpos 498
+  ypos 265
+ }
+set N93c18c0 [stack 0]
+push $N93c18c0
+add_layer {other other.rfx_depth}
+ Copy {
+  inputs 2
+  from0 other.rfx_depth
+  to0 rfxdepth.Z
+  name depth_copy
+  xpos 498
+  ypos 303
+ }
+ Multiply {
+  channels rfxdepth
+  value {{"parent.world_scale_unit == 1 ? 10 : parent.world_scale_unit == 2 ? 100 : parent.world_scale_unit == 3 ? 25.4 : parent.world_scale_unit == 4 ? 304.8 : 1"}}
+  name Multiply1
+  xpos 498
+  ypos 356
+ }
+ Dot {
+  name Dot2
+  xpos 532
+  ypos 420
+ }
+set N93e4a20 [stack 0]
+ Dot {
+  name Dot5
+  xpos 385
+  ypos 420
+ }
+ Dot {
+  name Dot6
+  xpos 385
+  ypos 1524
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat7
+  xpos 2631
+  ypos 1165
+ }
+ Noise {
+  size 15.5
+  zoffset {{frame}}
+  center {960 540}
+  name Noise1
+  xpos 2631
+  ypos 1203
+ }
+ Clamp {
+  name Clamp1
+  xpos 2631
+  ypos 1229
+ }
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/10.0v3/images/dof_iris/iris_5.png
+  format "204 209 0 0 204 209 1 "
+  origset true
+  name Read5
+  xpos 2666
+  ypos 977
+ }
+ Reformat {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat6
+  xpos 2666
+  ypos 1061
+ }
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/10.0v3/images/dof_iris/iris_4.png
+  format "229 229 0 0 229 229 1 "
+  origset true
+  name Read4
+  xpos 2555
+  ypos 977
+ }
+ Reformat {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos 2555
+  ypos 1061
+ }
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/10.0v3/images/dof_iris/iris_3.png
+  format "195 195 0 0 195 195 1 "
+  origset true
+  name Read3
+  xpos 2444
+  ypos 977
+ }
+ Reformat {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat4
+  xpos 2444
+  ypos 1061
+ }
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/10.0v3/images/dof_iris/iris_2.png
+  format "288 288 0 0 288 288 1 "
+  origset true
+  name Read2
+  xpos 2335
+  ypos 980
+ }
+ Reformat {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat3
+  xpos 2335
+  ypos 1064
+ }
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/10.0v3/images/dof_iris/iris_1.png
+  format "386 386 0 0 386 386 1 "
+  origset true
+  name Read1
+  xpos 2221
+  ypos 980
+ }
+ Reformat {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos 2221
+  ypos 1064
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat1
+  xpos 2067
+  ypos 1098
+ }
+ Flare {
+  position {512 512}
+  radius {199.74 211.05 237.44}
+  size_mult 2
+  inner_color 1
+  corners 7
+  flattening 1
+  sharpness 1
+  name Flare1
+  xpos 2067
+  ypos 1136
+ }
+ Switch {
+  inputs 6
+  which {{parent.filter_choice}}
+  name Switch2
+  xpos 2444
+  ypos 1136
+ }
+ Transform {
+  scale 0.5
+  center {512 512}
+  name Transform1
+  xpos 2444
+  ypos 1162
+ }
+ Transform {
+  scale {1 1}
+  center {512 512}
+  name anamorph
+  xpos 2444
+  ypos 1188
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  mix 0.5
+  name Merge2
+  xpos 2444
+  ypos 1235
+  disable {{!parent.filter_noise}}
+ }
+ Shuffle {
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos 2444
+  ypos 1280
+ }
+set N94bcd50 [stack 0]
+ Dot {
+  name Dot8
+  xpos 2478
+  ypos 1325
+ }
+push $N93e4a20
+ Blur {
+  channels rfxdepth
+  size {{parent.edge_artifact_blur_size}}
+  name blur_depth
+  xpos 498
+  ypos 450
+ }
+ Dot {
+  name Dot3
+  xpos 532
+  ypos 507
+ }
+set N94dd920 [stack 0]
+ ZDefocus2 {
+  z_channel rfxdepth.Z
+  output "focal plane setup"
+  show_image false
+  center {{parent.rfxZDefocus.center}}
+  focal_point {906 587}
+  size 1
+  max_size 100
+  filter_type bladed
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  aspect 0.5
+  blades 9
+  maskChannelMask none
+  name rfxZDefocus1
+  xpos 842
+  ypos 497
+ }
+ Shuffle {
+  in rfxdepth
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  xpos 842
+  ypos 573
+ }
+set Nb2948c0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 965
+  ypos 577
+ }
+ Dot {
+  name Dot4
+  xpos 965
+  ypos 665
+ }
+push $Nb2948c0
+ Blur {
+  size 10
+  name Blur1
+  xpos 842
+  ypos 599
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  maskChannelMask none
+  name Merge1
+  xpos 842
+  ypos 661
+ }
+ Dot {
+  name Dot7
+  xpos 876
+  ypos 910
+ }
+push $N94dd920
+add_layer {rfxDOF rfxDOF.edge}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rfxDOF.edge
+  maskChannelMask none
+  name Copy1
+  xpos 498
+  ypos 900
+ }
+ Premult {
+  channels rfxdepth
+  name Premult2
+  xpos 498
+  ypos 938
+ }
+ Blur {
+  channels rfxdepth
+  size 10
+  maskChannelInput rfxDOF.edge
+  name Blur3
+  xpos 498
+  ypos 997
+ }
+ ZDefocus2 {
+  inputs 2
+  z_channel rfxdepth.Z
+  math direct
+  show_image false
+  focal_point {0 0}
+  dof {{"\[value dof_focus_range]" x85 0 x286 0 x400 0}}
+  blur_dof false
+  size {{"((clamp((Variables_NoOp.focalLength/(Variables_NoOp.fStop)) * Variables_NoOp.focalLength/(Variables_NoOp.focalDistance - Variables_NoOp.focalLength) * Variables_NoOp.width/Variables_NoOp.horizAperture, 0.001, 100)))/100"}}
+  max_size 100
+  filter_type image
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  aspect 0.5
+  blades 9
+  maskChannelMask none
+  name rfxZDefocus
+  xpos 498
+  ypos 1315
+ }
+ Remove {
+  channels rfxDOF
+  channels2 rfxdepth
+  name Remove1
+  xpos 498
+  ypos 1379
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop2
+  xpos 498
+  ypos 1445
+ }
+ Switch {
+  inputs 2
+  which {{dof_blur==0?1:0}}
+  name Switch1
+  xpos 498
+  ypos 1520
+ }
+ Output {
+  name Output1
+  xpos 498
+  ypos 1612
+ }
+ NoOp {
+  inputs 0
+  name Variables_NoOp
+  xpos 178
+  ypos 479
+  addUserKnob {20 User}
+  addUserKnob {7 focalLength R 0 100}
+  focalLength {{input1.focal}}
+  addUserKnob {7 fStop R 0 32}
+  fStop {{128/(parent.dof_blur)}}
+  addUserKnob {7 focalDistance R 0 1000}
+  focalDistance {{parent.center*10}}
+  addUserKnob {7 horizAperture l "horiz Aperture" R 0 35}
+  horizAperture {{input1.haperture}}
+  addUserKnob {3 screenWidth}
+  screenWidth {{input.width}}
+ }
+push $N94bcd50
+ Viewer {
+  frame_range 85-164
+  frame_range_lock true
+  roi {0.004999995232 -0.4359999895 0.2269999981 -0.3090000272}
+  name Viewer1
+  xpos 227
+  ypos 1165
+ }
+end_group

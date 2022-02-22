@@ -1,0 +1,42 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+Gizmo {
+ inputs 0
+ help "Choose your wave type, set the values and press 'Generate Expression'. Load the 'Result' into the curve editor. To use this wave to control other nodes, CTRL drag the Result's curve icon to a node value of your choice."
+ note_font "Bitstream Vera Sans"
+ addUserKnob {20 CurveCreator}
+ addUserKnob {4 WaveSeed l Seed t "Select which preset expression driven waveform seed you'd like to use to generate your curve." M {Sine Bounce Rand Noise Tri Saw SawPara SawPara_Reversed SawExp "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {6 squared t "Click to square your waveform points. \n\nExample usage: A light blinking off and on. (1 = on, 0 = off.)" -STARTLINE}
+ addUserKnob {1 minVal l min}
+ minVal 0
+ addUserKnob {1 maxVal l max -STARTLINE}
+ maxVal 1
+ addUserKnob {7 speed l Speed t "Enter the desired number of min/max peaks over your frame range." R 1 100}
+ speed 20
+ addUserKnob {7 slide l Slide t "Slide the expression driven waveform (backward/forward) over your frame range." R -50 50}
+ addUserKnob {26 ""}
+ addUserKnob {22 generate l "Generate Curve" t "This button will generate an expression driven waveform based on the parameter values above (seed, min/max, speed, and slide) and can be viewed through the \"Dynamic Curve\" knob's Curve Editor. (Right Click - Curve Editor...)" T "type = nuke.thisNode().knob(\"WaveSeed\").value()\nsquareExp = \" > ((maxVal/2)+(minVal/2)) ? maxVal : minVal\"\nwcontrol = nuke.thisNode().knob(\"waveController\").value()\n\nsineExp1 = \"((sin((((frame+slide)*(pi*2/(speed/2))/2)))+1)/2)\"\nbounceExp1 = \"(sin(((frame/speed)*pi)+slide)>0?sin(((frame/speed)*pi)+slide):cos((((frame/speed)*pi)+slide)+(pi/2)))\"\nrandExp1 = \"(random((frame/speed)+slide))\"\nnoiseExp1 = \"((1*(noise((frame/speed)+slide))+1 ) /2 )\"\ntriExp1 = \"((((2*asin(sin(2*pi*(frame/speed)+slide)))/pi) / 2)+0.5)\"\nsawExp1 = \"(1/speed)*(((frame-1)+slide) % speed)\"\nsawParaExp1 = \"(sin((1/(pi/2))*(((frame-1)+slide)/(speed/2.46666666)) % (pi/2)))>0.99999?1:(sin((1/(pi/2))*(((frame-1)+slide)/(speed/2.46666666)) % (pi/2)))\"\nsawParaRExp1 = \"(cos((1/(pi/2))*(((frame-1)+slide)/(speed/2.46666666)) % (pi/2)))>0.99999?1:(cos((1/(pi/2))*(((frame-1)+slide)/(speed/2.46666666)) % (pi/2)))\"\nsawExpoExp1 = \"(((((exp((1/(pi/2))*(((frame-1)+slide)/(speed/4.934802)) % pi*2)))/534.5)) - 0.00186741)>0.999987?1:(((((exp((1/(pi/2))*(((frame-1)+slide)/(speed/4.934802)) % pi*2)))/534.5)) - 0.00186741)\"\n\nmaxMinExp =  \" * (maxVal-minVal) ) + minVal\"\n\nsineExp2 = \"(\" + sineExp1 + maxMinExp\nbounceExp2 = \"(\" + bounceExp1 + maxMinExp\nrandomExp2 = \"(\" + randExp1 + maxMinExp\nnoiseExp2 = \"(\" + noiseExp1 + maxMinExp\ntriExp2 = \"(\" + triExp1 + maxMinExp\nsawExp2 = \"(\" + sawExp1 + maxMinExp\nsawParaExp2 = \"(\" + sawParaExp1 + maxMinExp\nsawParaRExp2 = \"(\" + sawParaRExp1 + maxMinExp\nsawExpoExp2 = \"(\" + sawExpoExp1 + maxMinExp\n\nmaxMinCexp = \" * ((maxVal-((maxVal - minVal)*result2))-(minVal+((maxVal - minVal)*result2))))+(minVal+((maxVal - minVal)*result2))\"\n\nsineCexp = \"(\" + sineExp1 + maxMinCexp\nbounceCexp = \"(\" + bounceExp1 + maxMinCexp\nrandCexp = \"(\" + randExp1 + maxMinCexp\nnoiseCexp = \"(\" + noiseExp1 + maxMinCexp\ntriCexp = \"(\" + triExp1 + maxMinCexp\nsawCexp = \"(\" + sawExp1 + maxMinCexp\nsawParaCexp = \"(\" + sawParaExp1 + maxMinCexp\nsawParaRCexp = \"(\" + sawParaRExp1 + maxMinCexp\nsawExpoCexp = \"(\" + sawExpoExp1 + maxMinCexp\n\nsineComboExp = \"waveController ? (\" + sineCexp + \") : (\" + sineExp2 + \")\"\nbounceComboExp = \"waveController ? (\" + bounceCexp + \") : (\" + bounceExp2 + \")\"\nrandomComboExp = \"waveController ? (\" + randCexp + \") : (\" + randomExp2 + \")\"\nnoiseComboExp = \"waveController ? (\" + noiseCexp + \") : (\" + noiseExp2 + \")\"\ntriComboExp = \"waveController ? (\" + triCexp + \") : (\" + triExp2 + \")\"\nsawComboExp = \"waveController ? (\" + sawCexp + \") : (\" + sawExp2 + \")\"\nsawParaComboExp = \"waveController ? (\" + sawParaCexp + \") : (\" + sawParaExp2 + \")\"\nsawParaRComboExp = \"waveController ? (\" + sawParaRCexp + \") : (\" + sawParaRExp2 + \")\"\nsawExpoComboExp = \"waveController ? (\" + sawExpoCexp + \") : (\" + sawExpoExp2 + \")\"\n\n\nif (type==\"Sine\"):\n\texp = \"squared ? ((\" + sineComboExp + \")\" +  squareExp + \") : (\" + sineComboExp + \")\"\nelif (type==\"Bounce\"):\n\texp = \"squared ? ((\" + bounceComboExp + \")\" +  squareExp + \") : (\" + bounceComboExp + \")\"\nelif (type==\"Rand\"):\n\texp = \"squared ? ((\" + randomComboExp + \")\" +  squareExp + \") : (\" + randomComboExp + \")\"\nelif (type==\"Noise\"):\n\texp = \"squared ? ((\" + noiseComboExp + \")\" +  squareExp + \") : (\" + noiseComboExp + \")\"\nelif (type==\"Tri\"):\n\texp = \"squared ? ((\" + triComboExp + \")\" +  squareExp + \") : (\" + triComboExp + \")\"\nelif (type==\"Saw\"):\n\texp = \"squared ? ((\" + sawComboExp + \")\" +  squareExp + \") : (\" + sawComboExp + \")\"\nelif (type==\"SawPara\"):\n\texp = \"squared ? ((\" + sawParaComboExp + \")\" +  squareExp + \") : (\" + sawParaComboExp + \")\"\nelif (type==\"SawPara_Reversed\"):\n\texp = \"squared ? ((\" + sawParaRComboExp + \")\" +  squareExp + \") : (\" + sawParaRComboExp + \")\"\nelif (type==\"SawExp\"):\n\texp = \"squared ? ((\" + sawExpoComboExp + \")\" +  squareExp + \") : (\" + sawExpoComboExp + \")\"\n\n\nnuke.thisNode().knob(\"result\").setExpression(exp)" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {3 firstFrame l start t "This is expressioned to be driven by your \"Project Settings\" first/last frame values."}
+ firstFrame {{first_frame}}
+ addUserKnob {3 lastFrame l end t "This is expressioned to be driven by your \"Project Settings\" first/last frame values." -STARTLINE}
+ lastFrame {{last_frame}}
+ addUserKnob {22 bake l "Bake Curve" t "This will take your expression generated curve and create animation keyframes, allowing you to copy and paste the generated animation anywhere you wish without dependencies on this node's dynamic expression curve.\n\nNote: If you bake your animation curve and you decide later that you want to make changes to the expression, you'll need to clear the animation on your \"Dynamic Curve\" knob (Right click - No Animation) and then re-click \"Generate Curve\"." -STARTLINE T "nuke.animation(\"knob.result\", \"generate\", (\"knob.firstFrame\", \"knob.lastFrame\", \"1\", \"y\", \"result\"))\n\nnuke.message(\"Expression curve baking complete.\")"}
+ addUserKnob {26 ""}
+ addUserKnob {6 waveController l INVISIBLE +INVISIBLE +STARTLINE}
+ addUserKnob {7 result l "Dynamic Curve" t "Open this knob's Curve Editor (Right Click - Curve Editor...) to view your generated curve. \n\nOnce you're happy with it and want to use it's animation to drive other nodes, click \"Bake Curve\" and copy the resulting keyframed animation.\n\nNote: If you bake your animation curve and you decide later that you want to make changes to the expression, you'll need to clear the animation on this knob (Right click - No Animation) and then re-click \"Generate Curve\".\n\n" R 0 10}
+ result {{"squared ? ((waveController ? ((((sin((((frame+slide)*(pi*2/(speed/2))/2)))+1)/2) * ((maxVal-((maxVal - minVal)*result2))-(minVal+((maxVal - minVal)*result2))))+(minVal+((maxVal - minVal)*result2))) : ((((sin((((frame+slide)*(pi*2/(speed/2))/2)))+1)/2) * (maxVal-minVal) ) + minVal)) > ((maxVal/2)+(minVal/2)) ? maxVal : minVal) : (waveController ? ((((sin((((frame+slide)*(pi*2/(speed/2))/2)))+1)/2) * ((maxVal-((maxVal - minVal)*result2))-(minVal+((maxVal - minVal)*result2))))+(minVal+((maxVal - minVal)*result2))) : ((((sin((((frame+slide)*(pi*2/(speed/2))/2)))+1)/2) * (maxVal-minVal) ) + minVal))"}}
+}
+ NoOp {
+  inputs 0
+  name NoOp1
+  selected true
+  xpos 517
+  ypos -209
+ }
+ Output {
+  name Output1
+  xpos 517
+  ypos -130
+ }
+end_group

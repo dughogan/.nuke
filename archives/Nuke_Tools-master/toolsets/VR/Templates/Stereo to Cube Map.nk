@@ -1,0 +1,341 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x19252bff
+ label "Stereo to Cube Map"
+ note_font "Arial Bold Bold Bold"
+ note_font_size 70
+ selected true
+ xpos 1322
+ ypos -224
+ bdwidth 908
+ bdheight 812
+}
+push $cut_paste_input
+Reformat {
+ format "9216 4608 0 0 9216 4608 1 9k 2:1"
+ resize distort
+ name Reformat28
+ selected true
+ xpos 1757
+ ypos -78
+}
+SphericalTransform {
+ input "Lat Long map"
+ output Cube
+ out_rx {{curve x1 0 0 90 -90 0}}
+ out_ry {{curve x1 90 -90 0 0 0 -180}}
+ out_rz {{curve x1 0 0 0 0 0}}
+ format "1536 1536 0 0 1536 1536 1 1536_squared"
+ fix true
+ name SphericalTransform22
+ selected true
+ xpos 1757
+ ypos -40
+}
+Dot {
+ name Dot13
+ selected true
+ xpos 1791
+ ypos 23
+}
+set N142c4220 [stack 0]
+Dot {
+ name Dot19
+ selected true
+ xpos 1846
+ ypos 23
+}
+set N64d2d70 [stack 0]
+Dot {
+ name Dot18
+ selected true
+ xpos 1966
+ ypos 23
+}
+set N16d5ac70 [stack 0]
+Dot {
+ name Dot17
+ selected true
+ xpos 2063
+ ypos 23
+}
+FrameHold {
+ first_frame 6
+ name FrameHold19
+ selected true
+ xpos 2029
+ ypos 76
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat34
+ selected true
+ xpos 2029
+ ypos 114
+}
+Mirror2 {
+ flop true
+ name Mirror2_10
+ selected true
+ xpos 2029
+ ypos 152
+}
+Transform {
+ translate {3840 0}
+ name Transform21
+ selected true
+ xpos 2029
+ ypos 188
+}
+push $N16d5ac70
+FrameHold {
+ first_frame 5
+ name FrameHold15
+ selected true
+ xpos 1932
+ ypos 76
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat33
+ selected true
+ xpos 1932
+ ypos 114
+}
+Mirror2 {
+ flop true
+ name Mirror2_9
+ selected true
+ xpos 1932
+ ypos 152
+}
+Transform {
+ translate {2304 0}
+ name Transform20
+ selected true
+ xpos 1932
+ ypos 188
+}
+push $N64d2d70
+FrameHold {
+ first_frame 4
+ name FrameHold16
+ selected true
+ xpos 1812
+ ypos 76
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat32
+ selected true
+ xpos 1812
+ ypos 114
+}
+Mirror2 {
+ flop true
+ name Mirror2_4
+ selected true
+ xpos 1812
+ ypos 152
+}
+Transform {
+ translate {768 0}
+ name Transform19
+ selected true
+ xpos 1812
+ ypos 188
+}
+push $N142c4220
+Dot {
+ name Dot16
+ selected true
+ xpos 1731
+ ypos 23
+}
+set N15fbc550 [stack 0]
+FrameHold {
+ first_frame 3
+ name FrameHold17
+ selected true
+ xpos 1697
+ ypos 76
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat31
+ selected true
+ xpos 1697
+ ypos 114
+}
+Mirror2 {
+ flop true
+ name Mirror2_3
+ selected true
+ xpos 1697
+ ypos 152
+}
+Transform {
+ translate {-768 0}
+ name Transform18
+ selected true
+ xpos 1697
+ ypos 188
+}
+push 0
+push $N15fbc550
+Dot {
+ name Dot15
+ selected true
+ xpos 1635
+ ypos 23
+}
+set N142c50c0 [stack 0]
+FrameHold {
+ first_frame 2
+ name FrameHold18
+ selected true
+ xpos 1601
+ ypos 76
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat30
+ selected true
+ xpos 1601
+ ypos 114
+}
+Mirror2 {
+ flop true
+ name Mirror2_2
+ selected true
+ xpos 1601
+ ypos 152
+}
+Transform {
+ translate {-2304 0}
+ name Transform17
+ selected true
+ xpos 1601
+ ypos 188
+}
+push $N142c50c0
+Dot {
+ name Dot14
+ selected true
+ xpos 1503
+ ypos 23
+}
+FrameHold {
+ first_frame 1
+ name FrameHold20
+ selected true
+ xpos 1469
+ ypos 75
+}
+Reformat {
+ format "9216 1536 0 0 9216 1536 1 half_18k"
+ resize none
+ black_outside true
+ name Reformat29
+ selected true
+ xpos 1469
+ ypos 117
+}
+Mirror2 {
+ flop true
+ name Mirror2_1
+ selected true
+ xpos 1469
+ ypos 155
+}
+Transform {
+ translate {-3840 0}
+ name Transform16
+ selected true
+ xpos 1469
+ ypos 191
+}
+Merge2 {
+ inputs 6+1
+ name Merge4
+ selected true
+ xpos 1762
+ ypos 281
+}
+Reformat {
+ format "18432 1536 0 0 18432 1536 1 ORBx"
+ resize none
+ name Reformat44
+ selected true
+ xpos 1762
+ ypos 307
+}
+Dot {
+ name Dot12
+ selected true
+ xpos 1796
+ ypos 397
+}
+set N16859680 [stack 0]
+OneView {
+ view right
+ name OneView6
+ selected true
+ xpos 1916
+ ypos 393
+}
+Transform {
+ translate {4608 0}
+ center {9216 768}
+ name Transform5
+ selected true
+ xpos 1916
+ ypos 450
+}
+Dot {
+ name Dot11
+ selected true
+ xpos 1950
+ ypos 533
+}
+push $N16859680
+OneView {
+ name OneView5
+ selected true
+ xpos 1615
+ ypos 393
+}
+Transform {
+ translate {-4608 0}
+ center {9216 768}
+ name Transform28
+ selected true
+ xpos 1615
+ ypos 450
+}
+Dot {
+ name Dot10
+ selected true
+ xpos 1649
+ ypos 533
+}
+Merge2 {
+ inputs 2
+ name Merge6
+ selected true
+ xpos 1764
+ ypos 529
+}

@@ -1,0 +1,255 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+add_layer {other other.glint other.rfx_depth other.caustic other.cputime}
+Gizmo {
+ inputs 2
+ knobChanged "\nif nuke.thisKnob().name() == 'inputChange':\n    print 'input changed'\n    if nuke.thisKnob().name() == 'focusPlane':\n        if nuke.thisNode().input(2):\n            nuke.thisNode().knob('focusPlane').setVisible(False)\n        else:\n            nuke.thisNode().knob('focusPlane').setVisible(True)\n    if nuke.thisKnob().name() == 'focalPoint':\n        if nuke.thisNode().input(2):\n            nuke.thisNode().knob('focalPoint').setVisible(False)\n        else:\n            nuke.thisNode().knob('focalPoint').setVisible(True)\n    if nuke.thisKnob().name() == 'focusPlaneFF':\n        if nuke.thisNode().input(2):\n            nuke.thisNode().knob('focusPlaneFF').setVisible(True)\n        else:\n            nuke.thisNode().knob('focusPlaneFF').setVisible(False)\n    if nuke.thisKnob().name() == 'focusPlaneAdjust':\n        if nuke.thisNode().input(2):\n            nuke.thisNode().knob('focusPlaneAdjust').setVisible(True)\n        else:\n            nuke.thisNode().knob('focusPlaneAdjust').setVisible(False)\n\nif nuke.thisKnob().name() == 'focalPoint':\n    screenX = nuke.thisNode().knob('focalPoint').value(0)\n    screenY = nuke.thisNode().knob('focalPoint').value(1)\n    zVal = nuke.thisNode().input(0).sample('Z.red', screenX, screenY)\n    nuke.thisNode().knob('focusPlane').setValue(zVal)\n\nif nuke.thisKnob().name() == 'filterType':\n    if nuke.thisNode().knob('filterType').value() == 'disc':\n        nuke.thisNode().knob('bladeSettingsText').setVisible(False)\n        nuke.thisNode().knob('blades').setVisible(False)\n        nuke.thisNode().knob('roundness').setVisible(False)\n        nuke.thisNode().knob('rotation').setVisible(False)\n    if nuke.thisNode().knob('filterType').value() == 'bladed':\n        nuke.thisNode().knob('bladeSettingsText').setVisible(True)\n        nuke.thisNode().knob('blades').setVisible(True)\n        nuke.thisNode().knob('roundness').setVisible(True)\n        nuke.thisNode().knob('rotation').setVisible(True)\n\n\n"
+ tile_color 0xff
+ label "f-\[value dof_fstop]"
+ addUserKnob {20 User l Setup}
+ addUserKnob {41 output T rfxZDefocus.output}
+ addUserKnob {41 z_channel l "depth channel" T rfxZDefocus.z_channel}
+ addUserKnob {26 ""}
+ addUserKnob {68 dof_fstop l f-stop M {1 1.4 2 2.8 4 5.6 8 11 16 22 32}}
+ addUserKnob {26 fStopText l "" -STARTLINE T "  Evaluate image and choose appropriate f-stop"}
+ addUserKnob {26 ""}
+ addUserKnob {41 center l "Focal Point" T rfxZDefocus.center}
+ addUserKnob {41 focal_point l " :: " -STARTLINE T rfxZDefocus.focal_point}
+ addUserKnob {7 focusPlaneFF l "Follow Plane" +DISABLED +HIDDEN R 0 1000}
+ focusPlaneFF {{rfxZDefocus.center}}
+ addUserKnob {7 focusPlaneAdjust l "Follow Plane (+/-)" +HIDDEN R -50 50}
+ addUserKnob {26 ""}
+ addUserKnob {7 dof_focus_range l "Focus Range (+/-)" R 0 20}
+ addUserKnob {7 defocusAdjust l "DOF (+/-)" R -20 20}
+ addUserKnob {26 ""}
+ addUserKnob {41 bloom_gamma l "gamma correction" T rfxZDefocus.bloom_gamma}
+ addUserKnob {41 bloom -STARTLINE T rfxZDefocus.bloom}
+ addUserKnob {20 Advanced}
+ addUserKnob {41 filter_type l "filter type" T rfxZDefocus.filter_type}
+ addUserKnob {26 ""}
+ addUserKnob {20 disc_options l "disc options" n 1}
+ disc_options 0
+ addUserKnob {41 shape l "filter shape" T rfxZDefocus.shape}
+ addUserKnob {41 aspect l "aspect ratio" T rfxZDefocus.aspect}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 blades_options l "blade options" n 1}
+ blades_options 0
+ addUserKnob {41 blades T rfxZDefocus.blades}
+ addUserKnob {41 roundness T rfxZDefocus.roundness}
+ addUserKnob {41 rotation T rfxZDefocus.rotation}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 edge_blur l "@b;Edge Blur"}
+ addUserKnob {41 size l "edge blur size" T EdgeBlur1.size}
+ addUserKnob {41 edge_mult l "edge mult" T EdgeBlur1.edge_mult}
+ addUserKnob {41 size_1 l "blur (+/-)" T Blur3.size}
+ addUserKnob {20 InstructionsTab l INSTRUCTIONS}
+ addUserKnob {26 InstructionsText1 l "" +STARTLINE T "* You MUST have a camera hooked up for this tool to work correctly! *"}
+ addUserKnob {26 ""}
+ addUserKnob {26 InstructionsText2 l "" +STARTLINE T "Step #1: HOOK UP CAMERA\n\n   -Attach directly to camera node, NOT a JoinViews.\n\nStep #2: PICK FOCUS POINT\n\n   -Use the picker in the viewer to choose the focus plane, or hook up an axis to the \n    followFocus input and the tool will calculate the focus plane on the fly.\n\n   -In followFocus mode, the focus plane can be fine-tuned or animated using the\n    adjust f.p. slider.\n\nStep #3: SET F-STOP\n\n   -The lower the F-Stop, the more out of focus things will get.  \n\n   -Rule of Thumb: Dim = Lower F-Stop, Bright = Higher F-Stop\n\n    -Defocus amount can be tweaked for a given F-Stop using the bottom slider\n\n\n\n\n"}
+}
+ Input {
+  inputs 0
+  name img
+  xpos 498
+  ypos 293
+ }
+ ModifyMetaData {
+  metadata {
+   {set exr/CameraFocalLength (input1.focal)}
+   {set exr/CameraFStop "\[value dof_fstop]"}
+   {set dof/dof "\[value fstop_calc]+\[value dof_focus_range]-0.20541448"}
+   {set dof/size "\[value dof_calc]>0.01?\[value dof_calc]:0.01"}
+   {set "" ""}
+  }
+  name ModifyMetaData1
+  xpos 498
+  ypos 373
+  addUserKnob {20 calculations l Calculations}
+  addUserKnob {3 fstop_calc l fstop}
+  fstop_calc {{"((input1.focal)/\[value parent.dof_fstop])/\[value fstop_weighting]" x151 0}}
+  addUserKnob {3 dof_calc l dof}
+  dof_calc {{"(exp(int(sin(rfxZDefocus.center/30))*int(cos(input1.focal)))*(((((input1.focal)/(\[value parent.dof_fstop]))*(exp(pi/(input1.focal))))))+\[value defocusAdjust])"}}
+  addUserKnob {3 fstop_weighting l weighting}
+  fstop_weighting {{"(input1.focal/\[value parent.dof_fstop])+(rfxZDefocus.center/30)"}}
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop1
+  xpos 498
+  ypos 443
+ }
+ Dot {
+  name Dot2
+  xpos 532
+  ypos 484
+ }
+set N404c7750 [stack 0]
+ Dot {
+  name Dot3
+  xpos 680
+  ypos 484
+ }
+ ZDefocus2 {
+  z_channel other.rfx_depth
+  math direct
+  output "focal plane setup"
+  show_image false
+  fill_foreground false
+  center {{rfxZDefocus.center}}
+  focal_point {681 668}
+  dof {{"\[value dof_focus_range]" x286 0 x400 0}}
+  size {{"((clamp((Variables_NoOp.focalLength/Variables_NoOp.fStop) * Variables_NoOp.focalLength/(Variables_NoOp.focalDistance - Variables_NoOp.focalLength) * Variables_NoOp.width/Variables_NoOp.horizAperture + parent.defocusAdjust, 0.001, 100)))/100"}}
+  max_size 100
+  filter_type bladed
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  blades 6
+  maskChannelMask none
+  name rfxZDefocus1
+  xpos 646
+  ypos 522
+ }
+ Shuffle {
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  xpos 646
+  ypos 603
+ }
+set N318bd1b0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 769
+  ypos 607
+ }
+ Dot {
+  name Dot4
+  xpos 769
+  ypos 695
+ }
+push $N318bd1b0
+ Blur {
+  size 9.2
+  name Blur1
+  xpos 646
+  ypos 629
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  maskChannelMask none
+  name Merge1
+  xpos 646
+  ypos 691
+ }
+ Blur {
+  size 4.6
+  name Blur2
+  xpos 646
+  ypos 717
+ }
+push $N404c7750
+add_layer {rfxDOF rfxDOF.edge}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rfxDOF.edge
+  maskChannelMask none
+  name Copy1
+  xpos 498
+  ypos 717
+ }
+ EdgeBlur {
+  controlchannel rfxDOF.edge
+  size 0
+  maskChannelMask none
+  name EdgeBlur1
+  xpos 498
+  ypos 778
+ }
+ ZDefocus2 {
+  z_channel other.rfx_depth
+  math direct
+  show_image false
+  fill_foreground false
+  focal_point {960 519}
+  dof {{"\[value dof_focus_range]" x286 0 x400 0}}
+  size {{"((clamp((Variables_NoOp.focalLength/Variables_NoOp.fStop) * Variables_NoOp.focalLength/(Variables_NoOp.focalDistance - Variables_NoOp.focalLength) * Variables_NoOp.width/Variables_NoOp.horizAperture + parent.defocusAdjust, 0.001, 100)))/100"}}
+  max_size 100
+  filter_type bladed
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  blades 6
+  maskChannelMask none
+  name rfxZDefocus
+  xpos 498
+  ypos 816
+ }
+ Blur {
+  maskChannelInput rfxDOF.edge
+  name Blur3
+  xpos 498
+  ypos 854
+ }
+set N32591250 [stack 0]
+ Remove {
+  channels rfxDOF
+  name Remove1
+  xpos 498
+  ypos 897
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop2
+  xpos 498
+  ypos 944
+ }
+set N32ef7bc0 [stack 0]
+ Output {
+  name Output1
+  xpos 498
+  ypos 980
+ }
+ Input {
+  inputs 0
+  name L_camera
+  xpos 646
+  ypos 292
+  number 1
+ }
+ NoOp {
+  inputs 0
+  name Variables_NoOp
+  xpos 331
+  ypos 450
+  addUserKnob {20 User}
+  addUserKnob {7 focalLength R 0 100}
+  focalLength {{input1.focal}}
+  addUserKnob {7 fStop R 0 32}
+  fStop {{"\[value dof_fstop]"}}
+  addUserKnob {7 focalDistance R 0 1000}
+  focalDistance {{parent.center*10}}
+  addUserKnob {7 horizAperture l "horiz Aperture" R 0 35}
+  horizAperture {{input1.haperture}}
+  addUserKnob {3 screenWidth}
+  screenWidth {{input.width}}
+ }
+push $N32591250
+push 0
+push 0
+push 0
+push $N32ef7bc0
+ Viewer {
+  inputs 5
+  frame_range 101-175
+  input_number 4
+  name Viewer1
+  xpos 343
+  ypos 526
+ }
+end_group

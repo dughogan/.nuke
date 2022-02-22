@@ -1,0 +1,297 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Gizmo {
+ inputs 2
+ addUserKnob {20 tonemap l Tonemap t "Adjusts blend between linear colors and full tonemap"}
+ addUserKnob {41 red l exposure T EXPTool1.red}
+ addUserKnob {7 tonemap_saturation l saturation R 0 4}
+ tonemap_saturation 1
+ addUserKnob {26 ""}
+ addUserKnob {19 Grade1_black l lift t "Lifts blacks" R 0 0.1}
+ Grade1_black 0.005
+ addUserKnob {6 Grade1_black_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 shoulderStr l "Shoulder Str." t "Higher values produces brighter highlights" T Expression_Filmic.shoulderStr}
+ addUserKnob {41 linStr l "Linear Str." T Expression_Filmic.linStr}
+ addUserKnob {41 linAngle l "Linear Angle" T Expression_Filmic.linAngle}
+ addUserKnob {41 toeStr l "Toe Str." T Expression_Filmic.toeStr}
+ addUserKnob {41 toeNum l "Toe Num." T Expression_Filmic.toeNum}
+ addUserKnob {41 toeDen l "Toe Denom." T Expression_Filmic.toeDen}
+ addUserKnob {41 whitepoint l INVISIBLE +INVISIBLE T Expression_Filmic.whitepoint}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix l "Tonemap Mix" t "Blends between input and tonemapped image" T Merge1.mix}
+ addUserKnob {26 ""}
+ addUserKnob {22 reset l "reset all" -STARTLINE T "import nuke\n\nnuke.toNode('EXPTool1')\['red'].setValue(0)\nnuke.thisNode()\['Grade1_black'].setValue(0.005)\nnuke.thisNode()\['shoulderStr'].setValue(0.5)\nnuke.thisNode()\['linStr'].setValue(0.8)\nnuke.thisNode()\['linAngle'].setValue(0.2)\nnuke.thisNode()\['toeStr'].setValue(0.9)\nnuke.thisNode()\['toeNum'].setValue(0.065)\nnuke.thisNode()\['toeDen'].setValue(0.9)\nnuke.toNode('Merge1')\['mix'].setValue(1)\n\nnuke.message('Values Reset...')"}
+}
+ BackdropNode {
+  inputs 0
+  name Filmic
+  xpos -347
+  ypos -222
+  bdwidth 144
+  bdheight 193
+ }
+ BackdropNode {
+  inputs 0
+  name Filmic1
+  xpos -978
+  ypos -221
+  bdwidth 144
+  bdheight 193
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -152
+  ypos 215
+  number 1
+ }
+set N758cab0 [stack 0]
+ CMSTestPattern {
+  inputs 0
+  name CMSTestPattern1
+  xpos -870
+  ypos -431
+ }
+set N75914f0 [stack 0]
+ Input {
+  inputs 0
+  name img
+  xpos -581
+  ypos -482
+ }
+ Switch {
+  inputs 2
+  which {{parent.test_pattern}}
+  name Switch1
+  xpos -581
+  ypos -408
+ }
+ Dot {
+  name Dot14
+  xpos -547
+  ypos -295
+ }
+set N75a5c30 [stack 0]
+ EXPTool {
+  mode Stops
+  green 3.70156465e-33
+  blue 4.856337996e-33
+  name EXPTool1
+  xpos -457
+  ypos -299
+ }
+ Dot {
+  name Dot19
+  xpos -279
+  ypos -294
+ }
+ EXPTool {
+  mode Stops
+  red 1.8
+  green 1.8
+  blue 1.8
+  name EXPTool2
+  xpos -313
+  ypos -174
+ }
+ Grade {
+  black {{rfxToneMap.Grade2.black.r} {rfxToneMap.Grade2.black.g} {rfxToneMap.Grade2.black.b} {rfxToneMap.Grade2.black.a}}
+  name Grade1
+  xpos -313
+  ypos -136
+  addUserKnob {20 User}
+ }
+ Saturation {
+  saturation {{parent.tonemap_saturation}}
+  name Saturation2
+  xpos -313
+  ypos -99
+ }
+ Expression {
+  temp_name0 tNtD
+  temp_expr0 toeNum/toeDen
+  temp_name1 tStD
+  temp_expr1 toeStr*toeDen
+  temp_name2 tStN
+  temp_expr2 toeStr*toeNum
+  temp_name3 lAlS
+  temp_expr3 linAngle*linStr
+  expr0 ((r*(shoulderStr*r+lAlS)+tStN)/(r*(shoulderStr*r+linStr)+tStD))-tNtD
+  expr1 ((g*(shoulderStr*g+lAlS)+tStN)/(g*(shoulderStr*g+linStr)+tStD))-tNtD
+  expr2 ((b*(shoulderStr*b+lAlS)+tStN)/(b*(shoulderStr*b+linStr)+tStD))-tNtD
+  name Expression_Filmic
+  xpos -313
+  ypos -60
+  addUserKnob {20 User}
+  addUserKnob {7 shoulderStr l "Shoulder Str."}
+  shoulderStr 0.5
+  addUserKnob {7 linStr l "Linear Str."}
+  linStr 0.8
+  addUserKnob {7 linAngle l "Linear Angle"}
+  linAngle 0.2
+  addUserKnob {7 toeStr l "Toe Str."}
+  toeStr 0.9
+  addUserKnob {7 toeNum l "Toe Num." R 0 0.1}
+  toeNum 0.065
+  addUserKnob {7 toeDen l "Toe Denum."}
+  toeDen 0.9
+  addUserKnob {7 whitepoint l "White point" R 0 50}
+  addUserKnob {7 whitepointExp}
+  whitepointExp {{rfxToneMap.Expression_Filmic1.whitepointExp}}
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos -313
+  ypos 153
+ }
+push $N75a5c30
+ Dot {
+  name Dot27
+  xpos -777
+  ypos -295
+ }
+ Dot {
+  name Dot6
+  xpos -777
+  ypos 218
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  mix 0.9
+  name Merge1
+  xpos -313
+  ypos 215
+ }
+ Output {
+  name Output1
+  xpos -313
+  ypos 322
+ }
+push $N758cab0
+push $N75914f0
+ Dot {
+  name Dot7
+  xpos -1202
+  ypos -404
+ }
+ Dot {
+  name Dot2
+  xpos -1202
+  ypos -293
+ }
+set N76299d0 [stack 0]
+ EXPTool {
+  mode Stops
+  green 3.70156465e-33
+  blue 4.856337996e-33
+  name EXPTool3
+  xpos -1117
+  ypos -296
+ }
+ Dot {
+  name Dot3
+  xpos -910
+  ypos -293
+ }
+ EXPTool {
+  mode Stops
+  red 1.8
+  green 1.8
+  blue 1.8
+  name EXPTool4
+  xpos -944
+  ypos -173
+ }
+ Grade {
+  black {{parent.Grade1_black.r} {parent.Grade1_black.g} {parent.Grade1_black.b} {parent.Grade1_black.a}}
+  name Grade2
+  xpos -944
+  ypos -135
+  addUserKnob {20 User}
+ }
+ Saturation {
+  saturation {{parent.tonemap_saturation}}
+  name Saturation1
+  xpos -944
+  ypos -96
+ }
+ Expression {
+  temp_name0 tNtD
+  temp_expr0 toeNum/toeDen
+  temp_name1 tStD
+  temp_expr1 toeStr*toeDen
+  temp_name2 tStN
+  temp_expr2 toeStr*toeNum
+  temp_name3 lAlS
+  temp_expr3 linAngle*linStr
+  expr0 ((r*(shoulderStr*r+lAlS)+tStN)/(r*(shoulderStr*r+linStr)+tStD))-tNtD
+  expr1 ((g*(shoulderStr*g+lAlS)+tStN)/(g*(shoulderStr*g+linStr)+tStD))-tNtD
+  expr2 ((b*(shoulderStr*b+lAlS)+tStN)/(b*(shoulderStr*b+linStr)+tStD))-tNtD
+  name Expression_Filmic1
+  xpos -944
+  ypos -58
+  addUserKnob {20 User}
+  addUserKnob {7 shoulderStr l "Shoulder Str."}
+  shoulderStr 0.5
+  addUserKnob {7 linStr l "Linear Str."}
+  linStr 0.8
+  addUserKnob {7 linAngle l "Linear Angle"}
+  linAngle 0.2
+  addUserKnob {7 toeStr l "Toe Str."}
+  toeStr 0.9
+  addUserKnob {7 toeNum l "Toe Num." R 0 0.1}
+  toeNum 0.065
+  addUserKnob {7 toeDen l "Toe Denum."}
+  toeDen 0.9
+  addUserKnob {7 whitepoint l "White point" R 0 50}
+  addUserKnob {7 whitepointExp}
+  whitepointExp {{((whitepoint*(shoulderStr*whitepoint+linAngle*linStr)+toeStr*toeNum)/(whitepoint*(shoulderStr*whitepoint+linStr)+toeStr*toeDen))-(toeNum/toeDen)}}
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp2
+  xpos -944
+  ypos 154
+ }
+push $N76299d0
+ Dot {
+  name Dot4
+  xpos -1432
+  ypos -293
+ }
+ Dot {
+  name Dot5
+  xpos -1432
+  ypos 218
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge2
+  xpos -944
+  ypos 214
+ }
+ Colorspace {
+  colorspace_out sRGB
+  name Colorspace1
+  selected true
+  xpos -944
+  ypos 282
+  disable {{!parent.srgb_enable}}
+ }
+ GenerateLUT {
+  file tonemap.cube
+  file_type .cube
+  name GenerateLUT1
+  xpos -944
+  ypos 336
+ }
+ Viewer {
+  frame_range 101-400
+  name Viewer1
+  xpos -166
+  ypos -96
+ }
+end_group

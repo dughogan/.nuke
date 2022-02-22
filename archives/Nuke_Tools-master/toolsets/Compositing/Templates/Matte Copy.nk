@@ -1,0 +1,413 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1920" h="1165" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <splitter orientation="2">
+                <split size="71"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar_Flipbook Tools.1">
+                    <page id="Toolbar_Flipbook Tools.1"/>
+                </dock>
+                <split size="1045"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+            </splitter>
+            <split size="1874" stretch="1"/>
+            <splitter orientation="2">
+                <split size="72"/>
+                <dock id="" activePageId="Toolbar_Main Tools.1">
+                    <page id="Toolbar_Main Tools.1"/>
+                    <page id="Toolbar_Lighting Toolbar.1"/>
+                </dock>
+                <split size="1044"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="Pixel Analyzer.1"/>
+                    <page id="uk.co.thefoundry.waveformscope.1"/>
+                    <page id="uk.co.thefoundry.histogram.1"/>
+                    <page id="uk.co.thefoundry.vectorscope.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+    <window x="1920" y="0" w="1617" h="1193" screen="1">
+        <splitter orientation="2">
+            <split size="1165"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="Viewer.1"/>
+                <page id="uk.co.thefoundry.scripteditor.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/master_code/global/nuke/toolsets/10.0v3/ToolSets/Compositing/Templates/Matte Copy.nk"
+ format "1920 1038 0 0 1920 1038 1 RFX_RENDER"
+ colorManagement Nuke
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 user_name l "last saved by: " T dhogan}
+}
+BackdropNode {
+ inputs 0
+ name Compositing
+ tile_color 0x89897fc
+ note_font_size 48
+ xpos 1093
+ ypos 258
+ bdwidth 520
+ bdheight 106
+}
+BackdropNode {
+ inputs 0
+ name "Matte Copy"
+ tile_color 0x7f7f7fff
+ gl_color 0x44444401
+ label "Matte Copy\n(Occlusions in the Matte Pass)"
+ note_font "Arial Black"
+ note_font_size 20
+ xpos 441
+ ypos -14
+ bdwidth 372
+ bdheight 564
+}
+BackdropNode {
+ inputs 0
+ name "Matte Copy5"
+ tile_color 0x828282ff
+ gl_color 0x44444401
+ label "Matte Copy\n(Occlusions in the Bty)"
+ note_font "Arial Black"
+ note_font_size 20
+ xpos 13
+ ypos 50
+ bdwidth 368
+ bdheight 413
+}
+BackdropNode {
+ inputs 0
+ name "Sq: 0500 Sh: 0120 Reference Nodes"
+ tile_color 0x6734700
+ note_font_size 48
+ xpos 1073
+ ypos -54
+ bdwidth 560
+ bdheight 438
+}
+Reformat {
+ inputs 0
+ name Reformat2
+ xpos 498
+ ypos 178
+}
+Dot {
+ name Dot105
+ xpos 532
+ ypos 218
+}
+set N8cef880 [stack 0]
+RCryptomatte {
+ name RCryptomatte1
+ xpos 498
+ ypos 247
+}
+Group {
+ name MultiCrypto
+ tile_color 0x7a5ea3ff
+ gl_color 0xc4d600ff
+ xpos 498
+ ypos 273
+ addUserKnob {20 Main t "Main Window"}
+ addUserKnob {18 PickMatte l INVISIBLE +INVISIBLE}
+ PickMatte {0.2431870252 0.1161843091 5.12942329e+36}
+ addUserKnob {6 PickMatte_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 pickerAdd l "Pick Matte(s)" T crypto_viewer.pickerAdd}
+ addUserKnob {41 pickerRemove l "Picker Remove" T crypto_viewer.pickerRemove}
+ addUserKnob {26 ""}
+ addUserKnob {41 cryptoLayer l "Layer Selection" T crypto_viewer.cryptoLayer}
+ addUserKnob {41 matteList l "Matte List" T crypto_viewer.matteList}
+ addUserKnob {22 make_matte l "Make Matte" T "import sys\nmc_tool = nuke.thisNode()\n\n\nfor i in nuke.allNodes('Cryptomatte', mc_tool):\n    if i.knob('ref'):\n        i\[\"disable\"].setValue(1)\n\nmc_tool_picker = mc_tool.knob('pickerAdd')\nmc_tool_layer = mc_tool.knob('cryptoLayer')\nmc_tool_list = mc_tool.knob('matteList')\nmc_tool_picker_val = mc_tool_picker.getValue()\nmc_tool_layer_val = mc_tool_layer.getValue()\nmc_tool_list_val = mc_tool_list.getValue()\n\nif mc_tool_list_val == \[]:\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    raise Exception('Nothing Selected!')\n\nmatte_name = nuke.getInput('Name the matte:')\n\nif matte_name:\n    crypto_node = nuke.createNode('Cryptomatte', inpanel=False)\n    crypto_node.knob('pickerAdd').setValue(mc_tool_picker_val)\n    crypto_node.knob('cryptoLayer').setValue(mc_tool_layer_val)\n    crypto_node.knob('matteList').setValue('%s' % mc_tool_list_val)\n\n    crypto_node.connectInput(0, nuke.toNode('Input1'))\n    nuke.toNode('Output1').connectInput(0, crypto_node)\n\n    copy_node = nuke.createNode('Copy', inpanel = False)\n    cp_name = copy_node.knob('name').getValue()\n    cp_num = list(cp_name)\[-1]\n\n    copy_node.setInput(1, crypto_node)\n\nelse:\n    for i in nuke.allNodes('Cryptomatte', mc_tool):\n        if i.knob('ref'):\n            i\[\"disable\"].setValue(0)\n    raise Exception('Please enter a matte name')\n\ntry:\n    if not len(nuke.allNodes('Copy', mc_tool)) > 1:\n        copy_node.connectInput(0, nuke.toNode('crypto_viewer'))\n    else:\n        suffix_digit = int(filter(str.isdigit, copy_node.knob('name').getValue()))\n        copy_node.connectInput(0, nuke.toNode('Copy%s' % (suffix_digit-1)))\n\n    nuke.toNode('Output1').connectInput(0, copy_node)\n\n    copy_to_knob = copy_node.knob('to0')\n\n    nuke.Layer('matte', \['matte.%s'%matte_name])\n\n    copy_to_knob.setValue('matte.%s'%matte_name)\n    mc_tool_picker.setValue(\[0,0,0])\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    cv = nuke.toNode('%s.crypto_viewer' % (mc_tool.name()))\n    cv.resetKnobsToDefault()\n\n    #creating the knobs\n    mc_tool.begin()\n    txt_knob = nuke.Text_Knob('Matte #%s' % cp_num)\n    mc_tool.addKnob(txt_knob)\n    obj_knob = nuke.Link_Knob('obj%s' % cp_num, 'Objects')\n    obj_knob.setLink('\{\}.Cryptomatte\{\}.matteList'.format(mc_tool.name(),\n                                                         cp_num))\n    mc_tool.addKnob(obj_knob)\n    py_knob = nuke.PyScript_Knob('del%s' % cp_num, 'Delete Matte')\n    py_knob.setCommand(\"from nuke_tools import multi_crypto; multi_crypto.delete_matte()\")\n    mc_tool.addKnob(py_knob)\n    node = nuke.thisNode()\n    cv = nuke.toNode('%s.crypto_viewer' % (node.name()))\n    cv.resetKnobsToDefault()\n    cv.knob('forceUpdate').execute()\n    # user_tab = mc_tool.knob('User')\n    # user_tab.setFlag(nuke.INVISIBLE)\n    # mc_tool.knob('MultiCrypto').setFlag(nuke.TABKNOB)\n    mc_tool.end()\nexcept ValueError:\n    nuke.message('Please try again!')" +STARTLINE}
+ addUserKnob {22 refresh l Refresh -STARTLINE T "node = nuke.thisNode()\ncv = nuke.toNode('%s.crypto_viewer'%(node.name()))\ncv.resetKnobsToDefault()\ncv.knob('forceUpdate').execute()"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -40
+  ypos -84
+ }
+add_layer {crypto_object crypto_object.red crypto_object.green crypto_object.blue crypto_object.alpha}
+add_layer {crypto_object00 crypto_object00.red crypto_object00.green crypto_object00.blue crypto_object00.alpha}
+add_layer {crypto_object01 crypto_object01.red crypto_object01.green crypto_object01.blue crypto_object01.alpha}
+add_layer {crypto_object02 crypto_object02.red crypto_object02.green crypto_object02.blue crypto_object02.alpha}
+ Cryptomatte {
+  name crypto_viewer
+  matteList ""
+  cryptoLayer crypto_object
+  expression ""
+  keyedName ""
+  previewChannel crypto_object
+  in00 crypto_object00
+  in01 crypto_object01
+  in02 crypto_object02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+  addUserKnob {20 ref l Reference}
+  addUserKnob {26 info l "<b>Reference Node</b>" T "\n\n\n\n\n\n\n\n\nThis node will be disabled as soon as the first matte is selected."}
+ }
+set N3d605d0 [stack 0]
+ Output {
+  name Output1
+  xpos -40
+  ypos 272
+ }
+push $N3d605d0
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos -206
+  ypos 59
+ }
+end_group
+Remove {
+ channels rgba
+ name Remove8
+ xpos 498
+ ypos 299
+}
+Unpremult {
+ channels all
+ name Unpremult3
+ xpos 498
+ ypos 336
+}
+Dot {
+ name Dot106
+ xpos 532
+ ypos 395
+}
+push $N8cef880
+Unpremult {
+ inputs 0
+ channels all
+ name Unpremult1
+ xpos 674
+ ypos 170
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ maskChannelMask none
+ name Copy13
+ xpos 674
+ ypos 208
+}
+Premult {
+ channels all
+ name Premult5
+ xpos 674
+ ypos 294
+}
+Copy {
+ inputs 2
+ channels all
+ maskChannelMask none
+ name Copy14
+ xpos 674
+ ypos 379
+}
+Unpremult {
+ channels all
+ name Unpremult5
+ xpos 674
+ ypos 429
+}
+Premult {
+ channels all
+ name Premult4
+ xpos 674
+ ypos 467
+}
+Dot {
+ inputs 0
+ name Dot6
+ xpos 278
+ ypos 345
+}
+set N8b12560 [stack 0]
+RCryptomatte {
+ inputs 0
+ name RCryptomatte2
+ xpos 76
+ ypos 192
+}
+Group {
+ name MultiCrypto1
+ tile_color 0x7a5ea3ff
+ gl_color 0xc4d600ff
+ selected true
+ xpos 76
+ ypos 218
+ addUserKnob {20 Main t "Main Window"}
+ addUserKnob {18 PickMatte l INVISIBLE +INVISIBLE}
+ PickMatte {0.2431870252 0.1161843091 5.12942329e+36}
+ addUserKnob {6 PickMatte_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 pickerAdd l "Pick Matte(s)" T crypto_viewer.pickerAdd}
+ addUserKnob {41 pickerRemove l "Picker Remove" T crypto_viewer.pickerRemove}
+ addUserKnob {26 ""}
+ addUserKnob {41 cryptoLayer l "Layer Selection" T crypto_viewer.cryptoLayer}
+ addUserKnob {41 matteList l "Matte List" T crypto_viewer.matteList}
+ addUserKnob {22 make_matte l "Make Matte" T "import sys\nmc_tool = nuke.thisNode()\n\n\nfor i in nuke.allNodes('Cryptomatte', mc_tool):\n    if i.knob('ref'):\n        i\[\"disable\"].setValue(1)\n\nmc_tool_picker = mc_tool.knob('pickerAdd')\nmc_tool_layer = mc_tool.knob('cryptoLayer')\nmc_tool_list = mc_tool.knob('matteList')\nmc_tool_picker_val = mc_tool_picker.getValue()\nmc_tool_layer_val = mc_tool_layer.getValue()\nmc_tool_list_val = mc_tool_list.getValue()\n\nif mc_tool_list_val == \[]:\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    raise Exception('Nothing Selected!')\n\nmatte_name = nuke.getInput('Name the matte:')\n\nif matte_name:\n    crypto_node = nuke.createNode('Cryptomatte', inpanel=False)\n    crypto_node.knob('pickerAdd').setValue(mc_tool_picker_val)\n    crypto_node.knob('cryptoLayer').setValue(mc_tool_layer_val)\n    crypto_node.knob('matteList').setValue('%s' % mc_tool_list_val)\n\n    crypto_node.connectInput(0, nuke.toNode('Input1'))\n    nuke.toNode('Output1').connectInput(0, crypto_node)\n\n    copy_node = nuke.createNode('Copy', inpanel = False)\n    cp_name = copy_node.knob('name').getValue()\n    cp_num = list(cp_name)\[-1]\n\n    copy_node.setInput(1, crypto_node)\n\nelse:\n    for i in nuke.allNodes('Cryptomatte', mc_tool):\n        if i.knob('ref'):\n            i\[\"disable\"].setValue(0)\n    raise Exception('Please enter a matte name')\n\ntry:\n    if not len(nuke.allNodes('Copy', mc_tool)) > 1:\n        copy_node.connectInput(0, nuke.toNode('crypto_viewer'))\n    else:\n        suffix_digit = int(filter(str.isdigit, copy_node.knob('name').getValue()))\n        copy_node.connectInput(0, nuke.toNode('Copy%s' % (suffix_digit-1)))\n\n    nuke.toNode('Output1').connectInput(0, copy_node)\n\n    copy_to_knob = copy_node.knob('to0')\n\n    nuke.Layer('matte', \['matte.%s'%matte_name])\n\n    copy_to_knob.setValue('matte.%s'%matte_name)\n    mc_tool_picker.setValue(\[0,0,0])\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    cv = nuke.toNode('%s.crypto_viewer' % (mc_tool.name()))\n    cv.resetKnobsToDefault()\n\n    #creating the knobs\n    mc_tool.begin()\n    txt_knob = nuke.Text_Knob('Matte #%s' % cp_num)\n    mc_tool.addKnob(txt_knob)\n    obj_knob = nuke.Link_Knob('obj%s' % cp_num, 'Objects')\n    obj_knob.setLink('\{\}.Cryptomatte\{\}.matteList'.format(mc_tool.name(),\n                                                         cp_num))\n    mc_tool.addKnob(obj_knob)\n    py_knob = nuke.PyScript_Knob('del%s' % cp_num, 'Delete Matte')\n    py_knob.setCommand(\"from nuke_tools import multi_crypto; multi_crypto.delete_matte()\")\n    mc_tool.addKnob(py_knob)\n    node = nuke.thisNode()\n    cv = nuke.toNode('%s.crypto_viewer' % (node.name()))\n    cv.resetKnobsToDefault()\n    cv.knob('forceUpdate').execute()\n    # user_tab = mc_tool.knob('User')\n    # user_tab.setFlag(nuke.INVISIBLE)\n    # mc_tool.knob('MultiCrypto').setFlag(nuke.TABKNOB)\n    mc_tool.end()\nexcept ValueError:\n    nuke.message('Please try again!')" +STARTLINE}
+ addUserKnob {22 refresh l Refresh -STARTLINE T "node = nuke.thisNode()\ncv = nuke.toNode('%s.crypto_viewer'%(node.name()))\ncv.resetKnobsToDefault()\ncv.knob('forceUpdate').execute()"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -40
+  ypos -84
+ }
+ Cryptomatte {
+  name crypto_viewer
+  matteList ""
+  cryptoLayer crypto_object
+  expression ""
+  keyedName ""
+  previewChannel crypto_object
+  in00 crypto_object00
+  in01 crypto_object01
+  in02 crypto_object02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+  addUserKnob {20 ref l Reference}
+  addUserKnob {26 info l "<b>Reference Node</b>" T "\n\n\n\n\n\n\n\n\nThis node will be disabled as soon as the first matte is selected."}
+ }
+set N9727fc0 [stack 0]
+ Output {
+  name Output1
+  xpos -40
+  ypos 272
+ }
+push $N9727fc0
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos -206
+  ypos 59
+ }
+end_group
+Dot {
+ name Dot2
+ xpos 110
+ ypos 251
+}
+Reformat {
+ name Reformat1
+ xpos 76
+ ypos 283
+}
+Remove {
+ channels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ name Remove4
+ xpos 76
+ ypos 309
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ maskChannelMask none
+ name Copy10
+ xpos 76
+ ypos 335
+}
+Dot {
+ name Dot20
+ xpos 110
+ ypos 413
+}
+push $N8b12560
+Copy {
+ inputs 2
+ channels all
+ maskChannelMask none
+ name Copy12
+ xpos 244
+ ypos 397
+}
+Read {
+ inputs 0
+ file /render/21434_UGLY/sequences/0500/0120/media/ani/Hero/0020/frames/0500_0120_stereoCamera.%v.%04d.png
+ first 101
+ last 222
+ name sq0500_sh0120_animation_latest_read
+ xpos 1113
+ ypos -14
+}
+Read {
+ inputs 0
+ file /render/21434_UGLY/sequences/0500/0120/media/flo/master/0007/frames/0500_0120_stereoCamera.%v.%04d.png
+ first 101
+ last 222
+ name sq0500_sh0120_final_layout_latest_read
+ xpos 1113
+ ypos 132
+}
+Read {
+ inputs 0
+ file /render/21434_UGLY/sequences/0500/0120/comp/master/shot/0500_0120_master_v013/0500_0120_stereoCamera.%v.%04d.png
+ first 101
+ last 222
+ name sq0500_sh0120_compositing_13_read
+ xpos 1113
+ ypos 278
+}
+Read {
+ inputs 0
+ file /render/21434_UGLY/sequences/0500/0120/comp/master/shot/0500_0120_master_v018/0500_0120_stereoCamera.%v.%04d.png
+ first 101
+ last 222
+ name sq0500_sh0120_compositing_18_read
+ xpos 1313
+ ypos 278
+}
+Read {
+ inputs 0
+ file /render/21434_UGLY/sequences/0500/0120/comp/master/shot/0500_0120_master_v022/0500_0120_stereoCamera.%v.%04d.png
+ first 101
+ last 222
+ name sq0500_sh0120_compositing_22_read
+ xpos 1513
+ ypos 278
+}

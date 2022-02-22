@@ -1,0 +1,312 @@
+#! /usr/local/Nuke7.0v8/Nuke7.0 -nx
+version 7.0 v8
+Gizmo {
+ tile_color 0xff7511ff
+ note_font "Bitstream Vera Sans"
+ mapsize {0.15 0.15}
+ addUserKnob {20 "" l Parameters}
+ addUserKnob {20 info n 1}
+ info 0
+ addUserKnob {26 info_text l "" +STARTLINE T "author: Ed Whetstone\nupdated: 9/18/2013\n\nrotates RGB data like XYZ data, using a rotation matrix"}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 nrmlChannlChoice l "Output Channel:" t "choose the output channel" M {"X (red)" "Y (green)" "Z (blue)" "Rotated RGB" "" "" "" ""}}
+ nrmlChannlChoice "Z (blue)"
+ addUserKnob {4 nrmcheck l "Input Type:" M {Point Normal "" ""}}
+ nrmcheck Normal
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {7 xSlider l "X rotation" R 0 360}
+ addUserKnob {7 yRotation l "Y rotation" R 0 360}
+ addUserKnob {7 zRotation l "Z rotation" R 0 360}
+ addUserKnob {41 rotate l INVISIBLE +INVISIBLE T rotationControls.rotate}
+ addUserKnob {26 ""}
+ addUserKnob {20 origingrp l "Origin Control (advanced)" n 1}
+ origingrp 0
+ addUserKnob {26 altorigdesc l "" +STARTLINE T "\n( use this to change the \"pivot point\" of the rotation.  \nA reference frame must be set if your camera is moving )\n"}
+ addUserKnob {6 alter_origin l "alter origin" +STARTLINE}
+ addUserKnob {12 origin}
+ origin {200 200}
+ addUserKnob {41 first_frame l "set in frame" T FrameHold1.first_frame}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 grdGrp l "grade result" n 1}
+ addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {41 multiply T Grade1.multiply}
+ addUserKnob {41 blackpoint T Grade1.blackpoint}
+ addUserKnob {41 whitepoint T Grade1.whitepoint}
+ addUserKnob {20 endGroup n -1}
+}
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Math! http://en.wikipedia.org/wiki/Rotation_matrix"
+  xpos 1937
+  ypos -396
+ }
+ NoOp {
+  inputs 0
+  name rotationControls
+  xpos 1566
+  ypos -358
+  addUserKnob {20 "" l User}
+  addUserKnob {6 invertxmatrix -STARTLINE}
+  addUserKnob {6 invertymatrix -STARTLINE}
+  addUserKnob {6 invertzmatrix -STARTLINE}
+  addUserKnob {26 ""}
+  addUserKnob {6 negx -STARTLINE}
+  addUserKnob {6 negy -STARTLINE}
+  addUserKnob {6 negz -STARTLINE}
+  addUserKnob {13 rotate}
+  rotate {{parent.xSlider i} {parent.yRotation i} {parent.zRotation i}}
+  addUserKnob {26 ""}
+  addUserKnob {1 alphaexpr}
+  alphaexpr rotate.y/360.0*(2*PI)
+  addUserKnob {1 betaexpr}
+  betaexpr rotate.z/360.0*(2*PI)
+  addUserKnob {1 gammaexpr}
+  gammaexpr rotate.x/360.0*(2*PI)
+  addUserKnob {26 ""}
+  addUserKnob {7 alpha}
+  alpha {{"\[knob alphaexpr]" i}}
+  addUserKnob {7 beta}
+  beta {{"\[knob betaexpr]" i}}
+  addUserKnob {7 gamma}
+  gamma {{"\[knob gammaexpr]" i}}
+ }
+ Input {
+  inputs 0
+  name RGB
+  label "Input RGB"
+  xpos 1829
+  ypos -956
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 1829
+  ypos -875
+ }
+set N85a9630 [stack 0]
+ FrameHold {
+  first_frame 101
+  name FrameHold1
+  xpos 1597
+  ypos -881
+ }
+ OneView {
+  name OneView1
+  xpos 1597
+  ypos -833
+ }
+ Crop {
+  box {{parent.origin.x} {parent.origin.y} {parent.origin.x+1} {parent.origin.y+1}}
+  reformat true
+  crop false
+  name Crop1
+  xpos 1597
+  ypos -796
+ }
+ Reformat {
+  format "1972 1012 0 0 1972 1012 1 18842_turkeys_production_renderRes"
+  name Reformat1
+  xpos 1597
+  ypos -759
+ }
+ Multiply {
+  channels rgb
+  value -1
+  maskChannelMask none
+  name Multiply3
+  xpos 1597
+  ypos -706
+ }
+push $N85a9630
+ Dot {
+  name Dot2
+  xpos 1863
+  ypos -653
+ }
+set N85db8f0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask none
+  name Merge1
+  xpos 1597
+  ypos -657
+ }
+ Dot {
+  name Dot3
+  xpos 1631
+  ypos -612
+ }
+push $N85db8f0
+ Switch {
+  inputs 2
+  which {{parent.alter_origin}}
+  name Switch3
+  xpos 1829
+  ypos -616
+ }
+ Invert {
+  channels rgb
+  maskChannelMask none
+  mix {{parent.invertChk i}}
+  name Invert1
+  xpos 1829
+  ypos -550
+ }
+set N9b74e40 [stack 0]
+ Multiply {
+  value 2
+  maskChannelMask none
+  name Multiply1
+  xpos 1613
+  ypos -557
+ }
+ Add {
+  value -1
+  maskChannelMask none
+  name Add1
+  xpos 1613
+  ypos -497
+ }
+push $N9b74e40
+ Switch {
+  inputs 2
+  which {{parent.nrmcheck}}
+  name Switch2
+  xpos 1829
+  ypos -490
+ }
+ set C9b91f50 [stack 0]
+ ColorMatrix {
+  matrix {
+      {{"cos( \[value rotationControls.beta] )" i} {"-1 * sin( \[value rotationControls.beta] )" i} 0}
+      {{"sin( \[value rotationControls.beta] )" i} {"cos( \[value rotationControls.beta] )" i} 0}
+      {0 0 1}
+    }
+  name ColorMatrix12
+  label "Yaw  Z"
+  xpos 1829
+  ypos -452
+ }
+ ColorMatrix {
+  matrix {
+      {{"cos( \[value rotationControls.alpha] )" i} 0 {"sin( \[value rotationControls.alpha] )" i}}
+      {0 1 0}
+      {{"-1 * sin( \[value rotationControls.alpha] )" i} 0 {"cos( \[value rotationControls.alpha] )" i}}
+    }
+  name ColorMatrix11
+  label "Pitch  Y"
+  xpos 1829
+  ypos -379
+ }
+ ColorMatrix {
+  matrix {
+      {1 0 0}
+      {0 {"cos( \[value rotationControls.gamma] )" i} {"-1 * sin( \[value rotationControls.gamma] )" i}}
+      {0 {"sin( \[value rotationControls.gamma] )" i} {"cos( \[value rotationControls.gamma] )" i}}
+    }
+  name ColorMatrix10
+  label "roll  X"
+  xpos 1829
+  ypos -324
+ }
+set N9bad680 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1863
+  ypos -127
+ }
+set N817f8b0 [stack 0]
+ Shuffle {
+  name Shuffle4
+  xpos 2034
+  ypos -93
+ }
+push $N817f8b0
+ Shuffle {
+  red blue
+  green blue
+  name Shuffle2
+  xpos 1909
+  ypos -93
+ }
+push $N817f8b0
+ Shuffle {
+  red green
+  blue green
+  name Shuffle1
+  xpos 1773
+  ypos -91
+ }
+push $N817f8b0
+ Shuffle {
+  green red
+  blue red
+  name Shuffle3
+  xpos 1625
+  ypos -91
+ }
+ Switch {
+  inputs 4
+  which {{parent.nrmlChannlChoice}}
+  name Switch1
+  xpos 1825
+  ypos -18
+ }
+ Dot {
+  name Dot1
+  xpos 1859
+  ypos 97
+ }
+set Nad8fb80 [stack 0]
+ Add {
+  value 1
+  maskChannelMask none
+  name Add2
+  xpos 1619
+  ypos 88
+ }
+ Multiply {
+  value 0.5
+  maskChannelMask none
+  name Multiply2
+  xpos 1619
+  ypos 140
+ }
+push $Nad8fb80
+clone $C9b91f50 {
+  inputs 2
+  xpos 1825
+  ypos 146
+  selected false
+ }
+ Premult {
+  name Premult1
+  xpos 1825
+  ypos 208
+ }
+ Grade {
+  black_clamp false
+  maskChannelMask none
+  unpremult rgba.alpha
+  name Grade1
+  xpos 1825
+  ypos 236
+ }
+ Output {
+  name Output1
+  xpos 1825
+  ypos 299
+ }
+push $N9bad680
+ Viewer {
+  viewerProcess rec709
+  input_process false
+  name Viewer1
+  xpos 1829
+  ypos -410
+ }
+end_group

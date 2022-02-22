@@ -1,0 +1,30 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+Gizmo {
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -897
+  ypos 481
+ }
+ Colorspace {
+  name Colorspace2
+  xpos -897
+  ypos 545
+ }
+ Vectorfield {
+  vfield_file /work/20631_WISH/common/tonemaps/Tonemap.cube
+  version 14
+  file_type cube
+  name Vectorfield2
+  label AgfaVista
+  xpos -897
+  ypos 571
+ }
+ Output {
+  name Output1
+  xpos -897
+  ypos 671
+ }
+end_group

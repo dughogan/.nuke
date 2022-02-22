@@ -1,0 +1,302 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+Constant {
+ inputs 0
+ channels rgb
+ format "2048 2048 0 0 2048 2048 1 square_2K"
+ name Constant9
+ selected true
+ xpos -2891
+ ypos 1302
+}
+Crop {
+ box {0 0 {input.width} {input.height}}
+ reformat true
+ crop false
+ name Crop2
+ selected true
+ xpos -2891
+ ypos 1402
+}
+set N127cc880 [stack 0]
+Noise {
+ type turbulence
+ size 360
+ zoffset {{curve*(mult+.001) R x1 0 x100 1}}
+ octaves 2
+ lacunarity 1.7
+ gain 1.3
+ gamma 0.55
+ translate {0 10}
+ center {1280 675}
+ name NoiseA
+ selected true
+ xpos -2841
+ ypos 1447
+ addUserKnob {20 User l "Noise Speed"}
+ addUserKnob {7 mult l Speed}
+ mult 0.2
+ addUserKnob {26 ""}
+ addUserKnob {41 type_1 l type T NoiseA.type}
+ addUserKnob {41 size_1 l x/ysize T NoiseA.size}
+ addUserKnob {41 octaves_1 l octaves T NoiseA.octaves}
+ addUserKnob {41 nyquist_1 l "clip at Nyquist limit" T NoiseA.nyquist}
+ addUserKnob {41 lacunarity_1 l lacunarity T NoiseA.lacunarity}
+ addUserKnob {41 gain_1 l gain T NoiseA.gain}
+ addUserKnob {41 gamma_1 l gamma T NoiseA.gamma}
+}
+Grade {
+ whitepoint 1.6
+ gamma 22
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Grade36
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1473
+}
+Invert {
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Invert1
+ selected true
+ xpos -2841
+ ypos 1499
+}
+Clamp {
+ minimum 0.0001
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Clamp2
+ selected true
+ xpos -2841
+ ypos 1537
+}
+ColorCorrect {
+ contrast 5.85
+ gamma 1.8
+ midtones.gamma 1.4
+ highlights.gain 0.14
+ lookup {shadow {}
+   midtone {}
+   highlight {curve x0.1236841977 0 s0 x1 1 s0}}
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect1
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1575
+}
+ColorCorrect {
+ contrast 0.92
+ gamma 0.78
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect3
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1601
+}
+Grade {
+ blackpoint -0.14
+ whitepoint 1.6
+ black_clamp false
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name clr2
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1627
+}
+ColorCorrect {
+ contrast 1.16
+ gamma 0.7
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect4
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1653
+}
+push $N127cc880
+Noise {
+ type turbulence
+ size 360
+ zoffset {{curve*(mult+.001)+100 R x1 0 x100 1}}
+ octaves 2
+ lacunarity 1.7
+ gain 1.3
+ gamma 0.55
+ translate {-326 130}
+ center {1280 675}
+ name NoiseB
+ label "offset z"
+ selected true
+ xpos -2949
+ ypos 1441
+ addUserKnob {20 User l "Noise Speed"}
+ addUserKnob {7 mult l Speed}
+ mult 0.2
+ addUserKnob {26 ""}
+ addUserKnob {41 type_1 l type T NoiseB.type}
+ addUserKnob {41 size_1 l x/ysize T NoiseB.size}
+ addUserKnob {41 octaves_1 l octaves T NoiseB.octaves}
+ addUserKnob {41 nyquist_1 l "clip at Nyquist limit" T NoiseB.nyquist}
+ addUserKnob {41 lacunarity_1 l lacunarity T NoiseB.lacunarity}
+ addUserKnob {41 gain_1 l gain T NoiseB.gain}
+ addUserKnob {41 gamma_1 l gamma T NoiseB.gamma}
+}
+Grade {
+ whitepoint 1.6
+ gamma 22
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Grade37
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2949
+ ypos 1479
+}
+Invert {
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Invert2
+ selected true
+ xpos -2949
+ ypos 1505
+}
+Clamp {
+ minimum 0.0001
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Clamp3
+ selected true
+ xpos -2949
+ ypos 1543
+}
+ColorCorrect {
+ contrast 5.85
+ gamma 1.8
+ gain 0.88
+ midtones.gamma 1.4
+ highlights.gain 0.42
+ lookup {shadow {}
+   midtone {}
+   highlight {curve x0.1236841977 0 s0 x1 1 s0}}
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect2
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2949
+ ypos 1581
+}
+ColorCorrect {
+ contrast 0.92
+ gamma 0.78
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect5
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2949
+ ypos 1607
+}
+ColorCorrect {
+ contrast 1.16
+ gamma 0.7
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect6
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2949
+ ypos 1659
+}
+Dot {
+ name Dot36
+ selected true
+ xpos -2915
+ ypos 1702
+}
+Merge2 {
+ inputs 2
+ operation plus
+ maskChannelInput -rgba.alpha
+ name Merge41
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1698
+}
+Colorspace {
+ colorspace_out SLog
+ name Colorspace1
+ selected true
+ xpos -2841
+ ypos 1750
+}
+SoftClip {
+ conversion "logarithmic compress"
+ softclip_min 0.055
+ name SoftClip1
+ selected true
+ xpos -2841
+ ypos 1776
+}
+Colorspace {
+ colorspace_in SLog
+ name Colorspace2
+ selected true
+ xpos -2841
+ ypos 1802
+}
+ColorCorrect {
+ contrast 1.45
+ gamma 0.86
+ gain 1.12
+ highlights.gain 0.32
+ lookup {shadow {curve 1 s0 x0.05648200214 0 s0}
+   midtone {1-shadow-highlight}
+   highlight {curve x0.06883655488 0 s0 x1 1 s0}}
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name ColorCorrect8
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1828
+}
+Grade {
+ white 1.6
+ gamma 0.86
+ black_clamp false
+ maskChannelInput -rgba.alpha
+ unpremult -rgba.alpha
+ name Grade39
+ label "\[if \{ \[value mix] != 1 \} \{ return \"mix: \[value mix]\" \} else \{ return \" \"\}]"
+ selected true
+ xpos -2841
+ ypos 1854
+}
+Crop {
+ box {0 0 {input.width} {input.height}}
+ reformat true
+ crop false
+ name Crop3
+ selected true
+ xpos -2841
+ ypos 1880
+}
+Shuffle {
+ alpha black
+ name Shuffle9
+ selected true
+ xpos -2841
+ ypos 1906
+}

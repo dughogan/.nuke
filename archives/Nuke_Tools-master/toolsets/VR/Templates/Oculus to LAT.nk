@@ -1,0 +1,97 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name "LAT to Oculus2"
+ tile_color 0x44444401
+ gl_color 0x44444401
+ label "Oculus to LAT"
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 148
+ ypos 2565
+ bdwidth 298
+ bdheight 254
+}
+push $cut_paste_input
+Dot {
+ name Dot3
+ selected true
+ xpos 295
+ ypos 2647
+}
+set N26416e0 [stack 0]
+Crop {
+ box {{input.width/2} 0 {input.width} {input.width}}
+ name Crop5
+ selected true
+ xpos 343
+ ypos 2643
+}
+Shuffle {
+ in2 alpha
+ alpha white
+ name Shuffle9
+ selected true
+ xpos 343
+ ypos 2669
+}
+Transform {
+ scale {2 1}
+ center {{input.width} {input.height/2}}
+ black_outside false
+ shutter 0
+ shuttercustomoffset -1
+ name Transform6
+ selected true
+ xpos 343
+ ypos 2733
+}
+Dot {
+ name Dot5
+ selected true
+ xpos 377
+ ypos 2785
+}
+push $N26416e0
+Crop {
+ box {0 0 {input.height/2} {input.width}}
+ name Crop4
+ selected true
+ xpos 185
+ ypos 2643
+}
+Shuffle {
+ in2 alpha
+ alpha white
+ name Shuffle2
+ selected true
+ xpos 185
+ ypos 2669
+}
+Transform {
+ scale {2 1}
+ center {{input.width-input.width} {input.height/2}}
+ black_outside false
+ shutter 0
+ shuttercustomoffset -1
+ name Transform5
+ selected true
+ xpos 185
+ ypos 2726
+}
+Dot {
+ name Dot4
+ selected true
+ xpos 219
+ ypos 2785
+}
+JoinViews {
+ inputs 2
+ name JoinViews1
+ selected true
+ xpos 267
+ ypos 2781
+ viewassoc "left\nright"
+}

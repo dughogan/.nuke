@@ -1,0 +1,129 @@
+#! /usr/local/Nuke6.3v8/Nuke6.3 -nx
+version 6.3 v8
+Gizmo {
+ note_font "Bitstream Vera Sans"
+ mapsize {0.15 0.15}
+ addUserKnob {20 User}
+ addUserKnob {41 enable l "knob mix \$value" +INVISIBLE T Multiply1.enable}
+ addUserKnob {41 alpha l "Choose eye matte color" t "Select the color represented as the overall eye in your Color Seperation Matte." T Shuffle3.alpha}
+ addUserKnob {41 erode_size l outside_shadow_size t "Adjust slider to increase or decrease amoount of out eye (eyeliner) shadow." T FilterErode_OS_eye.size}
+ addUserKnob {41 eyeliner_blur l outside_shadow_blur t "Use this slider to increase or decrease the softness of the outside eye shadow (eyeliner)." T Blur_os_eye.size}
+ addUserKnob {41 value l outside_shadow_mix t "Adjusts the opacity of the outside eye shadow." T Multiply1.value}
+ addUserKnob {41 eye_shadow l eye_shadow_size t "Use this slider to adjust the thickness of the eye shadow." T FilterErode2.size}
+ addUserKnob {41 eye_shadow_blur t "Adjusts the softness of the eye shadow." T Blur7.size}
+ addUserKnob {41 translate l offset_eye_shadow t "Adjust shadow in x or y to simulate a light source." T Transform1.translate}
+ addUserKnob {41 mix l eye_shadow_mix t "Adjust opacity of shadow within eye." T Merge7.mix}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 235
+  ypos -210
+ }
+ Reformat {
+  type "to box"
+  box_width {{input.width i}}
+  box_height {{input.height i}}
+  box_fixed true
+  name Reformat
+  xpos 235
+  ypos -109
+ }
+ Shuffle {
+  name Shuffle3
+  xpos 235
+  ypos -39
+ }
+set N6818b10 [stack 0]
+ FilterErode {
+  size 0
+  name FilterErode2
+  xpos -140
+  ypos -45
+ }
+ Blur {
+  channels alpha
+  name Blur7
+  xpos -140
+  ypos 3
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos -140
+  ypos 55
+ }
+ Transform {
+  center {960 540}
+  name Transform1
+  xpos -140
+  ypos 103
+ }
+push $N6818b10
+ Merge2 {
+  inputs 2
+  operation in
+  name In
+  xpos -140
+  ypos 192
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  alpha white
+  out rgb
+  name Shuffle4
+  xpos -140
+  ypos 267
+ }
+push $N6818b10
+ FilterErode {
+  size 0
+  name FilterErode_OS_eye
+  xpos 235
+  ypos 242
+ }
+ Blur {
+  channels alpha
+  name Blur_os_eye
+  xpos 235
+  ypos 282
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  alpha white
+  out rgb
+  name Shuffle15
+  xpos 235
+  ypos 322
+ }
+push $N6818b10
+ Merge2 {
+  inputs 2
+  operation out
+  Achannels {rgba.red rgba.green rgba.blue rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue rgba.alpha}
+  name Out
+  xpos 125
+  ypos 322
+ }
+ Multiply {
+  name Multiply1
+  xpos 15
+  ypos 316
+ }
+ Merge {
+  inputs 2
+  name Merge7
+  xpos -140
+  ypos 322
+ }
+ Output {
+  name Output1
+  xpos -140
+  ypos 448
+ }
+end_group

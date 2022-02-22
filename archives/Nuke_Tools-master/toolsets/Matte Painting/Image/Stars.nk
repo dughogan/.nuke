@@ -1,0 +1,367 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name Stars
+ tile_color 0x131313ff
+ gl_color 0x44444401
+ label Stars
+ note_font "DejaVu Sans Bold"
+ note_font_size 40
+ selected true
+ xpos 2191
+ ypos -808
+ bdwidth 754
+ bdheight 1242
+}
+push $cut_paste_input
+Constant {
+ inputs 0
+ channels rgb
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Constant3
+ selected true
+ xpos 2486
+ ypos -715
+}
+Reformat {
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Reformat3
+ selected true
+ xpos 2486
+ ypos -603
+}
+set Nabee590 [stack 0]
+Dot {
+ name Dot36
+ selected true
+ xpos 2652
+ ypos -593
+}
+set N671b690 [stack 0]
+Dot {
+ name Dot37
+ selected true
+ xpos 2762
+ ypos -593
+}
+set Na705f40 [stack 0]
+Dot {
+ name Dot35
+ selected true
+ xpos 2872
+ ypos -593
+}
+Noise {
+ replace true
+ type turbulence
+ size 1
+ name Noise3
+ selected true
+ xpos 2838
+ ypos -575
+}
+Dot {
+ name Dot25
+ selected true
+ xpos 2872
+ ypos -479
+}
+push $N671b690
+Noise {
+ replace true
+ size 1
+ name Noise1
+ label Rotation
+ selected true
+ xpos 2618
+ ypos -575
+}
+push $Na705f40
+Noise {
+ replace true
+ size 940
+ gamma 0.635
+ name Noise2
+ selected true
+ xpos 2728
+ ypos -575
+}
+Dot {
+ name Dot27
+ selected true
+ xpos 2762
+ ypos -523
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge9
+ selected true
+ xpos 2618
+ ypos -527
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge10
+ selected true
+ xpos 2618
+ ypos -483
+}
+Grade {
+ channels rgba
+ multiply 1.2
+ gamma 0.12
+ name stars_amt_grade
+ selected true
+ xpos 2618
+ ypos -449
+}
+push $Nabee590
+Dither {
+ amount 15
+ static_seed true
+ name Dither1
+ selected true
+ xpos 2486
+ ypos -530
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name In
+ selected true
+ xpos 2486
+ ypos -449
+}
+Dot {
+ name Dot5
+ selected true
+ xpos 2520
+ ypos -378
+}
+set N613adf0 [stack 0]
+Dot {
+ name Dot4
+ selected true
+ xpos 2410
+ ypos -378
+}
+set Nac2d620 [stack 0]
+Shuffle {
+ in2 alpha
+ red green
+ blue green
+ alpha green
+ name Shuffle2
+ selected true
+ xpos 2375
+ ypos -343
+}
+set N1440a860 [stack 0]
+push $N613adf0
+Shuffle {
+ in2 alpha
+ red blue
+ green blue
+ alpha blue
+ name Shuffle3
+ selected true
+ xpos 2485
+ ypos -343
+}
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge3
+ selected true
+ xpos 2485
+ ypos -304
+}
+Grade {
+ multiply {1.850000024 1.258000016 1.258000016 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade3
+ selected true
+ xpos 2485
+ ypos -264
+}
+push 0
+push $Nac2d620
+Dot {
+ name Dot3
+ selected true
+ xpos 2300
+ ypos -378
+}
+Shuffle {
+ in2 alpha
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ selected true
+ xpos 2266
+ ypos -343
+}
+set N607f6f0 [stack 0]
+Grade {
+ multiply {1.543934822 1.842416883 2.900000095 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade1
+ selected true
+ xpos 2266
+ ypos -264
+}
+push $N607f6f0
+push $N1440a860
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge2
+ selected true
+ xpos 2375
+ ypos -304
+}
+Grade {
+ multiply {0.9898033738 1 0.75 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade2
+ selected true
+ xpos 2375
+ ypos -264
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ maskChannelMask none
+ name Merge1
+ selected true
+ xpos 2376
+ ypos -204
+}
+Saturation {
+ saturation 0.4
+ maskChannelMask none
+ name Saturation1
+ selected true
+ xpos 2376
+ ypos -178
+}
+Clamp {
+ maskChannelMask none
+ name Clamp1
+ selected true
+ xpos 2376
+ ypos -152
+}
+set N21212260 [stack 0]
+push $N21212260
+add_layer {stars stars.red stars.green stars.blue stars.alpha}
+Copy {
+ inputs 2
+ from0 rgba.red
+ to0 stars.red
+ from1 rgba.green
+ to1 stars.green
+ from2 rgba.blue
+ to2 stars.blue
+ from3 rgba.alpha
+ to3 stars.alpha
+ maskChannelMask none
+ name Copy1
+ selected true
+ xpos 2376
+ ypos -114
+}
+set N21205390 [stack 0]
+Shuffle {
+ in2 alpha
+ red black
+ green black
+ blue black
+ alpha black
+ name Shuffle7
+ selected true
+ xpos 2502
+ ypos -90
+}
+Noise {
+ replace true
+ size 40
+ zoffset {{frame/200}}
+ gain 1
+ gamma 0.8
+ name Noise6
+ label "Twinkle\nOn / Off"
+ selected true
+ xpos 2621
+ ypos -102
+}
+Dot {
+ name Dot105
+ selected true
+ xpos 2655
+ ypos 1
+}
+push $N21205390
+Merge2 {
+ inputs 2
+ operation stencil
+ mix 0.7
+ name Merge46
+ label Twinkle
+ selected true
+ xpos 2376
+ ypos -9
+}
+Mirror2 {
+ flop true
+ name Mirror2_1
+ selected true
+ xpos 2376
+ ypos 55
+}
+ReadGeo {
+ file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/dome.obj
+ translate {0 -90000 0}
+ name Dome_1
+ selected true
+ xpos 2376
+ ypos 81
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ name ScanlineRender2
+ selected true
+ xpos 2376
+ ypos 236
+}
+Grade {
+ multiply {1 1 2.549999952 1}
+ maskChannelMask none
+ name Grade4
+ label "Star Color"
+ selected true
+ xpos 2376
+ ypos 311
+}
+rfxLumaGlow {
+ name rfxLumaGlow1
+ note_font "Bitstream Vera Sans"
+ selected true
+ xpos 2376
+ ypos 391
+ info 0
+ multiply 0.86
+ from0 rgba.alpha
+}

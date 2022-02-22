@@ -1,0 +1,63 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Group {
+ name MultiCrypto
+ tile_color 0x7a5ea3ff
+ gl_color 0xc4d600ff
+ addUserKnob {20 Main t "Main Window"}
+ addUserKnob {18 PickMatte l INVISIBLE +INVISIBLE}
+ PickMatte {0.2431870252 0.1161843091 5.12942329e+36}
+ addUserKnob {6 PickMatte_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 pickerAdd l "Pick Matte(s)" T crypto_viewer.pickerAdd}
+ addUserKnob {41 pickerRemove l "Picker Remove" T crypto_viewer.pickerRemove}
+ addUserKnob {26 ""}
+ addUserKnob {41 cryptoLayer l "Layer Selection" T crypto_viewer.cryptoLayer}
+ addUserKnob {41 matteList l "Matte List" T crypto_viewer.matteList}
+ addUserKnob {22 make_matte l "Make Matte" T "import sys\nmc_tool = nuke.thisNode()\n\n\nfor i in nuke.allNodes('Cryptomatte', mc_tool):\n    if i.knob('ref'):\n        i\[\"disable\"].setValue(1)\n\nmc_tool_picker = mc_tool.knob('pickerAdd')\nmc_tool_layer = mc_tool.knob('cryptoLayer')\nmc_tool_list = mc_tool.knob('matteList')\nmc_tool_picker_val = mc_tool_picker.getValue()\nmc_tool_layer_val = mc_tool_layer.getValue()\nmc_tool_list_val = mc_tool_list.getValue()\n\nif mc_tool_list_val == \[]:\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    raise Exception('Nothing Selected!')\n\nmatte_name = nuke.getInput('Name the matte:')\n\nif matte_name:\n    crypto_node = nuke.createNode('Cryptomatte', inpanel=False)\n    crypto_node.knob('pickerAdd').setValue(mc_tool_picker_val)\n    crypto_node.knob('cryptoLayer').setValue(mc_tool_layer_val)\n    crypto_node.knob('matteList').setValue('%s' % mc_tool_list_val)\n\n    crypto_node.connectInput(0, nuke.toNode('Input1'))\n    nuke.toNode('Output1').connectInput(0, crypto_node)\n\n    copy_node = nuke.createNode('Copy', inpanel = False)\n    cp_name = copy_node.knob('name').getValue()\n    cp_num = list(cp_name)\[-1]\n\n    copy_node.setInput(1, crypto_node)\n\nelse:\n    for i in nuke.allNodes('Cryptomatte', mc_tool):\n        if i.knob('ref'):\n            i\[\"disable\"].setValue(0)\n    raise Exception('Please enter a matte name')\n\ntry:\n    if not len(nuke.allNodes('Copy', mc_tool)) > 1:\n        copy_node.connectInput(0, nuke.toNode('crypto_viewer'))\n    else:\n        suffix_digit = int(filter(str.isdigit, copy_node.knob('name').getValue()))\n        copy_node.connectInput(0, nuke.toNode('Copy%s' % (suffix_digit-1)))\n\n    nuke.toNode('Output1').connectInput(0, copy_node)\n\n    copy_to_knob = copy_node.knob('to0')\n\n    nuke.Layer('matte', \['matte.%s'%matte_name])\n\n    copy_to_knob.setValue('matte.%s'%matte_name)\n    mc_tool_picker.setValue(\[0,0,0])\n    nuke.toNode('crypto_viewer')\[\"disable\"].setValue(0)\n    cv = nuke.toNode('%s.crypto_viewer' % (mc_tool.name()))\n    cv.resetKnobsToDefault()\n\n    #creating the knobs\n    mc_tool.begin()\n    txt_knob = nuke.Text_Knob('Matte #%s' % cp_num)\n    mc_tool.addKnob(txt_knob)\n    obj_knob = nuke.Link_Knob('obj%s' % cp_num, 'Objects')\n    obj_knob.setLink('\{\}.Cryptomatte\{\}.matteList'.format(mc_tool.name(),\n                                                         cp_num))\n    mc_tool.addKnob(obj_knob)\n    py_knob = nuke.PyScript_Knob('del%s' % cp_num, 'Delete Matte')\n    py_knob.setCommand(\"from nuke_tools import multi_crypto; multi_crypto.delete_matte()\")\n    mc_tool.addKnob(py_knob)\n    node = nuke.thisNode()\n    cv = nuke.toNode('%s.crypto_viewer' % (node.name()))\n    cv.resetKnobsToDefault()\n    cv.knob('forceUpdate').execute()\n    # user_tab = mc_tool.knob('User')\n    # user_tab.setFlag(nuke.INVISIBLE)\n    # mc_tool.knob('MultiCrypto').setFlag(nuke.TABKNOB)\n    mc_tool.end()\nexcept ValueError:\n    nuke.message('Please try again!')" +STARTLINE}
+ addUserKnob {22 refresh l Refresh -STARTLINE T "node = nuke.thisNode()\ncv = nuke.toNode('%s.crypto_viewer'%(node.name()))\ncv.resetKnobsToDefault()\ncv.knob('forceUpdate').execute()"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -40
+  ypos -84
+ }
+add_layer {crypto_object crypto_object.red crypto_object.green crypto_object.blue crypto_object.alpha}
+add_layer {crypto_object00 crypto_object00.red crypto_object00.green crypto_object00.blue crypto_object00.alpha}
+add_layer {crypto_object01 crypto_object01.red crypto_object01.green crypto_object01.blue crypto_object01.alpha}
+add_layer {crypto_object02 crypto_object02.red crypto_object02.green crypto_object02.blue crypto_object02.alpha}
+ Cryptomatte {
+  name crypto_viewer
+  selected false
+  xpos -40
+  ypos 59
+  matteList ""
+  cryptoLayer crypto_object
+  expression ""
+  keyedName ""
+  previewChannel crypto_object
+  in00 crypto_object00
+  in01 crypto_object01
+  in02 crypto_object02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+  addUserKnob {20 ref l Reference}
+  addUserKnob {26 info l "<b>Reference Node</b>" T "\n\n\n\n\n\n\n\n\nThis node will be disabled as soon as the first matte is selected."}
+ }
+set Ne5ebf8f0 [stack 0]
+ Output {
+  name Output1
+  xpos -40
+  ypos 272
+ }
+push $Ne5ebf8f0
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos -206
+  ypos 59
+ }
+end_group

@@ -1,0 +1,310 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+push $cut_paste_input
+Dot {
+ name Dot2
+ selected true
+ xpos 1195
+ ypos 1488
+}
+set Nc4cb57e0 [stack 0]
+Dot {
+ name Dot18
+ selected true
+ xpos 1330
+ ypos 1488
+}
+set Ndaeb5960 [stack 0]
+Dot {
+ name Dot9
+ selected true
+ xpos 1458
+ ypos 1488
+}
+add_layer {clouds clouds.red clouds.green clouds.blue clouds.alpha}
+Shuffle {
+ in clouds
+ in2 clouds
+ alpha alpha2
+ name Shuffle4
+ label Clouds
+ selected true
+ xpos 1424
+ ypos 1506
+}
+Grade {
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade3
+ label "Clouds CC"
+ selected true
+ xpos 1424
+ ypos 1545
+}
+Dot {
+ name Dot12
+ selected true
+ xpos 1458
+ ypos 1913
+}
+set Ndb7bfb50 [stack 0]
+Dot {
+ name Dot14
+ selected true
+ xpos 1458
+ ypos 1939
+}
+push $Ndb7bfb50
+push $Ndaeb5960
+add_layer {card card.red card.green card.blue card.alpha}
+Shuffle {
+ in card
+ in2 clouds
+ alpha alpha2
+ name Shuffle6
+ label Card
+ selected true
+ xpos 1296
+ ypos 1506
+}
+Grade {
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade5
+ label "Card CC"
+ selected true
+ xpos 1296
+ ypos 1544
+}
+Dot {
+ name Dot19
+ selected true
+ xpos 1330
+ ypos 1834
+}
+set Nbabfa560 [stack 0]
+Dot {
+ name Dot20
+ selected true
+ xpos 1330
+ ypos 1860
+}
+push $Nbabfa560
+push $Nc4cb57e0
+add_layer {stars stars.red stars.green stars.blue stars.alpha}
+Shuffle {
+ in stars
+ in2 stars
+ alpha alpha2
+ name Shuffle5
+ label Stars
+ selected true
+ xpos 1161
+ ypos 1506
+}
+Grade {
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade1
+ label "Stars CC"
+ selected true
+ xpos 1161
+ ypos 1546
+}
+Dot {
+ name Dot15
+ selected true
+ xpos 1195
+ ypos 1708
+}
+set Nc4d599b0 [stack 0]
+Dot {
+ name Dot16
+ selected true
+ xpos 1271
+ ypos 1708
+}
+Dot {
+ name Dot17
+ selected true
+ xpos 1271
+ ypos 1770
+}
+push $Nc4d599b0
+push $Nc4cb57e0
+Dot {
+ name Dot4
+ selected true
+ xpos 1071
+ ypos 1488
+}
+set Ndc2a6060 [stack 0]
+Dot {
+ name Dot3
+ selected true
+ xpos 950
+ ypos 1488
+}
+add_layer {cap cap.red cap.green cap.blue cap.alpha}
+Shuffle {
+ in cap
+ in2 cap
+ alpha alpha2
+ name Shuffle1
+ label Cap
+ selected true
+ xpos 916
+ ypos 1506
+}
+Dot {
+ name Dot10
+ selected true
+ xpos 950
+ ypos 1671
+}
+set Nc4880bf0 [stack 0]
+Dot {
+ name Dot13
+ selected true
+ xpos 950
+ ypos 1697
+}
+push $Nc4880bf0
+push $Ndc2a6060
+add_layer {sky sky.red sky.green sky.blue sky.alpha}
+Shuffle {
+ in sky
+ in2 sky
+ alpha alpha2
+ name Shuffle3
+ label Vista
+ selected true
+ xpos 1037
+ ypos 1506
+}
+Grade {
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade4
+ label "Vista CC"
+ selected true
+ xpos 1037
+ ypos 1544
+}
+set Ndace1d70 [stack 0]
+push $Ndace1d70
+MergeExpression {
+ inputs 2
+ channel0 {sky.red -sky.green -sky.blue -sky.alpha}
+ expr0 rgba.red
+ channel1 {-sky.red sky.green -sky.blue -sky.alpha}
+ expr1 rgba.green
+ channel2 {-sky.red -sky.green sky.blue -sky.alpha}
+ expr2 rgba.blue
+ channel3 {-sky.red -sky.green -sky.blue sky.alpha}
+ expr3 rgba.alpha
+ name MergeExpression2
+ selected true
+ xpos 1037
+ ypos 1618
+}
+Merge2 {
+ inputs 2
+ operation under
+ maskChannelMask none
+ name Merge1
+ selected true
+ xpos 1037
+ ypos 1667
+}
+MergeExpression {
+ inputs 2
+ channel0 {cap.red -cap.green -cap.blue -cap.alpha}
+ expr0 A.rgba.red
+ channel1 {-cap.red cap.green -cap.blue -cap.alpha}
+ expr1 A.rgba.green
+ channel2 {-cap.red -cap.green cap.blue -cap.alpha}
+ expr2 A.rgba.blue
+ channel3 {-cap.red -cap.green -cap.blue cap.alpha}
+ expr3 A.rgba.alpha
+ name MergeExpression4
+ selected true
+ xpos 1037
+ ypos 1693
+}
+Dot {
+ name Dot11
+ selected true
+ xpos 1071
+ ypos 1744
+}
+Merge2 {
+ inputs 2
+ operation plus
+ maskChannelMask none
+ name Merge2
+ selected true
+ xpos 1161
+ ypos 1740
+}
+MergeExpression {
+ inputs 2
+ channel0 {stars.red -stars.green -stars.blue -stars.alpha}
+ expr0 A.rgba.red
+ channel1 {-stars.red stars.green -stars.blue -stars.alpha}
+ expr1 A.rgba.green
+ channel2 {-stars.red -stars.green stars.blue -stars.alpha}
+ expr2 A.rgba.blue
+ channel3 {-stars.red -stars.green -stars.blue stars.alpha}
+ expr3 A.rgba.alpha
+ name MergeExpression5
+ selected true
+ xpos 1161
+ ypos 1766
+}
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge4
+ selected true
+ xpos 1161
+ ypos 1830
+}
+MergeExpression {
+ inputs 2
+ channel0 {card.red -card.green -card.blue -card.alpha}
+ expr0 A.rgba.red
+ channel1 {-card.red card.green -card.blue -card.alpha}
+ expr1 A.rgba.green
+ channel2 {-card.red -card.green card.blue -card.alpha}
+ expr2 A.rgba.blue
+ channel3 {-card.red -card.green -card.blue card.alpha}
+ expr3 A.rgba.alpha
+ name MergeExpression3
+ selected true
+ xpos 1161
+ ypos 1856
+}
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge3
+ selected true
+ xpos 1161
+ ypos 1909
+}
+MergeExpression {
+ inputs 2
+ channel0 {clouds.red -clouds.green -clouds.blue -clouds.alpha}
+ expr0 A.rgba.red
+ channel1 {-clouds.red clouds.green -clouds.blue -clouds.alpha}
+ expr1 A.rgba.green
+ channel2 {-clouds.red -clouds.green clouds.blue -clouds.alpha}
+ expr2 A.rgba.blue
+ channel3 {-clouds.red -clouds.green -clouds.blue clouds.alpha}
+ expr3 A.rgba.alpha
+ name MergeExpression1
+ selected true
+ xpos 1161
+ ypos 1935
+}

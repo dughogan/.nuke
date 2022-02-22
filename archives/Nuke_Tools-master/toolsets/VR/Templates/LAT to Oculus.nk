@@ -1,0 +1,87 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name "LAT to Oculus3"
+ tile_color 0x44444401
+ gl_color 0x44444401
+ label "LAT to Oculus"
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 707
+ ypos 2111
+ bdwidth 366
+ bdheight 333
+}
+push $cut_paste_input
+Crop {
+ box {0 0 {input.height} {input.width}}
+ crop false
+ name Crop6
+ selected true
+ xpos 821
+ ypos 2171
+}
+Shuffle {
+ in2 alpha
+ alpha white
+ name Shuffle10
+ selected true
+ xpos 821
+ ypos 2197
+}
+Dot {
+ name Dot2
+ selected true
+ xpos 855
+ ypos 2238
+}
+set N9539290 [stack 0]
+OneView {
+ view right
+ name OneView2
+ selected true
+ xpos 931
+ ypos 2234
+}
+Transform {
+ scale {0.5 1}
+ center {{input.width} {input.height/2}}
+ name Transform7
+ selected true
+ xpos 931
+ ypos 2299
+}
+Dot {
+ name Dot33
+ selected true
+ xpos 965
+ ypos 2358
+}
+push $N9539290
+Transform {
+ scale {0.5 1}
+ center {{input.width-input.width} {input.height/2}}
+ black_outside false
+ shutter 0
+ shuttercustomoffset -1
+ name Transform8
+ selected true
+ xpos 821
+ ypos 2302
+}
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge4
+ selected true
+ xpos 821
+ ypos 2354
+}
+OneView {
+ name OneView4
+ selected true
+ xpos 821
+ ypos 2380
+}

@@ -1,0 +1,74 @@
+set cut_paste_input [stack 0]
+version 9.0 v5
+BackdropNode {
+ inputs 0
+ name "Oculus Top/Bottom to Stereo1"
+ tile_color 0x44444401
+ gl_color 0x44444401
+ label "Stereo to Oculus Top/Bottom"
+ note_font "Arial Black"
+ note_font_size 20
+ selected true
+ xpos 642
+ ypos 21
+ bdwidth 417
+ bdheight 243
+}
+push $cut_paste_input
+Dot {
+ name Dot6
+ selected true
+ xpos 847
+ ypos 103
+}
+set N62599a0 [stack 0]
+OneView {
+ name OneView1
+ selected true
+ xpos 686
+ ypos 99
+}
+Transform {
+ scale {1 0.5}
+ center {{input.width/2} {input.height}}
+ name Transform3
+ selected true
+ xpos 686
+ ypos 125
+}
+Dot {
+ name Dot7
+ selected true
+ xpos 720
+ ypos 203
+}
+push $N62599a0
+OneView {
+ view right
+ name OneView2
+ selected true
+ xpos 946
+ ypos 99
+}
+Transform {
+ scale {1 0.5}
+ center {{input.width/2} {input.height-input.height}}
+ name Transform4
+ selected true
+ xpos 946
+ ypos 125
+}
+Dot {
+ name Dot8
+ selected true
+ xpos 980
+ ypos 203
+}
+Merge2 {
+ inputs 2
+ maskChannelMask none
+ name Merge2
+ selected true
+ xpos 808
+ ypos 199
+}

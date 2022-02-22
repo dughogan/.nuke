@@ -1,0 +1,2565 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+Gizmo {
+ inputs 7
+ tile_color 0x4cffff
+ addUserKnob {20 User l Setup}
+ addUserKnob {22 sky_cam_persp l Perspective T "nuke.toNode('SkyRender2').knob(\"projection_mode\").setValue(\"0\")\nnuke.toNode('Resolution_Output2').knob(\"which\").setValue(\"0\")\nnuke.toNode('Camera_Viewer2').knob(\"which\").setValue(\"0\")" +STARTLINE}
+ addUserKnob {22 sky_cam_output l Spherical -STARTLINE T "nuke.toNode('SkyRender2').knob(\"projection_mode\").setValue(\"3\")\nnuke.toNode('Resolution_Output2').knob(\"which\").setValue(\"1\")\nnuke.toNode('Camera_Viewer2').knob(\"which\").setValue(\"1\")"}
+ addUserKnob {26 div_2 l "" -STARTLINE T "   |   "}
+ addUserKnob {22 sc_output l "Export Sky" -STARTLINE T "import os\n\nn = nuke.thisNode()\n\nnuke.toNode('SkyRender2').knob(\"projection_mode\").setValue(\"3\")\nnuke.toNode('Resolution_Output2').knob(\"which\").setValue(\"1\")\nnuke.toNode('Camera_Viewer2').knob(\"which\").setValue(\"1\")\n\nnuke.toNode('SkyRender2').knob(\"projection_mode\").setValue(\"3\")\nnuke.toNode('Resolution_Output2').knob(\"which\").setValue(\"1\")\nnuke.toNode('Camera_Viewer2').knob(\"which\").setValue(\"1\")\n\nnuke.thisNode()\['sc_grid_overlay'].setValue(0)\n\nn.knob('selected').setValue(True)\nwith nuke.root():\n  nuke.nodePaste('/code/global/nuke/toolsets/10.0v3/ToolSets/Matte Painting/Templates/MP Sky Output.nk')\n  nuke.message('Frame 1 = Sky\\nFrame 2 - 3 = HDRs for Lighting\\nFrame 4 = Layout Tiff')\n"}
+ addUserKnob {22 sc_output2 l "Create Controller" -STARTLINE T "import os\n\nn = nuke.thisNode()\n\nn.knob('selected').setValue(False)\nwith nuke.root():\n  nuke.nodePaste('/code/global/nuke/gizmos/10.0v3/rfxSky_Control.gizmo')"}
+ addUserKnob {26 ""}
+ addUserKnob {6 sc_grid_overlay l "Reference Grid" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 all_geo_trans_y l "Sky Altitude" R -500000 500000}
+ addUserKnob {7 all_geo_rotate_y l "Sky Rotate" R -360 360}
+ addUserKnob {26 ""}
+ addUserKnob {18 top_color l cap}
+ top_color {0 0 0}
+ addUserKnob {6 top_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 ground_color l ground}
+ ground_color {0 0 0}
+ addUserKnob {6 ground_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 background}
+ background {0 0 0}
+ addUserKnob {6 background_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 cap_horiz l "cap horizon" R -1000 1000}
+ addUserKnob {20 stars_tab l Features +HIDDEN}
+ addUserKnob {6 sc_mb_enable l "Motion Blur" -STARTLINE +HIDDEN}
+ sc_mb_enable true
+ addUserKnob {26 div_mb l "" -STARTLINE +HIDDEN T "  |  "}
+ addUserKnob {6 stars_twinkle l "Twinkle Stars?" -STARTLINE +HIDDEN}
+ stars_twinkle true
+ addUserKnob {26 control_div l "" +STARTLINE +HIDDEN}
+ addUserKnob {41 whitepoint l "star brightness" T Grade5.whitepoint}
+ addUserKnob {41 gamma l "star gamma" T Grade5.gamma}
+ addUserKnob {6 cloud_drift l "Drift Clouds" -STARTLINE +HIDDEN}
+ cloud_drift true
+ addUserKnob {4 sc_drift_dir l "" -STARTLINE +HIDDEN M {"Left to Right" "Right to Left" "" "" ""}}
+ addUserKnob {26 div_drift l "" -STARTLINE +HIDDEN T "  |  "}
+ addUserKnob {7 drift_speed l "Cloud Drift Speed" t "The lower the number, the faster the clouds." -STARTLINE +HIDDEN R 10 1000}
+ drift_speed 300
+ addUserKnob {26 stars_note l "" +STARTLINE T ""}
+ addUserKnob {26 ""}
+ addUserKnob {6 stars_on l "Stars On" +STARTLINE}
+ addUserKnob {7 stars_amt l "|  Amount" -STARTLINE R 0.1 1}
+ stars_amt 0.355
+ addUserKnob {20 Vista_tab l Vista}
+ addUserKnob {6 vista_on l Vista -STARTLINE}
+ addUserKnob {6 terrain_on l Terrain -STARTLINE}
+ addUserKnob {26 vista_format_info l "" -STARTLINE T "|  Required Format: 8640x1080 @ 300dpi"}
+ addUserKnob {26 div_10 l "" +STARTLINE}
+ addUserKnob {7 Vista_geo_1_trans_y l altitude R -500000 500000}
+ addUserKnob {7 Vista_geo_1_rotate_y l "rotate y" R -360 360}
+ addUserKnob {20 Clouds_tab l Clouds +HIDDEN}
+ addUserKnob {6 clouds_on l Clouds +STARTLINE}
+ addUserKnob {26 clouds_format_info l "" -STARTLINE T "|  Required Format: 8640x1080 @ 300dpi"}
+ addUserKnob {6 cloudsA_on l "Midground Clouds" +STARTLINE}
+ addUserKnob {6 cloudsB_on l "Background Clouds" -STARTLINE}
+ addUserKnob {26 div_11 l "" +STARTLINE}
+ addUserKnob {7 Clouds_geo_2_trans_y l altitude R -500000 500000}
+ addUserKnob {7 Clouds_geo_2_rotate_y l "rotate y" R -360 360}
+ addUserKnob {20 Card_tab l Card +HIDDEN}
+ addUserKnob {6 card_on l Card +STARTLINE}
+ addUserKnob {26 card_format_info l "" -STARTLINE T "|  Required Format(s): 1k,2k, or 4k @ 300dpi"}
+ addUserKnob {26 div_12 l "" +STARTLINE}
+ addUserKnob {7 Card_geo_3_rotate_x l "rotate y" R -180 180}
+ addUserKnob {7 Card_geo_3_rotate_y l "rotate x" R -360 360}
+ addUserKnob {7 Card_geo_3_rotate_z l "rotate z" R -360 360}
+ addUserKnob {7 Card_geo_3_scale l scale R 1 10}
+ Card_geo_3_scale 1
+}
+ BackdropNode {
+  inputs 0
+  name Overlay
+  tile_color 0x44444401
+  gl_color 0x44444401
+  label "Reference Grid"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos 5093
+  ypos 658
+  bdwidth 210
+  bdheight 412
+ }
+ BackdropNode {
+  inputs 0
+  name STARS
+  tile_color 0x47ff
+  gl_color 0x44444401
+  label STARS
+  note_font "Arial Black"
+  note_font_size 55
+  xpos 3011
+  ypos -1323
+  bdwidth 1582
+  bdheight 2196
+ }
+ Axis2 {
+  inputs 0
+  translate {{parent.Camera.pos} {parent.Camera.pos} {parent.Camera.pos}}
+  name Axis1
+  xpos 3760
+  ypos 528
+  addUserKnob {20 ivy_data +INVISIBLE}
+  addUserKnob {1 data +INVISIBLE}
+  data "\{\}"
+  addUserKnob {20 ivytab l Ivy}
+  addUserKnob {26 spiderlabel l "Spider Query"}
+  addUserKnob {1 ivy_job l Job}
+  addUserKnob {1 ivy_shot l Shot -STARTLINE}
+  addUserKnob {22 ivy_selectshot l "Select shot..." -STARTLINE T "__import__('dnnuke.core.ivy.spider_knobs', fromlist=\['selectShot']).selectShot()"}
+  addUserKnob {1 ivy_type l Type}
+  addUserKnob {22 ivy_selecttype l "Select type..." -STARTLINE T "__import__('dnnuke.core.ivy.spider_knobs', fromlist=\['selectType']).selectType()"}
+  addUserKnob {1 ivy_name l Name}
+  addUserKnob {6 ivy_regex l regex -STARTLINE}
+  addUserKnob {4 ivy_versionquery l Version M {"" latest "latest approved" "latest element in pipe" "latest WIP" "latest pending" specific}}
+  addUserKnob {3 ivy_vnum l vnum -STARTLINE +DISABLED}
+  addUserKnob {22 ivy_autofill l Autofill T "__import__('dnnuke.core.ivy.spider_knobs', fromlist=\['autofill']).autofill()" +STARTLINE}
+  addUserKnob {22 ivy_clear l Clear -STARTLINE T "__import__('dnnuke.core.ivy.spider_knobs', fromlist=\['clearFields']).clearFields()"}
+  addUserKnob {26 divider3 l "" +STARTLINE}
+  addUserKnob {6 ivy_usemanualuri l "Use manual URI (clears individual fields)" +STARTLINE}
+  addUserKnob {43 spider_uri l "Spider URI" +DISABLED}
+  addUserKnob {22 updateButton l Update T "__import__('dnnuke.core.ivy.template', fromlist=\['updateNode']).updateNode(nuke.thisNode())" +STARTLINE}
+  addUserKnob {22 testButton l Test -STARTLINE T "__import__('dnnuke.core.ivy.template',fromlist=\['test']).test(nuke.thisNode()\[\"spider_uri\"].value())"}
+  addUserKnob {22 resetButton l "Reset non-spider knobs" -STARTLINE T "__import__('dnnuke.core.ivy.template', fromlist=\['resetNode']).resetNode(nuke.thisNode())"}
+  addUserKnob {22 copyButton l "Copy URI" -STARTLINE T "__import__('dnnuke.core.ivy.spider_knobs', fromlist=\['copyUri']).copyUri()"}
+  addUserKnob {26 divider0 l "" +STARTLINE}
+  addUserKnob {20 dbinfo l "DB Info" n 1}
+  addUserKnob {1 twig_dnuuid l "Twig Id"}
+  addUserKnob {1 stalk_dnuuid l "Stalk Id"}
+  addUserKnob {1 twigtype_dnuuid l "Twig Type Id"}
+  addUserKnob {1 leaf_dnuuid l "Leaf Id"}
+  addUserKnob {26 divider1 l "" +STARTLINE}
+  addUserKnob {1 twigtype l "Twig Type"}
+  addUserKnob {1 leaf_label l Leaf}
+  addUserKnob {1 ivy_version l Version}
+  addUserKnob {43 ivy_notes l Notes}
+  addUserKnob {26 divider2 l "" +STARTLINE}
+  addUserKnob {1 build_label l "Build Label"}
+ }
+set Nd6ee880 [stack 0]
+ Camera {
+  selectable false
+  rotate {0 -90 0}
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM5
+  tile_color 0xf200ffff
+  label "+X\nNEKRO CLOUD"
+  xpos 4314
+  ypos 158
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "8192 8192 0 0 8192 8192 1 8K_matte"
+  name Constant3
+  xpos 3879
+  ypos -1237
+ }
+ Dot {
+  name Dot94
+  xpos 3913
+  ypos -1136
+ }
+set Nd71f6d0 [stack 0]
+ Dot {
+  name Dot36
+  xpos 4049
+  ypos -1136
+ }
+set Nd7240c0 [stack 0]
+ Dot {
+  name Dot37
+  xpos 4159
+  ypos -1136
+ }
+set Nd728ba0 [stack 0]
+ Dot {
+  name Dot35
+  xpos 4269
+  ypos -1136
+ }
+ Noise {
+  replace true
+  type turbulence
+  size 1
+  name Noise3
+  xpos 4235
+  ypos -1109
+ }
+ Dot {
+  name Dot25
+  xpos 4269
+  ypos -1018
+ }
+push $Nd7240c0
+ Noise {
+  replace true
+  size 1
+  name Noise1
+  label Rotation
+  xpos 4015
+  ypos -1113
+ }
+push $Nd728ba0
+ Noise {
+  replace true
+  size 940
+  gamma 0.635
+  name Noise2
+  xpos 4125
+  ypos -1111
+ }
+ Dot {
+  name Dot27
+  xpos 4159
+  ypos -1066
+ }
+ Merge2 {
+  inputs 2
+  operation out
+  name Merge9
+  xpos 4015
+  ypos -1070
+ }
+ Merge2 {
+  inputs 2
+  operation out
+  name Merge10
+  xpos 4015
+  ypos -1022
+ }
+ Grade {
+  channels rgba
+  multiply 1.2
+  gamma {{stars_amt}}
+  name stars_amt_grade
+  xpos 4015
+  ypos -974
+ }
+push $Nd71f6d0
+ Dither {
+  amount 15
+  static_seed true
+  name Dither1
+  xpos 3879
+  ypos -1054
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name In
+  xpos 3879
+  ypos -974
+ }
+ Dot {
+  name Dot5
+  xpos 3913
+  ypos -898
+ }
+set Nd7c27c0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 3803
+  ypos -898
+ }
+set Nd7c7200 [stack 0]
+ Shuffle {
+  in2 alpha
+  red green
+  blue green
+  alpha green
+  name Shuffle2
+  xpos 3769
+  ypos -878
+ }
+set Nd7cbcd0 [stack 0]
+push $Nd7c27c0
+ Shuffle {
+  in2 alpha
+  red blue
+  green blue
+  alpha blue
+  name Shuffle3
+  xpos 3879
+  ypos -878
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  maskChannelMask none
+  name Merge3
+  xpos 3879
+  ypos -830
+ }
+ Grade {
+  multiply {1.850000024 1.258000016 1.258000016 1}
+  black_clamp false
+  maskChannelMask none
+  name Grade3
+  xpos 3879
+  ypos -806
+ }
+push 0
+push $Nd7c7200
+ Dot {
+  name Dot3
+  xpos 3693
+  ypos -898
+ }
+ Shuffle {
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  xpos 3659
+  ypos -878
+ }
+set Nd80e3f0 [stack 0]
+ Grade {
+  multiply {1.543934822 1.842416883 2.900000095 1}
+  black_clamp false
+  maskChannelMask none
+  name Grade1
+  xpos 3659
+  ypos -806
+ }
+push $Nd80e3f0
+push $Nd7cbcd0
+ Merge2 {
+  inputs 2
+  operation stencil
+  maskChannelMask none
+  name Merge2
+  xpos 3769
+  ypos -830
+ }
+ Grade {
+  multiply {0.9898033738 1 0.75 1}
+  black_clamp false
+  maskChannelMask none
+  name Grade2
+  xpos 3769
+  ypos -806
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  maskChannelMask none
+  name Merge1
+  xpos 3769
+  ypos -734
+ }
+ Saturation {
+  saturation 0.4
+  maskChannelMask none
+  name Saturation1
+  xpos 3769
+  ypos -710
+ }
+ Clamp {
+  maskChannelMask none
+  name Clamp1
+  xpos 3769
+  ypos -684
+ }
+set Nd869340 [stack 0]
+push $Nd869340
+add_layer {stars stars.red stars.green stars.blue stars.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 stars.red
+  from1 rgba.green
+  to1 stars.green
+  from2 rgba.blue
+  to2 stars.blue
+  from3 rgba.alpha
+  to3 stars.alpha
+  maskChannelMask none
+  name Copy1
+  xpos 3769
+  ypos -638
+ }
+set Nd877e20 [stack 0]
+ Shuffle {
+  in2 alpha
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle7
+  xpos 3989
+  ypos -614
+ }
+ Noise {
+  replace true
+  size 40
+  zoffset {{frame/200}}
+  gain 1
+  gamma 0.8
+  name Noise6
+  label "Twinkle\nOn / Off"
+  xpos 4099
+  ypos -626
+ }
+ Dot {
+  name Dot105
+  xpos 4133
+  ypos -514
+ }
+push $Nd877e20
+ Merge2 {
+  inputs 2
+  operation stencil
+  mix 0.7
+  name Merge46
+  label Twinkle
+  xpos 3769
+  ypos -524
+ }
+set Nd8ace30 [stack 0]
+push $Nd8ace30
+ MergeExpression {
+  inputs 2
+  channel0 {stars.red -stars.green -stars.blue -stars.alpha}
+  expr0 rgba.red
+  channel1 {-stars.red stars.green -stars.blue -stars.alpha}
+  expr1 rgba.green
+  channel2 {-stars.red -stars.green stars.blue -stars.alpha}
+  expr2 rgba.blue
+  channel3 {-stars.red -stars.green -stars.blue stars.alpha}
+  expr3 rgba.alpha
+  name MergeExpression6
+  xpos 3769
+  ypos -459
+  disable {{!stars_on}}
+ }
+ Crop {
+  box {1 1 {input.width} {input.height}}
+  name Crop2
+  xpos 3769
+  ypos -343
+ }
+ Shuffle {
+  alpha white
+  name Shuffle15
+  xpos 3769
+  ypos -222
+ }
+ Dot {
+  name Dot34
+  xpos 3803
+  ypos -113
+ }
+set Nd8e33b0 [stack 0]
+ Dot {
+  name Dot38
+  xpos 4458
+  ypos -13
+ }
+ Project3D {
+  inputs 2
+  project_on back
+  name Project3D2
+  xpos 4424
+  ypos 178
+ }
+push $Nd6ee880
+ Camera {
+  selectable false
+  rotate {0 90 0}
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM4
+  tile_color 0xffff0000
+  label -X
+  xpos 4027
+  ypos 158
+ }
+push $Nd8e33b0
+ Dot {
+  name Dot40
+  xpos 4171
+  ypos -6
+ }
+ Project3D {
+  inputs 2
+  project_on back
+  name Project3D1
+  xpos 4137
+  ypos 178
+ }
+push $Nd6ee880
+ Camera {
+  selectable false
+  rotate {-90 0 0}
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM1
+  tile_color 0xffff0000
+  label -Y
+  xpos 3760
+  ypos 158
+ }
+push $Nd8e33b0
+ Dot {
+  name Dot42
+  xpos 3904
+  ypos -8
+ }
+ Project3D {
+  inputs 2
+  project_on back
+  name Project3D3
+  xpos 3870
+  ypos 178
+ }
+push $Nd6ee880
+ Camera {
+  selectable false
+  rotate {90 0 0}
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM6
+  tile_color 0xffff0000
+  label +Y
+  xpos 3528
+  ypos 152
+ }
+push $Nd8e33b0
+ Dot {
+  name Dot44
+  xpos 3672
+  ypos -9
+ }
+ Project3D {
+  inputs 2
+  project_on back
+  name Project3D4
+  xpos 3638
+  ypos 172
+ }
+push $Nd6ee880
+ Camera {
+  selectable false
+  rotate {0 180 0}
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM2
+  tile_color 0xffff0000
+  label +Z
+  xpos 3292
+  ypos 155
+ }
+push $Nd8e33b0
+ Dot {
+  name Dot46
+  xpos 3436
+  ypos -8
+ }
+ Project3D {
+  inputs 2
+  name Project3D17
+  xpos 3402
+  ypos 175
+ }
+push $Nd6ee880
+ Camera {
+  selectable false
+  focal 35
+  haperture 90
+  vaperture 90
+  near 10
+  far 6000000
+  name SixPack_CAM
+  tile_color 0xffff0000
+  label -Z
+  xpos 3047
+  ypos 161
+ }
+push $Nd8e33b0
+ Dot {
+  name Dot48
+  xpos 3191
+  ypos -7
+ }
+ Project3D {
+  inputs 2
+  project_on back
+  name Project3D18
+  xpos 3157
+  ypos 181
+ }
+ Dot {
+  name Dot49
+  xpos 3191
+  ypos 250
+ }
+ MergeMat {
+  inputs 2
+  also_merge all
+  operation plus
+  name MergeMat13
+  xpos 3402
+  ypos 246
+ }
+ MergeMat {
+  inputs 2
+  also_merge all
+  operation plus
+  name MergeMat14
+  xpos 3638
+  ypos 246
+ }
+ MergeMat {
+  inputs 2
+  also_merge all
+  operation plus
+  name MergeMat15
+  xpos 3870
+  ypos 246
+ }
+ MergeMat {
+  inputs 2
+  also_merge all
+  operation plus
+  name MergeMat1
+  xpos 4137
+  ypos 246
+ }
+ MergeMat {
+  inputs 2
+  also_merge all
+  operation plus
+  name MergeMat2
+  xpos 4424
+  ypos 246
+ }
+ Camera2 {
+  inputs 0
+  projection_mode spherical
+  name Camera3
+  label "Sphereical Cam\nOutput"
+  xpos 752
+  ypos 865
+ }
+ Input {
+  inputs 0
+  name Camera
+  tile_color 0xff0000ff
+  xpos 283
+  ypos 837
+  number 3
+  addUserKnob {20 User}
+  addUserKnob {7 focal_mod l modify_focal R 0 100}
+ }
+ Dot {
+  name Dot2
+  xpos 317
+  ypos 1002
+ }
+set Nd9e0630 [stack 0]
+push $Nd9e0630
+ Switch {
+  inputs 3
+  which {{SkyRender1.projection_mode==0?0:SkyRender1.projection_mode==3?2:0 x-3 0 x0 0 x1 0 x3 0 x17 0 x37 0 x101 0 x101.25 0}}
+  name Camera_Viewer
+  xpos 742
+  ypos 998
+ }
+set Nd9e5110 [stack 0]
+push $Nd9e0630
+ Dot {
+  name Dot11
+  xpos 336
+  ypos 2939
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Camera_Viewer2
+  xpos 742
+  ypos 2935
+ }
+push $Nd9e5110
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/8.0v5/sky_tools/grids/grid_square.jpg
+  format "1920 818 0 0 1920 818 1 RFX_RENDER_1_1"
+  proxy_format "1920 818 0 0 1920 818 1 RFX_RENDER_1_1"
+  origset true
+  version 18
+  name OverlayGrid_Read
+  xpos 5158
+  ypos 705
+ }
+ Reformat {
+  format "8192 8192 0 0 8192 8192 1 8K_matte"
+  name Reformat4
+  xpos 5158
+  ypos 792
+ }
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle6
+  xpos 5158
+  ypos 830
+ }
+ Grade {
+  channels rgba
+  multiply 0.6
+  maskChannelMask none
+  name Grade4
+  xpos 5158
+  ypos 854
+ }
+ Sphere {
+  uniform_scale 1000000
+  name Sphere2
+  xpos 5158
+  ypos 926
+ }
+ Reformat {
+  inputs 0
+  format "8192 8192 0 0 8192 8192 1 8K_matte"
+  name Reformat2
+  label "output format"
+  xpos 5515
+  ypos 894
+ }
+ Reformat {
+  inputs 0
+  name Reformat1
+  xpos 5735
+  ypos 998
+ }
+set Nda60410 [stack 0]
+push $Nda60410
+ Switch {
+  inputs 3
+  which {{SkyRender1.projection_mode==0?0:SkyRender1.projection_mode==3?2:0}}
+  name Resolution_Output
+  xpos 5515
+  ypos 998
+ }
+set Nda6ecd0 [stack 0]
+add_layer {P P.red P.green P.blue P.alpha P.X P.Y P.Z}
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  transparency false
+  antialiasing high
+  projection_mode spherical
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name SkyGrid
+  xpos 5158
+  ypos 998
+ }
+ Dot {
+  name Dot14
+  xpos 5192
+  ypos 1786
+ }
+ Dot {
+  name Dot95
+  xpos 2050
+  ypos 1786
+ }
+set Nda96db0 [stack 0]
+push $Nda96db0
+push $Nda96db0
+push $Nda96db0
+push $Nd9e5110
+ Dot {
+  inputs 0
+  name Dot66
+  xpos 2917
+  ypos -2768
+ }
+ Input {
+  inputs 0
+  name Terrain
+  xpos 2984
+  ypos -3615
+  number 6
+ }
+ Dot {
+  name Dot67
+  xpos 3018
+  ypos -3560
+ }
+set Nda9fce0 [stack 0]
+ Shuffle {
+  in2 alpha
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle9
+  xpos 3178
+  ypos -3564
+ }
+ Ramp {
+  maskChannelMask none
+  p0 {4650 835}
+  p1 {4650 0}
+  type plinear
+  name Ramp4
+  xpos 3178
+  ypos -3523
+ }
+push $Nda9fce0
+add_layer {ramp ramp.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 ramp.alpha
+  maskChannelMask none
+  name Copy3
+  xpos 2984
+  ypos -3529
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_6
+  xpos 2984
+  ypos -3455
+  disable true
+ }
+ Dot {
+  name Dot68
+  xpos 3018
+  ypos -3352
+ }
+set Ndadb390 [stack 0]
+ Dot {
+  name Dot75
+  xpos 2601
+  ypos -3272
+ }
+ Crop {
+  box {0 0 4320 {input.height}}
+  name Crop12
+  xpos 2567
+  ypos -3207
+ }
+push $Ndadb390
+ Dot {
+  name Dot77
+  xpos 2716
+  ypos -3271
+ }
+ Crop {
+  box {4320 0 8640 {input.height}}
+  name Crop13
+  xpos 2682
+  ypos -3205
+ }
+push $Ndadb390
+ Dot {
+  name Dot78
+  xpos 2825
+  ypos -3269
+ }
+ Crop {
+  box {8640 0 12960 {input.height}}
+  name Crop14
+  xpos 2791
+  ypos -3203
+ }
+push $Ndadb390
+ Dot {
+  name Dot79
+  xpos 2943
+  ypos -3268
+ }
+ Crop {
+  box {12960 0 17280 {input.height}}
+  name Crop15
+  xpos 2909
+  ypos -3202
+ }
+push $Ndadb390
+ Dot {
+  name Dot80
+  xpos 3060
+  ypos -3270
+ }
+ Crop {
+  box {17280 0 21600 {input.height}}
+  name Crop20
+  xpos 3026
+  ypos -3202
+ }
+push $Ndadb390
+ Dot {
+  name Dot81
+  xpos 3169
+  ypos -3272
+ }
+ Crop {
+  box {21600 0 25920 {input.height}}
+  name Crop21
+  xpos 3135
+  ypos -3203
+ }
+push 0
+push $Ndadb390
+ Dot {
+  name Dot82
+  xpos 3400
+  ypos -3273
+ }
+ Crop {
+  box {30240 0 34560 {input.height}}
+  name Crop22
+  xpos 3366
+  ypos -3201
+ }
+push $Ndadb390
+ Dot {
+  name Dot85
+  xpos 3284
+  ypos -3269
+ }
+ Crop {
+  box {25920 0 30240 {input.height}}
+  name Crop23
+  xpos 3250
+  ypos -3201
+ }
+ Merge2 {
+  inputs 8+1
+  also_merge {ramp.alpha none none ramp.alpha}
+  maskChannelMask none
+  name Merge13
+  xpos 2986
+  ypos -3095
+ }
+ ReadGeo {
+  file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/vista.obj
+  translate {0 {parent.Vista_geo_1_trans_y} 0}
+  rotate {0 {parent.Vista_geo_1_rotate_y} 0}
+  scaling {1 0.8 1}
+  name Vista_2
+  xpos 2986
+  ypos -2977
+  disable {{frame==5?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo6
+  xpos 2986
+  ypos -2859
+ }
+ TransformGeo {
+  rotate {0 -97 0}
+  name TransformGeo7
+  xpos 2986
+  ypos -2798
+ }
+ Switch {
+  inputs 2
+  which {{!parent.vista_on}}
+  name Switch8
+  xpos 2986
+  ypos -2772
+ }
+ Dot {
+  inputs 0
+  name Dot9
+  xpos 3994
+  ypos -2796
+ }
+ Axis {
+  rotate {{parent.Card_geo_3_rotate_x} {parent.Card_geo_3_rotate_y} {parent.Card_geo_3_rotate_z}}
+  name Card3_axis
+  xpos 3970
+  ypos -2745
+ }
+ Dot {
+  inputs 0
+  name Dot8
+  xpos 3766
+  ypos -2780
+ }
+ Input {
+  inputs 0
+  name Card
+  xpos 3815
+  ypos -3612
+  number 2
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_3
+  xpos 3815
+  ypos -3466
+ }
+ Dot {
+  name Dot76
+  xpos 3849
+  ypos -3322
+ }
+ Card {
+  translate {0 0 900000}
+  scaling {225000 225000 0}
+  uniform_scale {{parent.Card_geo_3_scale}}
+  name Card_3
+  xpos 3817
+  ypos -2948
+  disable {{frame==2?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo10
+  xpos 3817
+  ypos -2864
+ }
+ Switch {
+  inputs 2
+  which {{!parent.card_on}}
+  name Switch2
+  xpos 3817
+  ypos -2784
+ }
+ TransformGeo {
+  inputs 2
+  name TransformGeo1
+  xpos 3817
+  ypos -2725
+ }
+ Dot {
+  inputs 0
+  name Dot56
+  xpos -1674
+  ypos -2812
+ }
+ Dot {
+  inputs 0
+  name Dot39
+  xpos -1674
+  ypos -2863
+ }
+ Input {
+  inputs 0
+  name Clouds2
+  xpos -1619
+  ypos -3619
+  number 5
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_5
+  xpos -1619
+  ypos -3490
+ }
+ Dot {
+  name Dot41
+  xpos -1585
+  ypos -3383
+ }
+set Ndc26d90 [stack 0]
+ Dot {
+  name Dot43
+  xpos -2002
+  ypos -3303
+ }
+ Crop {
+  box {0 0 4320 {input.height}}
+  name Crop36
+  xpos -2036
+  ypos -3237
+ }
+push $Ndc26d90
+ Dot {
+  name Dot45
+  xpos -1887
+  ypos -3302
+ }
+ Crop {
+  box {4320 0 8640 {input.height}}
+  name Crop37
+  xpos -1921
+  ypos -3236
+ }
+push $Ndc26d90
+ Dot {
+  name Dot47
+  xpos -1778
+  ypos -3300
+ }
+ Crop {
+  box {8640 0 12960 {input.height}}
+  name Crop38
+  xpos -1812
+  ypos -3235
+ }
+push $Ndc26d90
+ Dot {
+  name Dot50
+  xpos -1660
+  ypos -3299
+ }
+ Crop {
+  box {12960 0 17280 {input.height}}
+  name Crop39
+  xpos -1694
+  ypos -3233
+ }
+push $Ndc26d90
+ Dot {
+  name Dot51
+  xpos -1543
+  ypos -3301
+ }
+ Crop {
+  box {17280 0 21600 {input.height}}
+  name Crop40
+  xpos -1577
+  ypos -3235
+ }
+push $Ndc26d90
+ Dot {
+  name Dot52
+  xpos -1434
+  ypos -3303
+ }
+ Crop {
+  box {21600 0 25920 {input.height}}
+  name Crop41
+  xpos -1468
+  ypos -3235
+ }
+push 0
+push $Ndc26d90
+ Dot {
+  name Dot53
+  xpos -1203
+  ypos -3300
+ }
+ Crop {
+  box {30240 0 34560 {input.height}}
+  name Crop42
+  xpos -1237
+  ypos -3232
+ }
+push $Ndc26d90
+ Dot {
+  name Dot54
+  xpos -1319
+  ypos -3300
+ }
+ Crop {
+  box {25920 0 30240 {input.height}}
+  name Crop43
+  xpos -1353
+  ypos -3232
+ }
+ Merge2 {
+  inputs 8+1
+  maskChannelMask none
+  name Merge8
+  xpos -1617
+  ypos -3129
+ }
+ ReadGeo {
+  file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/clouds.obj
+  translate {0 {parent.Clouds_geo_2_trans_y} 0}
+  rotate {0 {parent.Clouds_geo_2_rotate_y} 0}
+  scaling {1 0.8 1}
+  name Clouds_3
+  xpos -1617
+  ypos -3021
+  disable {{frame==4?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo5
+  xpos -1617
+  ypos -2893
+ }
+ Switch {
+  inputs 2
+  which {{!parent.clouds_on}}
+  name Switch5
+  xpos -1617
+  ypos -2867
+ }
+ Switch {
+  inputs 2
+  which {{!parent.cloudsB_on}}
+  name Switch7
+  xpos -1617
+  ypos -2816
+ }
+ Dot {
+  inputs 0
+  name Dot55
+  xpos -638
+  ypos -2816
+ }
+ Dot {
+  inputs 0
+  name Dot15
+  xpos -638
+  ypos -2860
+ }
+ Input {
+  inputs 0
+  name Clouds1
+  xpos -583
+  ypos -3616
+  number 4
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_4
+  xpos -583
+  ypos -3487
+ }
+ Dot {
+  name Dot16
+  xpos -549
+  ypos -3380
+ }
+set Ndcfd030 [stack 0]
+ Dot {
+  name Dot17
+  xpos -966
+  ypos -3300
+ }
+ Crop {
+  box {0 0 4320 {input.height}}
+  name Crop4
+  xpos -1000
+  ypos -3234
+ }
+push $Ndcfd030
+ Dot {
+  name Dot18
+  xpos -851
+  ypos -3299
+ }
+ Crop {
+  box {4320 0 8640 {input.height}}
+  name Crop5
+  xpos -885
+  ypos -3233
+ }
+push $Ndcfd030
+ Dot {
+  name Dot19
+  xpos -742
+  ypos -3297
+ }
+ Crop {
+  box {8640 0 12960 {input.height}}
+  name Crop6
+  xpos -776
+  ypos -3231
+ }
+push $Ndcfd030
+ Dot {
+  name Dot20
+  xpos -624
+  ypos -3296
+ }
+ Crop {
+  box {12960 0 17280 {input.height}}
+  name Crop7
+  xpos -658
+  ypos -3230
+ }
+push $Ndcfd030
+ Dot {
+  name Dot26
+  xpos -507
+  ypos -3298
+ }
+ Crop {
+  box {17280 0 21600 {input.height}}
+  name Crop24
+  xpos -541
+  ypos -3232
+ }
+push $Ndcfd030
+ Dot {
+  name Dot30
+  xpos -398
+  ypos -3300
+ }
+ Crop {
+  box {21600 0 25920 {input.height}}
+  name Crop25
+  xpos -432
+  ypos -3232
+ }
+push 0
+push $Ndcfd030
+ Dot {
+  name Dot31
+  xpos -167
+  ypos -3297
+ }
+ Crop {
+  box {30240 0 34560 {input.height}}
+  name Crop26
+  xpos -201
+  ypos -3229
+ }
+push $Ndcfd030
+ Dot {
+  name Dot32
+  xpos -283
+  ypos -3297
+ }
+ Crop {
+  box {25920 0 30240 {input.height}}
+  name Crop27
+  xpos -317
+  ypos -3229
+ }
+ Merge2 {
+  inputs 8+1
+  maskChannelMask none
+  name Merge5
+  xpos -581
+  ypos -3124
+ }
+ ReadGeo {
+  file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/clouds.obj
+  translate {0 {parent.Clouds_geo_2_trans_y} 0}
+  rotate {0 {parent.Clouds_geo_2_rotate_y} 0}
+  scaling {1 0.8 1}
+  name Clouds_1
+  xpos -581
+  ypos -3012
+  disable {{frame==3?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo3
+  xpos -581
+  ypos -2890
+ }
+ Switch {
+  inputs 2
+  which {{!parent.clouds_on}}
+  name Switch1
+  xpos -581
+  ypos -2864
+ }
+ Switch {
+  inputs 2
+  which {{!parent.cloudsA_on}}
+  name Switch6
+  xpos -581
+  ypos -2820
+ }
+ Dot {
+  inputs 0
+  name Dot7
+  xpos 333
+  ypos -2855
+ }
+ Input {
+  inputs 0
+  name Clouds
+  xpos 388
+  ypos -3611
+  number 1
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_2
+  xpos 388
+  ypos -3482
+ }
+ Dot {
+  name Dot86
+  xpos 422
+  ypos -3375
+ }
+set Nddce470 [stack 0]
+ Dot {
+  name Dot87
+  xpos 5
+  ypos -3295
+ }
+ Crop {
+  box {0 0 4320 {input.height}}
+  name Crop28
+  xpos -29
+  ypos -3225
+  disable true
+ }
+push $Nddce470
+ Dot {
+  name Dot88
+  xpos 120
+  ypos -3294
+ }
+ Crop {
+  box {4320 0 8640 {input.height}}
+  name Crop29
+  xpos 86
+  ypos -3227
+ }
+push $Nddce470
+ Dot {
+  name Dot89
+  xpos 229
+  ypos -3292
+ }
+ Crop {
+  box {8640 0 12960 {input.height}}
+  name Crop30
+  xpos 195
+  ypos -3228
+ }
+push $Nddce470
+ Dot {
+  name Dot90
+  xpos 347
+  ypos -3291
+ }
+ Crop {
+  box {12960 0 17280 {input.height}}
+  name Crop31
+  xpos 313
+  ypos -3225
+ }
+push $Nddce470
+ Dot {
+  name Dot91
+  xpos 464
+  ypos -3293
+ }
+ Crop {
+  box {17280 0 21600 {input.height}}
+  name Crop32
+  xpos 430
+  ypos -3227
+ }
+push $Nddce470
+ Dot {
+  name Dot101
+  xpos 573
+  ypos -3295
+ }
+ Crop {
+  box {21600 0 25920 {input.height}}
+  name Crop33
+  xpos 539
+  ypos -3226
+ }
+push 0
+push $Nddce470
+ Dot {
+  name Dot102
+  xpos 804
+  ypos -3292
+ }
+ Crop {
+  box {30240 0 34560 {input.height}}
+  name Crop34
+  xpos 770
+  ypos -3224
+ }
+push $Nddce470
+ Dot {
+  name Dot103
+  xpos 688
+  ypos -3292
+ }
+ Crop {
+  box {25920 0 30240 {input.height}}
+  name Crop35
+  xpos 654
+  ypos -3223
+ }
+ Merge2 {
+  inputs 8+1
+  maskChannelMask none
+  name Merge21
+  xpos 390
+  ypos -3121
+ }
+ ReadGeo {
+  file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/clouds.obj
+  translate {0 {parent.Clouds_geo_2_trans_y} 0}
+  rotate {0 {parent.Clouds_geo_2_rotate_y} 0}
+  scaling {1 0.8 1}
+  name Clouds_2
+  xpos 390
+  ypos -3006
+  disable {{frame==1?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo9
+  xpos 390
+  ypos -2921
+ }
+ Switch {
+  inputs 2
+  which {{!parent.clouds_on}}
+  name Switch3
+  xpos 390
+  ypos -2859
+ }
+ Dot {
+  inputs 0
+  name Dot6
+  xpos 1871
+  ypos -2769
+ }
+ Input {
+  inputs 0
+  name Vista
+  xpos 1938
+  ypos -3617
+ }
+ Dot {
+  name Dot62
+  xpos 1972
+  ypos -3561
+ }
+set Nde7cf00 [stack 0]
+ Shuffle {
+  in2 alpha
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle4
+  xpos 2132
+  ypos -3565
+ }
+ Ramp {
+  maskChannelMask none
+  p0 {4650 835}
+  p1 {4650 0}
+  type plinear
+  name Ramp1
+  xpos 2132
+  ypos -3524
+ }
+push $Nde7cf00
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 ramp.alpha
+  maskChannelMask none
+  name Copy2
+  xpos 1938
+  ypos -3530
+ }
+ Mirror2 {
+  flop true
+  name Mirror2_1
+  xpos 1938
+  ypos -3456
+  disable true
+ }
+ Dot {
+  name Dot69
+  xpos 1972
+  ypos -3353
+ }
+set Ndec5960 [stack 0]
+ Dot {
+  name Dot71
+  xpos 1555
+  ypos -3273
+ }
+ Crop {
+  box {0 0 4320 {input.height}}
+  name Crop9
+  xpos 1521
+  ypos -3208
+ }
+push $Ndec5960
+ Dot {
+  name Dot60
+  xpos 1670
+  ypos -3272
+ }
+ Crop {
+  box {4320 0 8640 {input.height}}
+  name Crop16
+  xpos 1636
+  ypos -3206
+ }
+push $Ndec5960
+ Dot {
+  name Dot72
+  xpos 1779
+  ypos -3270
+ }
+ Crop {
+  box {8640 0 12960 {input.height}}
+  name Crop17
+  xpos 1745
+  ypos -3204
+ }
+push $Ndec5960
+ Dot {
+  name Dot83
+  xpos 1897
+  ypos -3269
+ }
+ Crop {
+  box {12960 0 17280 {input.height}}
+  name Crop18
+  xpos 1863
+  ypos -3203
+ }
+push $Ndec5960
+ Dot {
+  name Dot84
+  xpos 2014
+  ypos -3271
+ }
+ Crop {
+  box {17280 0 21600 {input.height}}
+  name Crop19
+  xpos 1980
+  ypos -3203
+ }
+push $Ndec5960
+ Dot {
+  name Dot70
+  xpos 2123
+  ypos -3273
+ }
+ Crop {
+  box {21600 0 25920 {input.height}}
+  name Crop8
+  xpos 2089
+  ypos -3204
+ }
+push 0
+push $Ndec5960
+ Dot {
+  name Dot74
+  xpos 2354
+  ypos -3270
+ }
+ Crop {
+  box {30240 0 34560 {input.height}}
+  name Crop11
+  xpos 2320
+  ypos -3202
+ }
+push $Ndec5960
+ Dot {
+  name Dot73
+  xpos 2238
+  ypos -3270
+ }
+ Crop {
+  box {25920 0 30240 {input.height}}
+  name Crop10
+  xpos 2204
+  ypos -3202
+ }
+ Merge2 {
+  inputs 8+1
+  also_merge {ramp.alpha none none ramp.alpha}
+  maskChannelMask none
+  name Merge19
+  xpos 1940
+  ypos -3096
+ }
+ ReadGeo {
+  file /code/global/nuke/gizmos/9.0v5/rfx_sky/geo/vista.obj
+  translate {0 {parent.Vista_geo_1_trans_y} 0}
+  rotate {0 {parent.Vista_geo_1_rotate_y} 0}
+  scaling {1 0.8 1}
+  name Vista_1
+  xpos 1940
+  ypos -2977
+  disable {{frame==0?0:1}}
+ }
+ TransformGeo {
+  translate {0 {parent.all_geo_trans_y} 0}
+  rotate {0 {parent.all_geo_rotate_y} 0}
+  name TransformGeo8
+  xpos 1940
+  ypos -2860
+ }
+ TransformGeo {
+  rotate {0 -97 0}
+  name TransformGeo2
+  xpos 1940
+  ypos -2799
+ }
+ Switch {
+  inputs 2
+  which {{!parent.vista_on}}
+  name Switch4
+  xpos 1940
+  ypos -2773
+ }
+ Scene {
+  inputs 6
+  name SkyHub
+  xpos 1950
+  ypos -2544
+ }
+push $Nda6ecd0
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing high
+  projection_mode spherical
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name SkyRender1
+  xpos 1940
+  ypos 998
+ }
+ Dot {
+  name Dot22
+  xpos 1974
+  ypos 1106
+ }
+set Ndfb4ac0 [stack 0]
+ Dot {
+  name Dot92
+  xpos 1839
+  ypos 1106
+ }
+set Ndf8d3f0 [stack 0]
+ FrameHold {
+  first_frame 5
+  name FrameHold6
+  label Terrain
+  xpos 1805
+  ypos 1138
+ }
+set Ndfbde30 [stack 0]
+push $Ndfbde30
+add_layer {terrain terrain.red terrain.green terrain.blue terrain.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {terrain.red -terrain.green -terrain.blue -terrain.alpha}
+  expr0 rgba.red
+  channel1 {-terrain.red terrain.green -terrain.blue -terrain.alpha}
+  expr1 rgba.green
+  channel2 {-terrain.red -terrain.green terrain.blue -terrain.alpha}
+  expr2 rgba.blue
+  channel3 {-terrain.red -terrain.green -terrain.blue terrain.alpha}
+  expr3 rgba.alpha
+  name MergeExpression9
+  xpos 1805
+  ypos 1188
+  disable {{!parent.terrain_on}}
+ }
+ Remove {
+  operation keep
+  channels terrain
+  channels2 rgba
+  name Remove8
+  xpos 1805
+  ypos 1214
+ }
+ Dot {
+  name Dot93
+  xpos 1839
+  ypos 1739
+ }
+push $Ndf8d3f0
+ Dot {
+  name Dot58
+  xpos 1707
+  ypos 1106
+ }
+set Ndfdb830 [stack 0]
+ FrameHold {
+  first_frame 4
+  name FrameHold5
+  label "Background Clouds"
+  xpos 1673
+  ypos 1138
+ }
+set Ndfe5b20 [stack 0]
+push $Ndfe5b20
+add_layer {cloudsB cloudsB.red cloudsB.green cloudsB.blue cloudsB.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {cloudsB.red -cloudsB.green -cloudsB.blue -cloudsB.alpha}
+  expr0 rgba.red
+  channel1 {-cloudsB.red cloudsB.green -cloudsB.blue -cloudsB.alpha}
+  expr1 rgba.green
+  channel2 {-cloudsB.red -cloudsB.green cloudsB.blue -cloudsB.alpha}
+  expr2 rgba.blue
+  channel3 {-cloudsB.red -cloudsB.green -cloudsB.blue cloudsB.alpha}
+  expr3 rgba.alpha
+  name MergeExpression8
+  xpos 1673
+  ypos 1188
+  disable {{!parent.cloudsB_on}}
+ }
+ Remove {
+  operation keep
+  channels cloudsB
+  channels2 rgba
+  name Remove7
+  xpos 1673
+  ypos 1214
+ }
+ Dot {
+  name Dot59
+  xpos 1707
+  ypos 1357
+ }
+set Ne0042f0 [stack 0]
+ Dot {
+  name Dot98
+  xpos 1707
+  ypos 1395
+ }
+push $Ne0042f0
+push $Ndfdb830
+ Dot {
+  name Dot57
+  xpos 1597
+  ypos 1106
+ }
+set Ne008d10 [stack 0]
+ FrameHold {
+  first_frame 3
+  name FrameHold4
+  label "Midground Clouds"
+  xpos 1563
+  ypos 1138
+ }
+set Ndfe4c20 [stack 0]
+push $Ndfe4c20
+add_layer {cloudsA cloudsA.red cloudsA.green cloudsA.blue cloudsA.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {cloudsA.red -cloudsA.green -cloudsA.blue -cloudsA.alpha}
+  expr0 rgba.red
+  channel1 {-cloudsA.red cloudsA.green -cloudsA.blue -cloudsA.alpha}
+  expr1 rgba.green
+  channel2 {-cloudsA.red -cloudsA.green cloudsA.blue -cloudsA.alpha}
+  expr2 rgba.blue
+  channel3 {-cloudsA.red -cloudsA.green -cloudsA.blue cloudsA.alpha}
+  expr3 rgba.alpha
+  name MergeExpression7
+  xpos 1563
+  ypos 1188
+  disable {{!parent.cloudsA_on}}
+ }
+ Remove {
+  operation keep
+  channels cloudsA
+  channels2 rgba
+  name Remove6
+  xpos 1563
+  ypos 1214
+ }
+ Dot {
+  name Dot97
+  xpos 1597
+  ypos 1306
+ }
+set Nfe18800 [stack 0]
+ Merge2 {
+  inputs 2
+  operation under
+  also_merge all
+  maskChannelMask none
+  name Merge12
+  xpos 1563
+  ypos 1353
+ }
+push $Nfe18800
+push $Ne008d10
+ Dot {
+  name Dot23
+  xpos 1487
+  ypos 1106
+ }
+set Ne014f10 [stack 0]
+ FrameHold {
+  first_frame 1
+  name FrameHold2
+  label Clouds
+  xpos 1453
+  ypos 1138
+ }
+set Ne03ffb0 [stack 0]
+push $Ne03ffb0
+add_layer {clouds clouds.red clouds.green clouds.blue clouds.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {clouds.red -clouds.green -clouds.blue -clouds.alpha}
+  expr0 rgba.red
+  channel1 {-clouds.red clouds.green -clouds.blue -clouds.alpha}
+  expr1 rgba.green
+  channel2 {-clouds.red -clouds.green clouds.blue -clouds.alpha}
+  expr2 rgba.blue
+  channel3 {-clouds.red -clouds.green -clouds.blue clouds.alpha}
+  expr3 rgba.alpha
+  name MergeExpression1
+  xpos 1453
+  ypos 1188
+  disable {{!parent.clouds_on}}
+ }
+ Remove {
+  operation keep
+  channels clouds
+  channels2 rgba
+  name Remove2
+  xpos 1453
+  ypos 1214
+ }
+ Copy {
+  inputs 2
+  channels cloudsA
+  name Copy5
+  xpos 1453
+  ypos 1290
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  also_merge all
+  maskChannelMask none
+  name Merge11
+  xpos 1453
+  ypos 1353
+ }
+ Copy {
+  inputs 2
+  channels cloudsB
+  name Copy4
+  xpos 1453
+  ypos 1379
+ }
+ Dot {
+  name Dot96
+  xpos 1487
+  ypos 1507
+ }
+set Ne06dd70 [stack 0]
+ Shuffle {
+  in2 alpha
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle10
+  xpos 1581
+  ypos 1503
+ }
+ Rectangle {
+  maskChannelMask none
+  area {5851.5 0 5871.5 8192}
+  softness {5 0}
+  name Rectangle2
+  xpos 1581
+  ypos 1546
+ }
+push $Ne06dd70
+ TransformMasked {
+  inputs 1+1
+  translate {16 0}
+  center {5851.720215 3550.02002}
+  black_outside false
+  name Transform2
+  xpos 1453
+  ypos 1540
+ }
+ Dot {
+  name Dot1
+  xpos 1487
+  ypos 1681
+ }
+push $Ne014f10
+ Dot {
+  name Dot24
+  xpos 1362
+  ypos 1106
+ }
+ FrameHold {
+  first_frame 2
+  name FrameHold3
+  label Card
+  xpos 1328
+  ypos 1138
+ }
+set Ne09f1d0 [stack 0]
+push $Ne09f1d0
+add_layer {card card.red card.green card.blue card.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {card.red -card.green -card.blue -card.alpha}
+  expr0 rgba.red
+  channel1 {-card.red card.green -card.blue -card.alpha}
+  expr1 rgba.green
+  channel2 {-card.red -card.green card.blue -card.alpha}
+  expr2 rgba.blue
+  channel3 {-card.red -card.green -card.blue card.alpha}
+  expr3 rgba.alpha
+  name MergeExpression3
+  xpos 1328
+  ypos 1188
+  disable {{!parent.card_on}}
+ }
+ Remove {
+  operation keep
+  channels card
+  channels2 rgba
+  name Remove1
+  xpos 1328
+  ypos 1214
+ }
+ Dot {
+  name Dot21
+  xpos 1362
+  ypos 1630
+ }
+push $Ndfb4ac0
+ FrameHold {
+  name FrameHold1
+  label Vista
+  xpos 1940
+  ypos 1138
+ }
+set Ne0ccef0 [stack 0]
+ Rectangle {
+  output ramp
+  maskChannelMask none
+  area {-50 -30 8250 4095.800049}
+  name Rectangle1
+  xpos 3471
+  ypos 1144
+ }
+ Shuffle {
+  in ramp
+  in2 alpha
+  alpha red
+  name Shuffle5
+  xpos 3603
+  ypos 1150
+ }
+push $Nd9e5110
+push $Nd6ee880
+push $Nd8e33b0
+ Sphere {
+  uniform_scale {{parent.Sphere1.uniform_scale}}
+  name Sphere7
+  xpos 4424
+  ypos 498
+ }
+ Dot {
+  name Dot33
+  xpos 4458
+  ypos 786
+ }
+ TransformGeo {
+  inputs 2
+  name TransformGeo4
+  xpos 3750
+  ypos 782
+ }
+push $Nda6ecd0
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  transparency false
+  antialiasing high
+  projection_mode spherical
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name StarsRender
+  xpos 3750
+  ypos 998
+ }
+ Grade {
+  channels stars
+  gamma 0.64
+  maskChannelMask none
+  name Grade5
+  xpos 3750
+  ypos 1034
+ }
+ Shuffle {
+  in stars
+  in2 stars
+  alpha alpha2
+  name Shuffle14
+  xpos 3750
+  ypos 1072
+ }
+ Grade {
+  inputs 1+1
+  channels all
+  multiply 0
+  name Grade6
+  xpos 3750
+  ypos 1144
+ }
+ Remove {
+  operation keep
+  channels stars
+  channels2 rgba
+  name Remove4
+  xpos 3750
+  ypos 1238
+ }
+ Dot {
+  name Dot29
+  xpos 3784
+  ypos 1527
+ }
+ Dot {
+  name Dot10
+  xpos 2118
+  ypos 1527
+ }
+set Ne102e60 [stack 0]
+push $Ne102e60
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.top_color.r x101 0.2050841451} {parent.top_color.g x101 0.1332518756} {parent.top_color.b x101 0.3508488238} 1}
+  format "8192 8192 0 0 8192 8192 1 8K_matte"
+  name Constant4
+  xpos 2270
+  ypos 1166
+ }
+set Ne177370 [stack 0]
+ Shuffle {
+  in2 alpha
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle8
+  xpos 2367
+  ypos 1189
+ }
+ Ramp {
+  maskChannelMask none
+  p0 {1590 4540}
+  p1 {1590 7150}
+  type smooth1
+  name Ramp2
+  xpos 2463
+  ypos 1189
+ }
+ Invert {
+  maskChannelMask none
+  name Invert1
+  xpos 2463
+  ypos 1215
+ }
+ Dot {
+  name Dot63
+  xpos 2497
+  ypos 1401
+ }
+set Ne1a7d60 [stack 0]
+ Dot {
+  name Dot64
+  xpos 2497
+  ypos 1439
+ }
+set Ne1ac7e0 [stack 0]
+ Dot {
+  name Dot65
+  xpos 2497
+  ypos 1471
+ }
+push $Ne1ac7e0
+push $Ne1a7d60
+push $Ne177370
+ Ramp {
+  maskChannelMask none
+  p0 {4010 {4682.5+parent.cap_horiz}}
+  p1 {4010 {p0-10}}
+  color {{parent.ground_color.r} {parent.ground_color.g} {parent.ground_color.b} 1}
+  name Ramp3
+  xpos 2270
+  ypos 1238
+ }
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle18
+  xpos 2270
+  ypos 1264
+ }
+ Ramp {
+  maskChannelMask none
+  p0 {4010 {4682.5+parent.cap_horiz}}
+  p1 {4010 {input.height}}
+  type smooth0
+  color {{parent.background.r} {parent.background.g} {parent.background.b} {curve}}
+  name Ramp5
+  xpos 2270
+  ypos 1290
+ }
+ Dot {
+  name Dot13
+  xpos 2304
+  ypos 1343
+ }
+set Ne1c24c0 [stack 0]
+ Dot {
+  name Dot28
+  xpos 2304
+  ypos 1369
+ }
+push $Ne1c24c0
+push $Ne0ccef0
+push $Ne0ccef0
+add_layer {sky sky.red sky.green sky.blue sky.alpha}
+ MergeExpression {
+  inputs 2
+  channel0 {sky.red -sky.green -sky.blue -sky.alpha}
+  expr0 rgba.red
+  channel1 {-sky.red sky.green -sky.blue -sky.alpha}
+  expr1 rgba.green
+  channel2 {-sky.red -sky.green sky.blue -sky.alpha}
+  expr2 rgba.blue
+  channel3 {-sky.red -sky.green -sky.blue sky.alpha}
+  expr3 rgba.alpha
+  name MergeExpression2
+  xpos 1940
+  ypos 1188
+  disable {{!parent.vista_on}}
+ }
+ Remove {
+  operation keep
+  channels sky
+  channels2 rgba
+  name Remove3
+  xpos 1940
+  ypos 1214
+ }
+add_layer {cap cap.red cap.green cap.blue cap.alpha}
+ Merge2 {
+  inputs 2
+  operation under
+  also_merge cap
+  maskChannelMask none
+  name Merge6
+  xpos 1940
+  ypos 1339
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {cap.red -cap.green -cap.blue -cap.alpha}
+  expr0 A.rgba.red
+  channel1 {-cap.red cap.green -cap.blue -cap.alpha}
+  expr1 A.rgba.green
+  channel2 {-cap.red -cap.green cap.blue -cap.alpha}
+  expr2 A.rgba.blue
+  channel3 {-cap.red -cap.green -cap.blue cap.alpha}
+  expr3 A.rgba.alpha
+  name MergeExpression4
+  xpos 1940
+  ypos 1365
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Bchannels sky
+  output {sky.red sky.green sky.blue -sky.alpha}
+  maskChannelMask none
+  mix 0
+  name Ramp_Merge
+  xpos 1940
+  ypos 1391
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Bchannels cap
+  output {cap.red cap.green cap.blue -cap.alpha}
+  maskChannelMask none
+  mix {{parent.Ramp_Merge.mix}}
+  name Merge14
+  xpos 1940
+  ypos 1429
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask none
+  mix {{parent.Ramp_Merge.mix}}
+  name Merge18
+  xpos 1940
+  ypos 1467
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {stars.red -stars.green -stars.blue -stars.alpha}
+  expr0 A.rgba.red
+  channel1 {-stars.red stars.green -stars.blue -stars.alpha}
+  expr1 A.rgba.green
+  channel2 {-stars.red -stars.green stars.blue -stars.alpha}
+  expr2 A.rgba.blue
+  channel3 {-stars.red -stars.green -stars.blue stars.alpha}
+  expr3 A.rgba.alpha
+  name MergeExpression5
+  xpos 1940
+  ypos 1523
+  disable {{!stars_on}}
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge4
+  xpos 1940
+  ypos 1549
+  disable {{!stars_on}}
+ }
+ Merge2 {
+  inputs 2
+  also_merge all
+  maskChannelMask none
+  name Merge16
+  xpos 1940
+  ypos 1626
+ }
+ Merge2 {
+  inputs 2
+  also_merge all
+  maskChannelMask none
+  name Merge15
+  xpos 1940
+  ypos 1677
+ }
+set Ne239ed0 [stack 0]
+ Merge2 {
+  inputs 2
+  also_merge all
+  maskChannelMask none
+  name Merge20
+  xpos 1940
+  ypos 1735
+  disable {{!parent.terrain_on}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  also_merge all
+  maskChannelMask none
+  mix 0.5
+  name Merge7
+  xpos 1940
+  ypos 1782
+  disable {{!parent.sc_grid_overlay}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Bchannels sky
+  output sky
+  maskChannelMask none
+  mix 0.5
+  name Merge22
+  xpos 1940
+  ypos 1820
+  disable {{!parent.sc_grid_overlay}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Bchannels terrain
+  output terrain
+  maskChannelMask none
+  mix 0.5
+  name Merge23
+  xpos 1940
+  ypos 1858
+  disable {{!parent.sc_grid_overlay}}
+ }
+add_layer {vista vista.red vista.green vista.blue vista.alpha}
+ Merge2 {
+  inputs 2
+  operation multiply
+  Bchannels vista
+  output vista
+  maskChannelMask none
+  mix 0.5
+  name Merge24
+  xpos 1940
+  ypos 1896
+  disable {{!parent.sc_grid_overlay}}
+ }
+ Crop {
+  box {0 0 {input.height} {input.width}}
+  reformat true
+  name Crop3
+  xpos 1940
+  ypos 2219
+ }
+ Sphere {
+  cast_shadow false
+  receive_shadow false
+  rows 100
+  columns 100
+  uniform_scale 100000
+  name Sphere1
+  xpos 1940
+  ypos 2509
+ }
+push $Nda6ecd0
+push $Nda60410
+ Dot {
+  name Dot12
+  xpos 5769
+  ypos 2939
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Resolution_Output2
+  xpos 5515
+  ypos 2935
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing high
+  projection_mode spherical
+  motion_vectors_type distance
+  name SkyRender2
+  xpos 1940
+  ypos 2935
+ }
+ Dot {
+  name Dot61
+  xpos 1974
+  ypos 3416
+ }
+set Ne318060 [stack 0]
+ Shuffle {
+  in2 alpha
+  alpha alpha2
+  name Shuffle17
+  xpos 1842
+  ypos 3412
+ }
+ Transform {
+  scale {1.01 1}
+  center {{input.width/2} {input.height/2}}
+  name Transform5
+  xpos 1842
+  ypos 3438
+ }
+push $Ne318060
+ Merge2 {
+  inputs 2
+  operation under
+  maskChannelMask none
+  name Merge17
+  xpos 1940
+  ypos 3438
+ }
+ Transform {
+  scale {1 1.02}
+  center {{input.width/2} {input.height/2}}
+  black_outside false
+  name Transform1
+  xpos 1940
+  ypos 3784
+  disable {{Resolution_Output.which==2?0:1}}
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop1
+  xpos 1940
+  ypos 3810
+ }
+ Expression {
+  channel0 depth
+  expr0 1/Z
+  maskChannelMask none
+  name Expression1
+  xpos 1940
+  ypos 4107
+  disable {{parent.sky_mode==0?1:0}}
+ }
+set Ne361430 [stack 0]
+push $Ne361430
+add_layer {Z Z.red Z.green Z.blue Z.alpha}
+ Copy {
+  inputs 2
+  from0 depth.Z
+  to0 Z.red
+  maskChannelMask none
+  name Copy10
+  xpos 1940
+  ypos 4133
+  disable {{parent.sky_mode==0?1:0}}
+ }
+ Premult {
+  channels Z
+  name Premult16
+  xpos 1940
+  ypos 4171
+  disable {{parent.sky_mode==0?1:0}}
+ }
+ Remove {
+  channels none
+  name Remove5
+  xpos 1940
+  ypos 4209
+ }
+ Output {
+  name Output1
+  xpos 1940
+  ypos 4422
+ }
+push $Ne239ed0
+ Viewer {
+  frame 105
+  frame_range 105-144
+  name Viewer1
+  xpos 1893
+  ypos 1188
+ }
+end_group

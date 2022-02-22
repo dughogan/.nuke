@@ -1,0 +1,159 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+Group {
+ name rfxMultiMatte
+ tile_color 0x5100ffff
+ label "\[value matte_name]"
+ note_font "Bitstream Vera Sans Bold"
+ addUserKnob {20 Mattes_tab l Mattes}
+ addUserKnob {1 matte_name l "Label Me!"}
+ addUserKnob {26 ""}
+ addUserKnob {22 add_matte l "<img src=\"/code/global/nuke/gizmos/8.0v5/imgs/rfxgrade/add_mattes.png\">  </>" T "from plutonium.gizmos import multimatte\nreload(multimatte)\nmultimatte.add_from_list()" +STARTLINE}
+ addUserKnob {26 div4 l "" -STARTLINE T ::}
+ addUserKnob {22 sampleadd l "<img src=\"/code/global/nuke/gizmos/8.0v5/imgs/rfxgrade/add_sample.png\">   </>" -STARTLINE T "from plutonium.gizmos import multimatte\nmultimatte.add_from_sample()"}
+ addUserKnob {12 sample_pos l :: -STARTLINE}
+ sample_pos {1705 587}
+ addUserKnob {26 ""}
+ addUserKnob {6 view_chk l "Show Background" +STARTLINE}
+ view_chk true
+ addUserKnob {22 clear_all l " CLEAR ALL" -STARTLINE T "from plutonium.gizmos import multimatte\nmultimatte.clear_all()"}
+ addUserKnob {22 finalize_btn l INVISIBLE -STARTLINE +INVISIBLE T "import nk_mmatte\nnk_mmatte.finalize()"}
+ addUserKnob {26 div1 l " "}
+}
+ Input {
+  inputs 0
+  name B
+  label B
+  xpos -150
+  ypos -544
+ }
+set N7687610 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -150
+  ypos -474
+ }
+ Dot {
+  name builder_dot
+  tile_color 0xff
+  label BUILDER
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font_size 20
+  note_font_color 0xffffffff
+  xpos -116
+  ypos 162
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos -150
+  ypos 278
+ }
+set N76a50c0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -116
+  ypos 378
+ }
+set N76b34e0 [stack 0]
+push $N76a50c0
+ Read {
+  inputs 0
+  file /code/global/nuke/gizmos/8.0v5/imgs/rfx_status_mattes.png
+  origset true
+  version 2
+  name Read3
+  xpos 290
+  ypos -207
+ }
+ Transform {
+  translate {10 10}
+  center {179.5 31.5}
+  name Transform1
+  xpos 290
+  ypos -82
+ }
+ Reformat {
+  inputs 0
+  name Reformat2
+  xpos 400
+  ypos -34
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge2
+  xpos 290
+  ypos -34
+ }
+push $N7687610
+ Dot {
+  name Dot1
+  xpos 104
+  ypos -534
+ }
+ Grade {
+  multiply 0.25
+  maskChannelMask none
+  name Grade1
+  xpos 70
+  ypos -106
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge3
+  xpos 70
+  ypos -34
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output rgb
+  maskChannelMask none
+  name Merge1
+  xpos 70
+  ypos 278
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy1
+  xpos 70
+  ypos 368
+ }
+push $N76b34e0
+ Dot {
+  name Dot2
+  xpos -116
+  ypos 426
+ }
+ Switch {
+  inputs 2
+  which {{parent.view_chk}}
+  name Switch1
+  xpos 70
+  ypos 422
+ }
+ Clamp {
+  channels alpha
+  maskChannelMask none
+  name Clamp1
+  xpos 70
+  ypos 464
+ }
+ Output {
+  name Output1
+  xpos 70
+  ypos 518
+ }
+end_group

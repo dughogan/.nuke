@@ -1,0 +1,119 @@
+Gizmo {
+ inputs 2
+ name rfxPtoZ
+ selected true
+}
+ Input {
+  inputs 0
+  name camera
+  xpos 259
+  ypos -846
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.input0.input1.translate.x} {parent.input0.input1.translate.y} {parent.input0.input1.translate.z} 0}
+  name right_camera
+  xpos 413
+  ypos -498
+ }
+ Input {
+  inputs 0
+  name B
+  xpos 259
+  ypos -723
+  number 1
+ }
+set N18c08010 [stack 0]
+add_layer {P P.red P.green P.blue P.alpha}
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name Shuffle31
+  xpos 259
+  ypos -685
+ }
+ Unpremult {
+  alpha P.alpha
+  name Unpremult7
+  xpos 259
+  ypos -652
+ }
+set N18a49990 [stack 0]
+ OneView {
+  view right
+  name OneView8
+  label right
+  xpos 308
+  ypos -590
+ }
+ MergeExpression {
+  inputs 2
+  channel0 rgb
+  expr0 "sqrt(pow((A.r - B.r), 2) + pow((A.g - B.g), 2) + pow((A.b - B.b), 2))"
+  name MergeExpression2
+  xpos 303
+  ypos -475
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.input0.input0.translate.x} {parent.input0.input0.translate.y} {parent.input0.input0.translate.z} 0}
+  name left_camera
+  xpos -4
+  ypos -497
+ }
+push $N18a49990
+ OneView {
+  name OneView7
+  label left
+  xpos 208
+  ypos -590
+ }
+ MergeExpression {
+  inputs 2
+  channel0 rgb
+  expr0 "sqrt(pow((A.r - B.r), 2) + pow((A.g - B.g), 2) + pow((A.b - B.b), 2))"
+  name MergeExpression1
+  xpos 208
+  ypos -474
+ }
+ JoinViews {
+  inputs 2
+  name JoinViews1
+  xpos 262
+  ypos -426
+  viewassoc "left\nright"
+ }
+ Premult {
+  name Premult40
+  selected true
+  xpos 262
+  ypos -389
+ }
+push $N18c08010
+ Dot {
+  name Dot1
+  xpos 506
+  ypos -719
+ }
+add_layer {Z Z.red Z.green Z.blue Z.alpha}
+ ShuffleCopy {
+  inputs 2
+  in2 P
+  red red
+  green red
+  blue red
+  alpha alpha2
+  out Z
+  name ShuffleCopy1
+  xpos 472
+  ypos -389
+ }
+ Output {
+  name Output1
+  xpos 472
+  ypos -345
+ }
+end_group

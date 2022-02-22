@@ -1,0 +1,217 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+#write_info Write4 file:"/work/21162_FIENDS/common/lighting/HDR/fiends/" format:"1920 1080 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (linear)" datatype:"16 bit half" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 10.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="1920" y="0" w="1920" h="1165" maximized="1" screen="1">
+        <splitter orientation="1">
+            <split size="40"/>
+            <splitter orientation="2">
+                <split size="64"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar_Flipbook Tools.1">
+                    <page id="Toolbar_Lighting Toolbar.1"/>
+                    <page id="Toolbar_Main Tools.1"/>
+                    <page id="Toolbar_Flipbook Tools.1"/>
+                </dock>
+                <split size="1052"/>
+                <dock id="" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+            </splitter>
+            <split size="1868" stretch="1"/>
+            <splitter orientation="2">
+                <split size="0"/>
+                <dock id=""/>
+                <split size="1116"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="0"/>
+            <dock id=""/>
+        </splitter>
+    </window>
+    <window x="-4" y="-4" w="1928" h="1152" maximized="1" screen="0">
+        <splitter orientation="2">
+            <split size="1124"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/code/global/nuke/toolsets/10.0v3/ToolSets/Lighting/HDR Light Dome.nk"
+ format "1920 1080 0 0 1920 1080 1 RFX_RENDER"
+ proxy_type scale
+ proxy_format "1920 1080 0 0 1920 1080 1 FIENDS_comp"
+ colorManagement Nuke
+ defaultViewerLUT "OCIO LUTs"
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 user_name l "last saved by: " T dhogan}
+}
+BackdropNode {
+ inputs 0
+ name "Fiends Sky Dome"
+ tile_color 0x5f7a8701
+ gl_color 0x5f7a8701
+ label "HDR Light Dome"
+ note_font "Arial Black"
+ note_font_size 20
+ xpos -873
+ ypos -906
+ bdwidth 1451
+ bdheight 812
+}
+StickyNote {
+ inputs 0
+ name StickyNote3
+ label "Halos here. \n           Can have more or less depending on look desired. Bigger scale compared to main sun radial affects softness.     "
+ xpos -43
+ ypos -473
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "save as HDR to:\n      /work/21162_FIENDS/common/lighting/HDR/fiends/      \n\n                  Make folder for your shot. Test as much as needed but when you get what you like, save your final as (your shot number)_lightDome.hdr"
+ xpos -708
+ ypos -183
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "Main sunlight source here. \n        Bigger size affects softness of shadow. Can adjust softness or blur of radial as well.        "
+ xpos -857
+ ypos -713
+}
+StickyNote {
+ inputs 0
+ name StickyNote4
+ label "Make this Constant 4k Lat Long\nand be sure to set the resolution on your sky dome!!"
+ xpos -293
+ ypos -801
+}
+Radial {
+ inputs 0
+ maskChannelMask none
+ area {1790 1367 2147.199951 1723}
+ softness 17
+ color {0.9860000014 1 0.8249999881 1}
+ name Radial5
+ label "second halo color"
+ xpos -151
+ ypos -471
+}
+Grade {
+ multiply {-577.9992065 -1320.000122 800 4}
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade6
+ label "adjust color and brightness"
+ xpos -151
+ ypos -388
+}
+Dot {
+ name Dot1
+ xpos -117
+ ypos -323
+}
+Radial {
+ inputs 0
+ maskChannelMask none
+ area {1850 1427 2087.199951 1663}
+ softness 17
+ color {0.9860000014 1 0.8249999881 1}
+ name Radial4
+ label "first halo color"
+ xpos -259
+ ypos -470
+}
+Grade {
+ multiply {557.9996948 -1400 800 400}
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade5
+ label "adjust color and brightness"
+ xpos -259
+ ypos -387
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant3
+ xpos -407
+ ypos -814
+}
+Radial {
+ maskChannelMask none
+ area {1960 1537 1977.199951 1553}
+ softness 0
+ color {0.9860000014 1 0.8249999881 1}
+ name Radial6
+ label "main sun "
+ xpos -407
+ ypos -712
+}
+Grade {
+ multiply 800
+ maskChannelMask none
+ unpremult rgba.alpha
+ name Grade4
+ label "adjust brightness and color\n800 intensity works well"
+ xpos -407
+ ypos -674
+}
+Merge2 {
+ inputs 2
+ operation under
+ maskChannelMask none
+ name Merge3
+ xpos -407
+ ypos -375
+}
+Merge2 {
+ inputs 2
+ operation under
+ maskChannelMask none
+ name Merge4
+ xpos -407
+ ypos -327
+}
+Write {
+ channels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ file /work/21162_FIENDS/common/lighting/HDR/fiends/
+ file_type exr
+ version 18
+ name Write4
+ selected true
+ xpos -407
+ ypos -222
+ addUserKnob {20 caravr l CaraVR}
+ addUserKnob {4 viewPresets l "View Presets" M {main stereo cams all}}
+ addUserKnob {22 set l Set -STARTLINE T "w = nuke.thisNode()\nscriptViews = nuke.views()\nviewPreset = w\['viewPresets'].getValue()\nselectedViews = None\nif viewPreset == 0:\n  selectedViews = \['main']\nif viewPreset == 1:\n  stereoViews = \['left', 'right']\n  if set(stereoViews).issubset(set(scriptViews)):\n    selectedViews = stereoViews\n  else:\n    selectedViews = None\nelif viewPreset == 2:\n  selectedViews = \[v for v in scriptViews if 'cam' in v.lower()]\nelif viewPreset == 3:\n  selectedViews = scriptViews\nif selectedViews:\n  w\['views'].fromScript(' '.join(selectedViews))\n"}
+}

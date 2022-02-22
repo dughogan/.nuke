@@ -1,0 +1,1306 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1920" h="1163" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <splitter orientation="2">
+                <split size="71"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar_Flipbook Tools.1">
+                    <page id="Toolbar_Flipbook Tools.1"/>
+                </dock>
+                <split size="1045"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+            </splitter>
+            <split size="1876" stretch="1"/>
+            <splitter orientation="2">
+                <split size="72"/>
+                <dock id="" activePageId="Toolbar_Main Tools.1">
+                    <page id="Toolbar_Main Tools.1"/>
+                    <page id="Toolbar_Lighting Toolbar.1"/>
+                </dock>
+                <split size="1044"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="Pixel Analyzer.1"/>
+                    <page id="uk.co.thefoundry.waveformscope.1"/>
+                    <page id="uk.co.thefoundry.histogram.1"/>
+                    <page id="uk.co.thefoundry.vectorscope.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+    <window x="1916" y="-4" w="1928" h="1208" maximized="1" screen="1">
+        <splitter orientation="2">
+            <split size="1180"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="uk.co.thefoundry.scripteditor.1"/>
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/people/dhogan/nuke_networkUser/nuke_tools_scripts/Tool WIPs/starfield.nk"
+ last_frame 1798
+ fps 60
+ format "3410 2160 0 0 3410 2160 1 MINION_comp"
+ proxy_type scale
+ proxy_format "3410 2160 0 0 3410 2160 1 MINION_comp"
+ addUserKnob {20 User}
+ addUserKnob {26 user_name l "last saved by: " T dhogan}
+}
+Camera2 {
+ inputs 0
+ name Camera3
+ xpos 918
+ ypos 1611
+}
+Dot {
+ name Dot34
+ label Shot_Camera
+ xpos 942
+ ypos 1762
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Constant4
+ xpos -1141
+ ypos -181
+}
+Reformat {
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Reformat4
+ xpos -1141
+ ypos -69
+}
+set Na4894e20 [stack 0]
+Dot {
+ name Dot22
+ xpos -975
+ ypos -59
+}
+set Ncf719300 [stack 0]
+Dot {
+ name Dot24
+ xpos -865
+ ypos -59
+}
+set N8600e1d0 [stack 0]
+Dot {
+ name Dot26
+ xpos -755
+ ypos -59
+}
+Noise {
+ replace true
+ type turbulence
+ size 1
+ zoffset 2
+ name Noise10
+ xpos -789
+ ypos -41
+}
+Dot {
+ name Dot28
+ xpos -755
+ ypos 55
+}
+push $Ncf719300
+Noise {
+ replace true
+ size 1
+ zoffset 2
+ name Noise11
+ label Rotation
+ xpos -1009
+ ypos -41
+}
+push $N8600e1d0
+Noise {
+ replace true
+ size 840
+ zoffset 2
+ gamma 0.635
+ name Noise12
+ xpos -899
+ ypos -41
+}
+Dot {
+ name Dot29
+ xpos -865
+ ypos 11
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge18
+ xpos -1009
+ ypos 7
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge19
+ xpos -1009
+ ypos 51
+}
+Grade {
+ channels rgba
+ multiply 1.2
+ gamma 0.23
+ name stars_amt_grade3
+ xpos -1009
+ ypos 85
+}
+push $Na4894e20
+Dither {
+ amount 205
+ seed 3
+ name Dither4
+ xpos -1141
+ ypos -3
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name In3
+ xpos -1141
+ ypos 85
+}
+Dot {
+ name Dot30
+ xpos -1107
+ ypos 156
+}
+set Nc7d03f30 [stack 0]
+Dot {
+ name Dot31
+ xpos -1217
+ ypos 156
+}
+set Nc7d08b40 [stack 0]
+Shuffle {
+ in2 alpha
+ red green
+ blue green
+ alpha green
+ name Shuffle13
+ xpos -1252
+ ypos 191
+}
+set Nc7d0d6f0 [stack 0]
+push $Nc7d03f30
+Shuffle {
+ in2 alpha
+ red blue
+ green blue
+ alpha blue
+ name Shuffle14
+ xpos -1142
+ ypos 191
+}
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge20
+ xpos -1142
+ ypos 230
+}
+Grade {
+ multiply {1.850000024 1.258000016 1.258000016 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade13
+ xpos -1142
+ ypos 270
+}
+push 0
+push $Nc7d08b40
+Dot {
+ name Dot32
+ xpos -1327
+ ypos 156
+}
+Shuffle {
+ in2 alpha
+ green red
+ blue red
+ alpha red
+ name Shuffle15
+ xpos -1361
+ ypos 191
+}
+set N7e8f8060 [stack 0]
+Grade {
+ multiply {1.543934822 1.842416883 2.900000095 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade14
+ xpos -1361
+ ypos 269
+}
+push $N7e8f8060
+push $Nc7d0d6f0
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge21
+ xpos -1252
+ ypos 230
+}
+Grade {
+ multiply {0.9898033738 1 0.75 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade15
+ xpos -1252
+ ypos 270
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ maskChannelMask none
+ name Merge22
+ xpos -1252
+ ypos 330
+}
+Clamp {
+ maskChannelMask none
+ name Clamp4
+ xpos -1251
+ ypos 382
+}
+Saturation {
+ saturation 0.05
+ maskChannelMask none
+ name Saturation5
+ xpos -1251
+ ypos 420
+}
+Grade {
+ blackpoint -0.001
+ whitepoint 0.96
+ white 0.025
+ gamma 1.36
+ maskChannelMask none
+ name Grade16
+ xpos -1251
+ ypos 468
+}
+Shuffle {
+ in2 alpha
+ alpha red
+ name Shuffle16
+ xpos -1251
+ ypos 494
+}
+Mirror2 {
+ flop true
+ name Mirror2_4
+ xpos -1251
+ ypos 552
+}
+Dot {
+ name Dot33
+ xpos -1217
+ ypos 781
+}
+Saturation {
+ saturation 0
+ maskChannelMask none
+ name Saturation7
+ xpos 783
+ ypos 777
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Constant2
+ xpos -310
+ ypos -189
+}
+Reformat {
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Reformat2
+ xpos -310
+ ypos -77
+}
+set Nac7a4240 [stack 0]
+Dot {
+ name Dot14
+ xpos -144
+ ypos -67
+}
+set Nacf0f180 [stack 0]
+Dot {
+ name Dot15
+ xpos -34
+ ypos -67
+}
+set N63433b0 [stack 0]
+Dot {
+ name Dot16
+ xpos 76
+ ypos -67
+}
+Noise {
+ replace true
+ type turbulence
+ size 1
+ zoffset 2
+ name Noise6
+ xpos 42
+ ypos -49
+}
+Dot {
+ name Dot17
+ xpos 76
+ ypos 47
+}
+push $Nacf0f180
+Noise {
+ replace true
+ size 1
+ zoffset 2
+ name Noise8
+ label Rotation
+ xpos -178
+ ypos -49
+}
+push $N63433b0
+Noise {
+ replace true
+ size 940
+ zoffset 2
+ gamma 0.635
+ name Noise9
+ xpos -68
+ ypos -49
+}
+Dot {
+ name Dot18
+ xpos -34
+ ypos 3
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge12
+ xpos -178
+ ypos -1
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge13
+ xpos -178
+ ypos 43
+}
+Grade {
+ channels rgba
+ multiply 1.2
+ gamma 0.12
+ name stars_amt_grade2
+ xpos -178
+ ypos 77
+}
+push $Nac7a4240
+Dither {
+ amount 105
+ seed 3
+ name Dither3
+ xpos -310
+ ypos -3
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name In2
+ xpos -310
+ ypos 77
+}
+Dot {
+ name Dot19
+ xpos -276
+ ypos 148
+}
+set Na485ce70 [stack 0]
+Dot {
+ name Dot20
+ xpos -386
+ ypos 148
+}
+set N69dff30 [stack 0]
+Shuffle {
+ in2 alpha
+ red green
+ blue green
+ alpha green
+ name Shuffle9
+ xpos -421
+ ypos 183
+}
+set N65052a0 [stack 0]
+push $Na485ce70
+Shuffle {
+ in2 alpha
+ red blue
+ green blue
+ alpha blue
+ name Shuffle10
+ xpos -311
+ ypos 183
+}
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge14
+ xpos -311
+ ypos 222
+}
+Grade {
+ multiply {1.850000024 1.258000016 1.258000016 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade9
+ xpos -311
+ ypos 262
+}
+push 0
+push $N69dff30
+Dot {
+ name Dot21
+ xpos -496
+ ypos 148
+}
+Shuffle {
+ in2 alpha
+ green red
+ blue red
+ alpha red
+ name Shuffle11
+ xpos -530
+ ypos 183
+}
+set Na4865bc0 [stack 0]
+Grade {
+ multiply {1.543934822 1.842416883 2.900000095 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade10
+ xpos -530
+ ypos 261
+}
+push $Na4865bc0
+push $N65052a0
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge15
+ xpos -421
+ ypos 222
+}
+Grade {
+ multiply {0.9898033738 1 0.75 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade11
+ xpos -421
+ ypos 262
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ maskChannelMask none
+ name Merge16
+ xpos -420
+ ypos 322
+}
+Clamp {
+ maskChannelMask none
+ name Clamp3
+ xpos -420
+ ypos 374
+}
+Saturation {
+ saturation 0.05
+ maskChannelMask none
+ name Saturation3
+ xpos -420
+ ypos 412
+}
+Grade {
+ blackpoint 0.008
+ whitepoint 0.84
+ gamma 0.94
+ maskChannelMask none
+ name Grade12
+ xpos -420
+ ypos 460
+}
+Shuffle {
+ in2 alpha
+ alpha red
+ name Shuffle12
+ xpos -420
+ ypos 486
+}
+Mirror2 {
+ flop true
+ name Mirror2_3
+ xpos -420
+ ypos 543
+}
+Dot {
+ name Dot23
+ xpos -386
+ ypos 712
+}
+Saturation {
+ saturation 0.1
+ maskChannelMask none
+ name Saturation6
+ xpos 779
+ ypos 708
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Constant1
+ xpos 456
+ ypos -177
+}
+Reformat {
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Reformat1
+ xpos 456
+ ypos -65
+}
+set Nc6f319f0 [stack 0]
+Dot {
+ name Dot1
+ xpos 622
+ ypos -55
+}
+set Nc58358c0 [stack 0]
+Dot {
+ name Dot2
+ xpos 732
+ ypos -55
+}
+set Nb382560 [stack 0]
+Dot {
+ name Dot6
+ xpos 842
+ ypos -55
+}
+Noise {
+ replace true
+ type turbulence
+ size 1
+ zoffset 2
+ name Noise4
+ xpos 808
+ ypos -37
+}
+Dot {
+ name Dot7
+ xpos 842
+ ypos 59
+}
+push $Nc58358c0
+Noise {
+ replace true
+ size 1
+ zoffset 2
+ name Noise5
+ label Rotation
+ xpos 588
+ ypos -37
+}
+push $Nb382560
+Noise {
+ replace true
+ size 940
+ zoffset 2
+ gamma 0.635
+ name Noise7
+ xpos 698
+ ypos -37
+}
+Dot {
+ name Dot8
+ xpos 732
+ ypos 15
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge4
+ xpos 588
+ ypos 11
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge5
+ xpos 588
+ ypos 55
+}
+Grade {
+ channels rgba
+ multiply 1.2
+ gamma 0.12
+ name stars_amt_grade1
+ xpos 588
+ ypos 89
+}
+push $Nc6f319f0
+Dither {
+ amount 35
+ seed 2
+ name Dither2
+ xpos 456
+ ypos 6
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name In1
+ xpos 456
+ ypos 89
+}
+Dot {
+ name Dot9
+ xpos 490
+ ypos 160
+}
+set Nbd81bf60 [stack 0]
+Dot {
+ name Dot10
+ xpos 380
+ ypos 160
+}
+set Nc2e37cc0 [stack 0]
+Shuffle {
+ in2 alpha
+ red green
+ blue green
+ alpha green
+ name Shuffle4
+ xpos 345
+ ypos 195
+}
+set Nc7149070 [stack 0]
+push $Nbd81bf60
+Shuffle {
+ in2 alpha
+ red blue
+ green blue
+ alpha blue
+ name Shuffle5
+ xpos 455
+ ypos 195
+}
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge6
+ xpos 455
+ ypos 234
+}
+Grade {
+ multiply {1.850000024 1.258000016 1.258000016 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade5
+ xpos 455
+ ypos 274
+}
+push 0
+push $Nc2e37cc0
+Dot {
+ name Dot11
+ xpos 270
+ ypos 160
+}
+Shuffle {
+ in2 alpha
+ green red
+ blue red
+ alpha red
+ name Shuffle6
+ xpos 236
+ ypos 195
+}
+set Nc5ad9590 [stack 0]
+Grade {
+ multiply {1.543934822 1.842416883 2.900000095 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade6
+ xpos 236
+ ypos 273
+}
+push $Nc5ad9590
+push $Nc7149070
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge7
+ xpos 345
+ ypos 234
+}
+Grade {
+ multiply {0.9898033738 1 0.75 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade7
+ xpos 345
+ ypos 274
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ maskChannelMask none
+ name Merge8
+ xpos 346
+ ypos 334
+}
+Clamp {
+ maskChannelMask none
+ name Clamp2
+ xpos 346
+ ypos 386
+}
+Saturation {
+ saturation 0.05
+ maskChannelMask none
+ name Saturation2
+ xpos 346
+ ypos 424
+}
+Grade {
+ blackpoint 0.03
+ whitepoint 0.62
+ gamma 0.47
+ maskChannelMask none
+ name Grade8
+ xpos 346
+ ypos 472
+}
+Shuffle {
+ in2 alpha
+ alpha red
+ name Shuffle8
+ xpos 346
+ ypos 498
+}
+Mirror2 {
+ flop true
+ name Mirror2_2
+ xpos 346
+ ypos 555
+}
+Dot {
+ name Dot12
+ xpos 380
+ ypos 651
+}
+Saturation {
+ saturation 0.4
+ maskChannelMask none
+ name Saturation4
+ xpos 783
+ ypos 647
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Constant3
+ xpos 1257
+ ypos -254
+}
+Reformat {
+ format "4096 4096 0 0 4096 4096 1 square_4K"
+ name Reformat3
+ xpos 1257
+ ypos -142
+}
+set N671e1b0 [stack 0]
+Dot {
+ name Dot36
+ xpos 1423
+ ypos -132
+}
+set N6693de0 [stack 0]
+Dot {
+ name Dot37
+ xpos 1533
+ ypos -132
+}
+set N63bd740 [stack 0]
+Dot {
+ name Dot35
+ xpos 1643
+ ypos -132
+}
+Noise {
+ replace true
+ type turbulence
+ size 1
+ name Noise3
+ xpos 1609
+ ypos -114
+}
+Dot {
+ name Dot25
+ xpos 1643
+ ypos -18
+}
+push $N6693de0
+Noise {
+ replace true
+ size 1
+ name Noise1
+ label Rotation
+ xpos 1389
+ ypos -114
+}
+push $N63bd740
+Noise {
+ replace true
+ size 940
+ gamma 0.635
+ name Noise2
+ xpos 1499
+ ypos -114
+}
+Dot {
+ name Dot27
+ xpos 1533
+ ypos -62
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge9
+ xpos 1389
+ ypos -66
+}
+Merge2 {
+ inputs 2
+ operation out
+ name Merge10
+ xpos 1389
+ ypos -22
+}
+Grade {
+ channels rgba
+ multiply 1.1
+ gamma 0.08
+ name stars_amt_grade
+ xpos 1389
+ ypos 12
+}
+push $N671e1b0
+Dither {
+ amount 15
+ name Dither1
+ xpos 1257
+ ypos -70
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name In
+ xpos 1257
+ ypos 12
+}
+Dot {
+ name Dot5
+ xpos 1291
+ ypos 83
+}
+set N639cf00 [stack 0]
+Dot {
+ name Dot4
+ xpos 1181
+ ypos 83
+}
+set N63a1d40 [stack 0]
+Shuffle {
+ in2 alpha
+ red green
+ blue green
+ alpha green
+ name Shuffle2
+ xpos 1146
+ ypos 118
+}
+set N1a969980 [stack 0]
+push $N639cf00
+Shuffle {
+ in2 alpha
+ red blue
+ green blue
+ alpha blue
+ name Shuffle3
+ xpos 1256
+ ypos 118
+}
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge3
+ xpos 1256
+ ypos 157
+}
+Grade {
+ multiply {1.850000024 1.258000016 1.258000016 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade3
+ xpos 1256
+ ypos 197
+}
+push 0
+push $N63a1d40
+Dot {
+ name Dot3
+ xpos 1071
+ ypos 83
+}
+Shuffle {
+ in2 alpha
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ xpos 1037
+ ypos 118
+}
+set Nfefe6800 [stack 0]
+Grade {
+ multiply {1.543934822 1.842416883 2.900000095 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade1
+ xpos 1037
+ ypos 197
+}
+push $Nfefe6800
+push $N1a969980
+Merge2 {
+ inputs 2
+ operation stencil
+ maskChannelMask none
+ name Merge2
+ xpos 1146
+ ypos 157
+}
+Grade {
+ multiply {0.9898033738 1 0.75 1}
+ black_clamp false
+ maskChannelMask none
+ name Grade2
+ xpos 1146
+ ypos 197
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ maskChannelMask none
+ name Merge1
+ xpos 1147
+ ypos 257
+}
+Saturation {
+ saturation 0.4
+ maskChannelMask none
+ name Saturation1
+ xpos 1147
+ ypos 283
+}
+Clamp {
+ maskChannelMask none
+ name Clamp1
+ xpos 1147
+ ypos 309
+}
+Grade {
+ blackpoint 0.03
+ whitepoint 0.23
+ multiply 0.4
+ gamma 0.88
+ maskChannelMask none
+ name Grade4
+ xpos 1147
+ ypos 381
+}
+Shuffle {
+ in2 alpha
+ alpha red
+ name Shuffle7
+ xpos 1147
+ ypos 407
+}
+Glow2 {
+ brightness 20
+ size 1.2
+ maskChannelMask none
+ name Glow1
+ xpos 1147
+ ypos 433
+}
+Mirror2 {
+ flop true
+ name Mirror2_1
+ xpos 1147
+ ypos 516
+}
+Saturation {
+ saturation 0.6
+ maskChannelMask none
+ name Saturation8
+ xpos 1147
+ ypos 542
+}
+Merge2 {
+ inputs 2
+ operation screen
+ maskChannelMask none
+ mix 0.595
+ name Merge11
+ label Medium
+ xpos 1147
+ ypos 641
+}
+Merge2 {
+ inputs 2
+ operation screen
+ maskChannelMask none
+ mix 0.2
+ name Merge17
+ label Small
+ xpos 1147
+ ypos 702
+}
+Merge2 {
+ inputs 2
+ operation screen
+ maskChannelMask none
+ mix 0.14
+ name Merge23
+ label Tiny
+ xpos 1147
+ ypos 771
+}
+Dot {
+ name Dot13
+ xpos 1181
+ ypos 919
+}
+set Nacfebef0 [stack 0]
+FrameHold {
+ first_frame 7
+ name FrameHold7
+ xpos 1456
+ ypos 1020
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ translate {0 0.3 0}
+ rotate {90 -300 90}
+ name Card7
+ xpos 1456
+ ypos 1123
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 6
+ name FrameHold6
+ xpos 1347
+ ypos 1016
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -5"} {"parent.Scene1.turn * 90"}}
+ name Card6
+ xpos 1347
+ ypos 1118
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 5
+ name FrameHold5
+ xpos 1247
+ ypos 1017
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -4"} {"parent.Scene1.turn * 90"}}
+ name Card5
+ xpos 1247
+ ypos 1119
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 4
+ name FrameHold4
+ xpos 1147
+ ypos 1018
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -3"} {"parent.Scene1.turn * 90"}}
+ name Card4
+ xpos 1147
+ ypos 1119
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 3
+ name FrameHold3
+ xpos 1047
+ ypos 1018
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -2"} {"parent.Scene1.turn * 90"}}
+ name Card3
+ xpos 1047
+ ypos 1118
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 2
+ name FrameHold2
+ xpos 947
+ ypos 1018
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -1"} {"parent.Scene1.turn * 90"}}
+ name Card2
+ xpos 947
+ ypos 1119
+}
+push $Nacfebef0
+FrameHold {
+ first_frame 1
+ name FrameHold1
+ xpos 847
+ ypos 1018
+ postage_stamp true
+}
+Card {
+ z {{parent.Scene1.size}}
+ lens_in_focal {{parent.Scene1.focal}}
+ lens_in_haperture {{parent.Scene1.haperture}}
+ rotate {{parent.Scene1.tilt} {"parent.Scene1.rotate  * -0"} {"parent.Scene1.turn * 90"}}
+ name Card1
+ xpos 847
+ ypos 1120
+}
+Scene {
+ inputs 7
+ name Scene1
+ xpos 1157
+ ypos 1221
+ addUserKnob {20 Panorama}
+ addUserKnob {7 focal R 0 100}
+ focal 20
+ addUserKnob {7 haperture R 0 100}
+ haperture 36
+ addUserKnob {7 size R 0 10000}
+ size 1
+ addUserKnob {7 rotate R 0 360}
+ rotate 60
+ addUserKnob {7 tilt R 0 360}
+ tilt 30
+ addUserKnob {4 turn l orientation M {landscape portrait}}
+ turn portrait
+}
+set Nac8c0e10 [stack 0]
+TransformGeo {
+ rotate {180 90 0}
+ name TransformGeo1
+ xpos 1011
+ ypos 1241
+}
+push $Nac8c0e10
+Scene {
+ inputs 2
+ name Scene2
+ xpos 1157
+ ypos 1312
+ addUserKnob {20 Panorama}
+ addUserKnob {7 focal R 0 100}
+ focal 20
+ addUserKnob {7 haperture R 0 100}
+ haperture 36
+ addUserKnob {7 size R 0 10000}
+ size 1
+ addUserKnob {7 rotate R 0 360}
+ rotate 60
+ addUserKnob {7 tilt R 0 360}
+ tilt 30
+ addUserKnob {4 turn l orientation M {landscape portrait}}
+ turn portrait
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ name ScanlineRender1
+ xpos 1147
+ ypos 1758
+}
+Viewer {
+ frame 1
+ frame_range 1-1798
+ fps 60
+ name Viewer1
+ xpos 1147
+ ypos 1871
+}

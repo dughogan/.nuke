@@ -1,0 +1,912 @@
+#! /usr/local/Nuke10.0v3/libnuke-10.0.3.so -nx
+version 10.0 v3
+add_layer {Z Z.red Z.green Z.blue Z.alpha}
+Group {
+ name rfxSlicer 
+ inputs 2
+ knobChanged "from nuke_artist_tools.plutonium.ui import knobs\n\nif nuke.thisKnob().name() in ('near_dropper', 'far_dropper'):\n    depth_channel = nuke.toNode('Depth_Copy')\['from0'].value()\n    with nuke.thisNode():\n        # near_dropper\n        knobs.update_drop_sample('near_dropper', 'near_value', depth_channel)\n        #\n\n        #far_dropper\n        knobs.update_drop_sample('far_dropper', 'far_value', depth_channel)\n        #\n    "
+ tile_color 0x1f2121ff
+ addUserKnob {20 User l "D3 Controls"}
+ addUserKnob {4 view l "Setup: " M {D3 D4 "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 depth_channel l "Depth Channel" T Depth_Copy.from0}
+ addUserKnob {26 lbl l "Layer Range"}
+ addUserKnob {78 near_value l near n 1}
+ addUserKnob {12 near_dropper l " :: " -STARTLINE}
+ addUserKnob {78 far_value l far n 1}
+ far_value 100
+ addUserKnob {12 far_dropper l " :: " -STARTLINE}
+ addUserKnob {7 mid l "mid size" R 0 15}
+ mid 0.1
+ addUserKnob {22 auto_set l "Click Me! (Auto)" T "import plutonium.gizmos.atmo as atmo\natmo.auto_z_depth()" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 d4_controls l "D4 Controls"}
+ addUserKnob {4 view2 l "View: " M {Characters Props Custom Combined "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 pickerAdd l "Characters Add" T Cryptomatte_Characters.pickerAdd}
+ addUserKnob {41 pickerRemove l "Characters Remove" T Cryptomatte_Characters.pickerRemove}
+ addUserKnob {26 ""}
+ addUserKnob {41 pickerAdd_1 l "Props Add" T Cryptomatte_Props.pickerAdd}
+ addUserKnob {41 pickerRemove_1 l "Props Remove" T Cryptomatte_Props.pickerRemove}
+ addUserKnob {26 ""}
+ addUserKnob {41 pickerAdd_2 l "Custom Add" T Cryptomatte_Custom.pickerAdd}
+ addUserKnob {41 pickerRemove_2 l "Custom Remove" T Cryptomatte_Custom.pickerRemove}
+}
+ Input {
+  inputs 0
+  name Char_Crypto
+  selected true
+  xpos 954
+  ypos -176
+  number 1
+ }
+ Dot {
+  name Dot24
+  xpos 988
+  ypos 5
+ }
+set Neebb5200 [stack 0]
+add_layer {other other.d1a other.d2a other.mouthbag}
+ Shuffle {
+  in other
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle10
+  xpos 1081
+  ypos 1
+ }
+push $Neebb5200
+add_layer {d1a d1a.red d1a.green d1a.blue d1a.alpha}
+ ChannelMerge {
+  inputs 2
+  A rgba.red
+  B d1a.alpha
+  output d1a.alpha
+  maskChannelMask none
+  name ChannelMerge2
+  xpos 954
+  ypos 58
+ }
+ Dot {
+  name Dot23
+  xpos 988
+  ypos 129
+ }
+set Neebd4e00 [stack 0]
+ Shuffle {
+  in other
+  in2 alpha
+  alpha alpha2
+  name Shuffle9
+  xpos 1087
+  ypos 125
+ }
+push $Neebd4e00
+add_layer {d2a d2a.red d2a.green d2a.blue d2a.alpha}
+ ChannelMerge {
+  inputs 2
+  A rgba.green
+  B d2a.blue
+  output d2a.blue
+  maskChannelMask none
+  name ChannelMerge1
+  xpos 954
+  ypos 180
+ }
+ Dot {
+  name Dot26
+  xpos 988
+  ypos 278
+ }
+set Neebf4920 [stack 0]
+ Dot {
+  name Dot15
+  xpos 988
+  ypos 419
+ }
+set Neebf9420 [stack 0]
+ Dot {
+  name Dot11
+  xpos 988
+  ypos 463
+ }
+add_layer {crypto_material crypto_material.red crypto_material.green crypto_material.blue crypto_material.alpha}
+add_layer {crypto_material00 crypto_material00.red crypto_material00.green crypto_material00.blue crypto_material00.alpha}
+add_layer {crypto_material01 crypto_material01.red crypto_material01.green crypto_material01.blue crypto_material01.alpha}
+add_layer {crypto_material02 crypto_material02.red crypto_material02.green crypto_material02.blue crypto_material02.alpha}
+ Cryptomatte {
+  name Cryptomatte_Custom
+  label custom
+  xpos 1371
+  ypos 453
+  matteList ""
+  cryptoLayer ""
+  expression ""
+  keyedName ""
+  previewChannel crypto_material
+  in00 crypto_material00
+  in01 crypto_material01
+  in02 crypto_material02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+ }
+set Neec028d0 [stack 0]
+ Dot {
+  name Dot13
+  xpos 1405
+  ypos 630
+ }
+set Nee8a3420 [stack 0]
+push $Neebb5200
+ Cryptomatte {
+  name Cryptomatte_Props
+  label props
+  xpos 1254
+  ypos -5
+  matteList ""
+  cryptoLayer crypto_material
+  expression ""
+  keyedName "ID value not in manifest."
+  previewChannel crypto_material
+  in00 crypto_material00
+  in01 crypto_material01
+  in02 crypto_material02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+ }
+set Nee8a7c90 [stack 0]
+ Dot {
+  name Dot12
+  xpos 1288
+  ypos 592
+ }
+set Nee777fa0 [stack 0]
+push $Neebb5200
+ Cryptomatte {
+  name Cryptomatte_Characters
+  label characters
+  xpos 838
+  ypos -5
+  matteList ""
+  cryptoLayer crypto_material
+  expression ""
+  keyedName "ID value not in manifest."
+  previewChannel crypto_material
+  in00 crypto_material00
+  in01 crypto_material01
+  in02 crypto_material02
+  in03 none
+  in04 none
+  in05 none
+  in06 none
+  in07 none
+ }
+set Nee77c800 [stack 0]
+ Dot {
+  name Dot27
+  xpos 872
+  ypos 554
+ }
+set Nee64cb20 [stack 0]
+push $Neebf9420
+push $Neebf4920
+push $Neebf4920
+add_layer {d1 d1.red d1.green d1.blue d1.alpha}
+ Remove {
+  channels {-d1.red -d1.green d1.blue -d1.alpha}
+  name Remove1
+  xpos 809
+  ypos 268
+ }
+ Copy {
+  inputs 2
+  from0 d2a.blue
+  to0 d1.blue
+  maskChannelMask none
+  name Copy17
+  xpos 809
+  ypos 347
+ }
+push $Nee77c800
+push 0
+push $Nee8a7c90
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha alpha2
+  name Shuffle11
+  xpos 1138
+  ypos 55
+ }
+push $Neebd4e00
+ Shuffle {
+  in d1a
+  in2 alpha
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle8
+  xpos 878
+  ypos 125
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  maskChannelMask none
+  name Merge3
+  xpos 768
+  ypos 125
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 432
+  ypos -1008
+ }
+ Expression {
+  channel0 depth
+  expr0 isinf(depth.Z)?0:depth.Z
+  maskChannelMask none
+  name Expression2
+  label "fix infinity pixels"
+  xpos 432
+  ypos -922
+ }
+ Shuffle {
+  in depth
+  in2 alpha
+  alpha alpha2
+  out Z
+  name Shuffle21
+  label "\[value in] -> \[value out]"
+  xpos 432
+  ypos -884
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 432
+  ypos -799
+  disable {{1-parent.premulted}}
+ }
+set Nee6b5ea0 [stack 0]
+push $Nee6b5ea0
+ Copy {
+  inputs 2
+  from0 Z.red
+  to0 depth.Z
+  maskChannelMask none
+  name Depth_Copy
+  xpos 432
+  ypos -682
+ }
+ Dot {
+  name Dot3
+  xpos 466
+  ypos -506
+ }
+set Nee6cc0c0 [stack 0]
+ Dot {
+  name Dot7
+  xpos 303
+  ypos -506
+ }
+ Dot {
+  name Dot8
+  xpos 303
+  ypos -29
+ }
+set Nee6d54a0 [stack 0]
+push $Nee6cc0c0
+ Shuffle {
+  in depth
+  name Shuffle1
+  xpos 634
+  ypos -510
+ }
+ Dot {
+  name Dot1
+  xpos 668
+  ypos -459
+ }
+set Nee6e8bd0 [stack 0]
+ Dot {
+  name Dot2
+  xpos 479
+  ypos -459
+ }
+ Grade {
+  blackpoint {{parent.far_value-10}}
+  whitepoint {{parent.far_value}}
+  maskChannelMask none
+  name Grade1
+  xpos 445
+  ypos -410
+ }
+ Dot {
+  name Dot6
+  xpos 479
+  ypos -351
+ }
+set Nee703330 [stack 0]
+push $Nee6e8bd0
+ Grade {
+  blackpoint {{parent.near_value}}
+  whitepoint {{parent.far_value-parent.mid}}
+  maskChannelMask none
+  name Grade2
+  xpos 634
+  ypos -411
+ }
+set Nee707ca0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 833
+  ypos -407
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red rgba.green rgba.blue rgba.red}
+  Bchannels {rgba.red rgba.green rgba.blue rgba.red}
+  output {rgba.red rgba.green rgba.blue rgba.red}
+  maskChannelMask none
+  name Merge17
+  xpos 799
+  ypos -361
+ }
+ Invert {
+  maskChannelMask none
+  name Invert1
+  xpos 799
+  ypos -323
+ }
+ Dot {
+  name Dot10
+  xpos 833
+  ypos -154
+ }
+push $Nee703330
+ Dot {
+  name Dot5
+  xpos 479
+  ypos -300
+ }
+set Nee53d1a0 [stack 0]
+ Dot {
+  name Dot9
+  xpos 479
+  ypos -192
+ }
+push $Nee53d1a0
+push $Nee707ca0
+ Merge2 {
+  inputs 2
+  operation stencil
+  Achannels {rgba.red rgba.green rgba.blue rgba.red}
+  Bchannels {rgba.red rgba.green rgba.blue rgba.red}
+  output {rgba.red rgba.green rgba.blue rgba.red}
+  maskChannelMask none
+  name Merge16
+  xpos 634
+  ypos -310
+ }
+ Shuffle {
+  in2 alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos 634
+  ypos -272
+ }
+set Nee555bd0 [stack 0]
+push $Nee555bd0
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.green
+  maskChannelMask none
+  name Copy2
+  xpos 634
+  ypos -240
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.blue
+  maskChannelMask none
+  name Copy1
+  xpos 634
+  ypos -202
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  maskChannelMask none
+  name Copy3
+  xpos 634
+  ypos -164
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy8
+  xpos 634
+  ypos -39
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  maskChannelMask none
+  name Merge1
+  xpos 634
+  ypos 125
+ }
+ Premult {
+  name Premult7
+  xpos 634
+  ypos 151
+  disable {{1-parent.premulted}}
+ }
+ Copy {
+  inputs 2
+  from0 d1.red
+  to0 d1.red
+  from1 d1.green
+  to1 d1.green
+  from2 d1.blue
+  to2 d1.blue
+  maskChannelMask none
+  name Copy7
+  xpos 634
+  ypos 335
+ }
+add_layer {d2 d2.red d2.green d2.blue d2.alpha}
+ Copy {
+  inputs 2
+  from0 d2.red
+  to0 d2.red
+  from1 d2.green
+  to1 d2.green
+  from2 d2.blue
+  to2 d2.blue
+  maskChannelMask none
+  name Copy4
+  xpos 634
+  ypos 397
+ }
+set Nee5c0df0 [stack 0]
+push $Nee5c0df0
+add_layer {d3 d3.red d3.green d3.blue d3.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 d3.red
+  from1 rgba.green
+  to1 d3.green
+  from2 rgba.blue
+  to2 d3.blue
+  maskChannelMask none
+  name Copy10
+  xpos 634
+  ypos 459
+ }
+add_layer {d4 d4.red d4.green d4.blue}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 d4.red
+  maskChannelMask none
+  name Copy5
+  xpos 634
+  ypos 544
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 d4.green
+  maskChannelMask none
+  name Copy6
+  xpos 634
+  ypos 582
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 d4.blue
+  maskChannelMask none
+  name Copy9
+  xpos 634
+  ypos 620
+ }
+ Dot {
+  name Dot18
+  xpos 668
+  ypos 714
+ }
+set Nee6052d0 [stack 0]
+ Dot {
+  name Dot19
+  xpos 551
+  ypos 714
+ }
+ Dot {
+  name Dot20
+  xpos 551
+  ypos 869
+ }
+set Nee60e940 [stack 0]
+ Dot {
+  name Dot22
+  xpos 551
+  ypos 1131
+ }
+push $Nee6d54a0
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha alpha2
+  name Shuffle6
+  xpos 269
+  ypos 1083
+ }
+ Invert {
+  maskChannelMask none
+  name Invert2
+  xpos 390
+  ypos 1077
+ }
+push $Nee60e940
+push $Nee60e940
+push $Nee60e940
+push $Nee8a3420
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha alpha2
+  name Shuffle5
+  xpos 1371
+  ypos 658
+ }
+ Dot {
+  name Dot17
+  xpos 1405
+  ypos 702
+ }
+push 0
+push $Nee64cb20
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha alpha2
+  name Shuffle3
+  xpos 838
+  ypos 658
+ }
+ Dot {
+  name Dot14
+  xpos 872
+  ypos 702
+ }
+push $Nee777fa0
+ Shuffle {
+  in alpha
+  in2 alpha
+  alpha alpha2
+  name Shuffle4
+  xpos 1254
+  ypos 656
+ }
+ Merge2 {
+  inputs 3+1
+  maskChannelMask none
+  name Merge2
+  xpos 1254
+  ypos 698
+ }
+ Dot {
+  name Dot25
+  xpos 1288
+  ypos 758
+ }
+push $Neec028d0
+push $Nee8a7c90
+push $Nee64cb20
+ Switch {
+  inputs 4
+  which {{view2}}
+  name Switch2
+  xpos 1033
+  ypos 754
+ }
+ Dot {
+  name Dot16
+  xpos 1067
+  ypos 798
+ }
+push $Nee6052d0
+ Switch {
+  inputs 2
+  which {{parent.view}}
+  name Switch1
+  xpos 634
+  ypos 794
+ }
+ Copy {
+  inputs 2
+  channels d1
+  maskChannelMask none
+  name Copy11
+  xpos 634
+  ypos 853
+ }
+ Copy {
+  inputs 2
+  channels d2
+  maskChannelMask none
+  name Copy12
+  xpos 634
+  ypos 977
+ }
+ Copy {
+  inputs 2
+  channels {d3.red d3.green d3.blue -d3.alpha}
+  maskChannelMask none
+  name Copy13
+  xpos 634
+  ypos 1027
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 d3.alpha
+  maskChannelMask none
+  name Copy16
+  xpos 634
+  ypos 1077
+ }
+ Copy {
+  inputs 2
+  channels d4
+  maskChannelMask none
+  name Copy14
+  xpos 634
+  ypos 1115
+ }
+set Nee4909a0 [stack 0]
+ Dot {
+  name Dot57
+  xpos 668
+  ypos 1302
+ }
+set Nee4d53f0 [stack 0]
+ Dot {
+  name Dot58
+  xpos 196
+  ypos 1302
+ }
+set Nee4da140 [stack 0]
+ Shuffle {
+  in d4
+  in2 alpha
+  alpha alpha2
+  name Shuffle16
+  xpos 412
+  ypos 1373
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message D4
+  old_message {{68 52}
+    }
+  box {38 41.5 170 142.5}
+  transforms {{0 2}
+    }
+  cursor_position 2
+  scale {1 1}
+  center {1044 429}
+  cursor_initialised true
+  initial_cursor_position {{38 142.5}
+    }
+  group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+  animation_layers {{1 11 1044 429 0 0 1 1 0 0 0 0}
+    }
+  name Text4
+  xpos 412
+  ypos 1399
+ }
+push $Nee4da140
+ Shuffle {
+  in d3
+  in2 alpha
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle7
+  xpos 285
+  ypos 1372
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "D3 - Sky"
+  old_message {{68 51 32 45 32 83 107 121}
+    }
+  box {38 41.5 410 142.5}
+  transforms {{0 2}
+    }
+  cursor_position 8
+  scale {1 1}
+  center {1044 429}
+  cursor_initialised true
+  initial_cursor_position {{38 142.5}
+    }
+  group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+  animation_layers {{1 11 1044 429 0 0 1 1 0 0 0 0}
+    }
+  name Text5
+  xpos 285
+  ypos 1398
+ }
+push $Nee4da140
+ Shuffle {
+  in d3
+  in2 alpha
+  alpha alpha2
+  name Shuffle15
+  xpos 162
+  ypos 1373
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message D3
+  old_message {{68 51}
+    }
+  box {38 41.5 170 142.5}
+  transforms {{0 2}
+    }
+  cursor_position 2
+  scale {1 1}
+  center {1044 429}
+  cursor_initialised true
+  initial_cursor_position {{38 142.5}
+    }
+  group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+  animation_layers {{1 11 1044 429 0 0 1 1 0 0 0 0}
+    }
+  name Text3
+  xpos 162
+  ypos 1399
+ }
+push $Nee4da140
+ Shuffle {
+  in d2
+  in2 alpha
+  alpha alpha2
+  name Shuffle14
+  xpos 41
+  ypos 1374
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message D2
+  old_message {{68 50}
+    }
+  box {38 41.5 170 142.5}
+  transforms {{0 2}
+    }
+  cursor_position 2
+  scale {1 1}
+  center {1044 429}
+  cursor_initialised true
+  initial_cursor_position {{38 142.5}
+    }
+  group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+  animation_layers {{1 11 1044 429 0 0 1 1 0 0 0 0}
+    }
+  name Text2
+  xpos 41
+  ypos 1400
+ }
+push $Nee4da140
+ Shuffle {
+  in d1
+  in2 alpha
+  alpha alpha2
+  name Shuffle18
+  xpos -79
+  ypos 1376
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message D1
+  old_message {{68 49}
+    }
+  box {38 41.5 170 142.5}
+  transforms {{0 2}
+    }
+  cursor_position 2
+  scale {1 1}
+  center {1044 429}
+  cursor_initialised true
+  initial_cursor_position {{38 142.5}
+    }
+  group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+  animation_layers {{1 11 1044 429 0 0 1 1 0 0 0 0}
+    }
+  name Text1
+  xpos -79
+  ypos 1402
+ }
+ ContactSheet {
+  inputs 5
+  width {{root.width}}
+  height {{root.height}}
+  columns 2
+  center true
+  roworder TopBottom
+  name ContactSheet1
+  xpos 162
+  ypos 1448
+ }
+ Dot {
+  name Dot21
+  xpos 196
+  ypos 1508
+ }
+push $Nee4d53f0
+add_layer {d_ref d_ref.red d_ref.green d_ref.blue}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 d_ref.red
+  from1 rgba.green
+  to1 d_ref.green
+  from2 rgba.blue
+  to2 d_ref.blue
+  maskChannelMask none
+  name Copy15
+  xpos 634
+  ypos 1486
+ }
+ Output {
+  name Output1
+  xpos 634
+  ypos 1873
+ }
+push $Nee4909a0
+ Viewer {
+  frame_range 1001-1027
+  channels d4
+  colour_sample_bbox {0.1130268201 -0.2806513309 0.1139846742 -0.2796934843}
+  viewerProcess "Default (Monitor)"
+  name Viewer1
+  xpos 229
+  ypos 265
+ }
+end_group

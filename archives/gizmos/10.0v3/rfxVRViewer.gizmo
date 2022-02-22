@@ -1,0 +1,315 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+Gizmo {
+ inputs 2
+ tile_color 0x3d3df7ff
+ addUserKnob {20 User}
+ addUserKnob {6 oc_viewer_stereo_onoff l "Stereo Mirror" t "Use with a desktop mirror setup to view your stereo Oculus renders." +STARTLINE}
+ addUserKnob {6 oc_viewer_stereo_flip l "stereo flip" -STARTLINE}
+ addUserKnob {6 oc_viewer_convert l "Convert Image to Oculus" t "If you're working with stereo spherical renders that aren't stitched together yet, this option will combine the two images in the \"oculus\" format." -STARTLINE}
+ addUserKnob {26 oc_viewer_controls_txt l "" +STARTLINE}
+ addUserKnob {41 focal l "focal length" T Camera1.focal}
+ addUserKnob {26 ""}
+ addUserKnob {7 oc_viewer_lr l x R -180 180}
+ addUserKnob {7 oc_viewer_tilt l y R -90 90}
+ addUserKnob {7 oc_viewer_ud l z R -90 90}
+}
+ BackdropNode {
+  inputs 0
+  name "LAT to Oculus2"
+  tile_color 0x44444401
+  gl_color 0x44444401
+  label "LAT to Oculus"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos -314
+  ypos -736
+  bdwidth 519
+  bdheight 273
+ }
+ BackdropNode {
+  inputs 0
+  name "Stereo Mirror Viewer1"
+  tile_color 0x51714d01
+  gl_color 0x51714d01
+  label "Stereo Mirror Viewer"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos -448
+  ypos 374
+  bdwidth 402
+  bdheight 290
+ }
+ BackdropNode {
+  inputs 0
+  name "Stereo Viewing Prep2"
+  tile_color 0x44447fff
+  gl_color 0x44444401
+  label "Stereo Viewing Prep"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos -378
+  ypos -342
+  bdwidth 271
+  bdheight 311
+ }
+ BackdropNode {
+  inputs 0
+  name "Viewer Eyes1"
+  tile_color 0x44444401
+  gl_color 0x44444401
+  label "Viewer POV"
+  note_font "Arial Black"
+  note_font_size 20
+  xpos -929
+  ypos -101
+  bdwidth 193
+  bdheight 175
+ }
+ Input {
+  inputs 0
+  name stereo_camera
+  tile_color 0xff0000ff
+  xpos -874
+  ypos -230
+ }
+ Camera2 {
+  rotate {{parent.oc_viewer_tilt} {parent.oc_viewer_lr} {parent.oc_viewer_ud}}
+  focal 24
+  name Camera1
+  xpos -864
+  ypos -31
+ }
+ Dot {
+  name Dot16
+  xpos -840
+  ypos 200
+ }
+ Input {
+  inputs 0
+  name oculus_img
+  tile_color 0x4444ffff
+  xpos -280
+  ypos -855
+  number 1
+ }
+ Dot {
+  name Dot3
+  xpos -246
+  ypos -646
+ }
+set N1c11ea40 [stack 0]
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle1
+  xpos -427
+  ypos -650
+ }
+ Crop {
+  box {2048 0 4100 4100}
+  name Crop1
+  xpos -427
+  ypos -591
+ }
+ Transform {
+  translate {-2048 0}
+  scale {1 1}
+  center {0 2049}
+  black_outside false
+  shutter 0
+  shuttercustomoffset -1
+  name Transform1
+  xpos -427
+  ypos -538
+ }
+ Dot {
+  name Dot4
+  xpos -393
+  ypos -430
+ }
+push $N1c11ea40
+ Shuffle {
+  in2 alpha
+  alpha white
+  name Shuffle2
+  xpos -210
+  ypos -650
+ }
+ Crop {
+  box {0 0 4096 4096}
+  name Crop2
+  xpos -113
+  ypos -650
+ }
+ Dot {
+  name Dot103
+  xpos -8
+  ypos -646
+ }
+set N201d6ad0 [stack 0]
+ OneView {
+  view right
+  name OneView2
+  xpos 68
+  ypos -650
+ }
+ Transform {
+  scale {0.5 1}
+  center {4096 2049}
+  name Transform5
+  xpos 68
+  ypos -585
+ }
+ Dot {
+  name Dot104
+  xpos 102
+  ypos -526
+ }
+push $N201d6ad0
+ Transform {
+  scale {0.5 1}
+  center {0 2049}
+  black_outside false
+  shutter 0
+  shuttercustomoffset -1
+  name Transform6
+  xpos -42
+  ypos -582
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge16
+  xpos -42
+  ypos -530
+ }
+push $N1c11ea40
+ Switch {
+  inputs 2
+  which {{parent.oc_viewer_convert}}
+  name Switch2
+  xpos -280
+  ypos -530
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge1
+  xpos -280
+  ypos -434
+  disable {{parent.oc_viewer_stereo_flip==0?1:0}}
+ }
+ Mirror {
+  Horizontal true
+  name Mirror4
+  xpos -280
+  ypos -169
+ }
+ Sphere {
+  rows 200
+  columns 200
+  scaling {1 0.5 1}
+  uniform_scale 400000
+  name Sphere1
+  label "Projection Screen"
+  selected true
+  xpos -280
+  ypos 51
+ }
+ Reformat {
+  inputs 0
+  format "1920 818 0 0 1920 818 1 RFX_RENDER_1_1"
+  name Reformat1
+  xpos -126
+  ypos 190
+  disable {{parent.oc_viewer_stereo_onoff}}
+ }
+ ScanlineRender {
+  inputs 3
+  antialiasing high
+  motion_vectors_type distance
+  name ScanlineRender2
+  xpos -280
+  ypos 196
+ }
+set N1c124740 [stack 0]
+ Dot {
+  name Dot18
+  xpos -246
+  ypos 422
+ }
+set N13761c60 [stack 0]
+ Dot {
+  name Dot20
+  xpos -125
+  ypos 422
+ }
+ OneView {
+  view right
+  name OneView1
+  label Right
+  xpos -159
+  ypos 470
+ }
+ Mirror {
+  Horizontal true
+  name Mirror5
+  xpos -159
+  ypos 515
+ }
+ Dot {
+  name Dot21
+  xpos -125
+  ypos 554
+ }
+push $N13761c60
+ OneView {
+  name OneView4
+  label Left
+  xpos -280
+  ypos 470
+ }
+set N1fce3ec0 [stack 0]
+ ContactSheet {
+  inputs 2
+  width {{input.width*2}}
+  height {{input.height}}
+  rows 1
+  columns 2
+  name ContactSheet2
+  xpos -280
+  ypos 550
+ }
+ Dot {
+  name Dot2
+  xpos -246
+  ypos 617
+ }
+push $N1fce3ec0
+ Dot {
+  name Dot1
+  xpos -387
+  ypos 480
+ }
+ Switch {
+  inputs 2
+  which {{parent.oc_viewer_stereo_onoff}}
+  name Switch1
+  xpos -421
+  ypos 613
+ }
+ Output {
+  name Output1
+  xpos -421
+  ypos 716
+ }
+push $N1c124740
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos -647
+  ypos 675
+ }
+end_group

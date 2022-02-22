@@ -1,0 +1,843 @@
+﻿set cut_paste_input [stack 0]
+version 12.0 v5
+push 0
+push $cut_paste_input
+Group {
+ name JamChalk
+ inputs 2
+ selected true
+ xpos -8790
+ ypos 2492
+ addUserKnob {20 User}
+ addUserKnob {7 Texture l "Texture mix"}
+ Texture 1
+ addUserKnob {41 translate T T.translate}
+ addUserKnob {41 rotate T T.rotate}
+ addUserKnob {41 scale T T.scale}
+ addUserKnob {41 distortmag l "distort mag" T Expression1.distortmag}
+ addUserKnob {6 hatch +STARTLINE}
+ hatch true
+ addUserKnob {6 crosshatch -STARTLINE}
+ crosshatch true
+ addUserKnob {7 hatchrot l "Hatch rotate" R -180 180}
+ hatchrot 10
+ addUserKnob {2 chalkFolder l "Chalk Folder"}
+ chalkFolder /jam/pipe/reference/chalk
+ addUserKnob {3 step_control l "Step Mode" t "0 = Exposure or xsheet based\n1 = Held\n2 = Force 2's"}
+ step_control {{parent.SpatterGen_MASTER_LOLA.step_control}}
+ addUserKnob {4 step_mode l "" -STARTLINE M {exposure hold force_steps "" "" ""}}
+ step_mode {{"\[value step_control]" x30 2 x61 2}}
+ addUserKnob {3 step_size l "Step Size"}
+ step_size {{parent.SpatterGen_MASTER_LOLA.step_size}}
+ addUserKnob {3 step_frame l "Step Frame" +INVISIBLE}
+ step_frame {{"\[if \{\[value step_mode] == \"exposure\"\} \{return \[frame]\} \{if \{\[value step_mode] == \"hold\" \} \{return 0\} \{return \[expr int(\[frame]/\[value step_size])*\[value step_size]]\} \} ]"}}
+ addUserKnob {3 Stepper t "on2's. 3's. etc\nFrame length +1 for HELD\nOffset in \"Depth X/Y Scale\" to B is needed" +INVISIBLE}
+ Stepper {{"\[expr \[jamXsheetHash xsheet \[value elementname] \[expr \[value step_frame ] + \[jamSceneSetupValueInt harmony_to_vfx_frame_offset]]] % 12]"}}
+ addUserKnob {1 elementname l element_name +INVISIBLE}
+ elementname "\[python nuke.thisNode().metadata('element_name', time=nuke.frame())]"
+}
+ StickyNote {
+  inputs 0
+  name StickyNote14
+  label Blob
+  xpos -84
+  ypos -290
+ }
+ CheckerBoard2 {
+  inputs 0
+  name CheckerBoard1
+  xpos -2022
+  ypos 52
+ }
+set Nd47cf800 [stack 0]
+ Transform {
+  translate {3000 2300}
+  rotate 110
+  scale 0.7
+  center {{width/2 x36 0} {height/2 x36 0}}
+  name T
+  xpos -1827
+  ypos 76
+ }
+ Input {
+  inputs 0
+  name InputBlob
+  xpos -80
+  ypos -249
+  number 1
+ }
+ Blur {
+  size 100
+  name Blur1
+  xpos -80
+  ypos -213
+ }
+ Expression {
+  temp_name0 cosa
+  temp_expr0 cos(distortangle/180*3.1415926)
+  temp_name1 sina
+  temp_expr1 sin(distortangle/180*3.1415926)
+  expr0 "sina * distortmag * b"
+  expr1 "cosa * distortmag * b"
+  name Expression1
+  xpos -80
+  ypos -162
+  addUserKnob {20 User}
+  addUserKnob {7 distortangle l "distort angle" R -180 180}
+  distortangle {{-T.rotate}}
+  addUserKnob {7 distortmag l "distort mag" R 0 300}
+  distortmag 150
+ }
+ Dot {
+  name Dot12
+  xpos -46
+  ypos -15
+ }
+ Input {
+  inputs 0
+  name InputHighlight
+  xpos -1048
+  ypos -240
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle4
+  xpos -1048
+  ypos -189
+ }
+ Dot {
+  name Dot13
+  xpos -1014
+  ypos -145
+ }
+set N58459800 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -1164
+  ypos -148
+ }
+ Dot {
+  name Dot7
+  xpos -1130
+  ypos -89
+ }
+set N58714000 [stack 0]
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression10
+  xpos -1164
+  ypos -51
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy1
+  xpos -1164
+  ypos -18
+ }
+ IDistort {
+  uv forward
+  name IDistort1
+  xpos -1164
+  ypos 59
+ }
+set N58714c00 [stack 0]
+ Expression {
+  temp_name0 ex
+  temp_expr0 "r - T.center.x - T.translate.x"
+  temp_name1 why
+  temp_expr1 "g -T.center.y - T.translate.y"
+  temp_name2 rx
+  temp_expr2 "crrot* ex - srrot * why"
+  temp_name3 ry
+  temp_expr3 " srrot * ex + crrot *why"
+  expr0 "rx / T.scale.w+ T.center.x"
+  expr1 "ry /T.scale.h + T.center.y"
+  name Expression5
+  xpos -1476
+  ypos 63
+  addUserKnob {20 User}
+  addUserKnob {7 rrot}
+  rrot {{"-T.rotate * 3.1415926535 / 180.0"}}
+  addUserKnob {7 crrot}
+  crrot {{cos(rrot)}}
+  addUserKnob {7 srrot}
+  srrot {{sin(rrot)}}
+ }
+set N58715000 [stack 0]
+ Dot {
+  name Dot16
+  xpos -1848
+  ypos 274
+ }
+ Grade {
+  white {1 1 1 1}
+  multiply {0.00048828125 0.0006426735219 1 1}
+  name Grade11
+  xpos -1882
+  ypos 308
+ }
+push $Nd47cf800
+ Dot {
+  name Dot17
+  xpos -1988
+  ypos 364
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos -1882
+  ypos 357
+ }
+ Expression {
+  inputs 0
+  temp_name0 rrot
+  temp_expr0 "T.rotate * 3.1415925535 / 180.0"
+  temp_name1 ex
+  temp_expr1 "cos(rrot) * (x - T.center.x + T.translate.x) + sin(rrot) * (y - T.center.y - T.translate.y) "
+  temp_name2 why
+  temp_expr2 "-cos(rrot) * (y - T.center.y - T.translate.y) +sin(rrot) * (x - T.center.x - T.translate.x)  "
+  temp_name3 dist
+  temp_expr3 "sqrt( (ex - center.x)*(ex - center.x) + (why - center.y)*(why-center.y))"
+  expr0 ex
+  expr1 why
+  name Expression7
+  xpos -1825
+  ypos 39
+  addUserKnob {20 User}
+  addUserKnob {12 center}
+  center {770 3860}
+  addUserKnob {7 period t "reciprocal frequence (size)" R 0 10}
+  period 3.62
+  addUserKnob {7 phaseoffset}
+  phaseoffset -1.17539815
+ }
+push $N58459800
+ Dot {
+  name Dot19
+  xpos -344
+  ypos -145
+ }
+set N85bde800 [stack 0]
+ Dot {
+  name Dot22
+  xpos -179
+  ypos -145
+ }
+push $N58459800
+ Grade {
+  gamma 1.12
+  name Grade15
+  xpos -1048
+  ypos 118
+  disable true
+ }
+ ColorLookup {
+  lut {master {curve C 0 s0.6999999881 1 s0.349999994}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup1
+  xpos -1048
+  ypos 152
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos -1048
+  ypos 183
+ }
+set N85bdf800 [stack 0]
+ Grade {
+  channels all
+  blackpoint 0.1
+  name Grade22
+  xpos -974
+  ypos 240
+ }
+ Dot {
+  name Dot8
+  xpos -940
+  ypos 306
+ }
+set N7d43c000 [stack 0]
+ Grade {
+  name Grade18
+  xpos -974
+  ypos 415
+ }
+ Dot {
+  name Dot9
+  xpos -940
+  ypos 474
+ }
+set N7d43c800 [stack 0]
+ Dot {
+  name Dot10
+  xpos -886
+  ypos 476
+ }
+set N7d43cc00 [stack 0]
+ Grade {
+  channels alpha
+  black 0.22
+  name Grade20
+  xpos -833
+  ypos 587
+ }
+push $N58714000
+ Dot {
+  name Dot4
+  xpos -666
+  ypos -89
+ }
+set N7d43d400 [stack 0]
+ Dot {
+  name Dot5
+  xpos -434
+  ypos -89
+ }
+ Noise {
+  size {{"30 * Expression8.period"}}
+  zoffset {{"parent.Noise2.zoffset + 17"}}
+  octaves 2
+  translate {{parent.T1.translate.x} {parent.T1.translate.y}}
+  rotate {{parent.T1.rotate}}
+  scale {{parent.T1.scale}}
+  center {{parent.T1.center.x} {parent.T1.center.y}}
+  name Noise3
+  xpos -468
+  ypos 231
+ }
+ Add {
+  value -0.26
+  name Add3
+  label "offset to median of noise (blur to measure)"
+  xpos -468
+  ypos 277
+ }
+ Grade {
+  whitepoint 0.61
+  black_clamp false
+  name Grade1
+  xpos -468
+  ypos 335
+ }
+ Grade {
+  multiply 0.06
+  black_clamp false
+  name Grade12
+  xpos -468
+  ypos 589
+ }
+push $N7d43c000
+ Invert {
+  name Invert4
+  xpos -828
+  ypos 494
+ }
+push $N58714c00
+ Expression {
+  temp_name0 ex
+  temp_expr0 "x - T.center.x - T.translate.x"
+  temp_name1 why
+  temp_expr1 "y  -T.center.y - T.translate.y"
+  temp_name2 rx
+  temp_expr2 "crrot* ex - srrot * why"
+  temp_name3 ry
+  temp_expr3 " srrot * ex + crrot *why"
+  expr0 "rx / T.scale.w+ T.center.x"
+  expr1 "ry /T.scale.h + T.center.y"
+  name Expression6
+  xpos -590
+  ypos 63
+  addUserKnob {20 User}
+  addUserKnob {7 rrot}
+  rrot {{"-T1.rotate * 3.1415926535 / 180.0"}}
+  addUserKnob {7 crrot}
+  crrot {{cos(rrot)}}
+  addUserKnob {7 srrot}
+  srrot {{sin(rrot)}}
+ }
+ Expression {
+  temp_name0 dist
+  temp_expr0 "sqrt( (r - center.x)*(r - center.x) + (g - center.y)*(g-center.y))"
+  expr0 sin(dist/period)
+  expr1 sin(dist/period+phaseoffset)
+  name Expression8
+  xpos -590
+  ypos 231
+  addUserKnob {20 User}
+  addUserKnob {12 center}
+  center {0 4000}
+  addUserKnob {7 period t "reciprocal frequence (size)" R 0 10}
+  period 3
+  addUserKnob {7 phaseoffset}
+  phaseoffset -1.17539815
+ }
+ Clamp {
+  minimum -0.5
+  mix 0.66
+  name Clamp2
+  xpos -590
+  ypos 281
+ }
+ Expression {
+  expr0 r-g
+  expr1 r-g
+  name Expression9
+  xpos -590
+  ypos 340
+ }
+ Grade {
+  blackpoint -0.84
+  whitepoint 0.99
+  black_clamp false
+  name Grade13
+  xpos -590
+  ypos 381
+ }
+ Grade {
+  multiply 0.5
+  black_clamp false
+  name Grade17
+  xpos -590
+  ypos 405
+ }
+push $N7d43d400
+ Noise {
+  size {{Expression8.period}}
+  zoffset {{parent.Noise2.zoffset+681}}
+  octaves 1
+  translate {{parent.T1.translate.x} {parent.T1.translate.y}}
+  rotate {{parent.T1.rotate}}
+  scale {{parent.T1.scale}}
+  center {{parent.T1.center.x} {parent.T1.center.y}}
+  name Noise4
+  xpos -700
+  ypos 231
+ }
+ Blur {
+  size 1.3
+  name Blur5
+  xpos -700
+  ypos 281
+ }
+ Add {
+  value -0.28
+  name Add4
+  label "offset to median of noise (blur to measure)"
+  xpos -700
+  ypos 342
+ }
+ Multiply {
+  value 2
+  name Multiply1
+  xpos -700
+  ypos 433
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -590
+  ypos 437
+ }
+ Grade {
+  inputs 1+1
+  black 0.5
+  white {{black}}
+  black_clamp false
+  name Grade14
+  xpos -590
+  ypos 498
+ }
+push $N7d43c800
+ Invert {
+  name Invert3
+  xpos -974
+  ypos 519
+ }
+ Grade {
+  blackpoint -0.02
+  name Grade19
+  xpos -974
+  ypos 551
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos -590
+  ypos 551
+ }
+ Merge2 {
+  inputs 2+1
+  operation plus
+  name Merge7
+  tile_color 0xff0000ff
+  xpos -590
+  ypos 589
+  disable true
+ }
+push $N7d43cc00
+ Dot {
+  name Dot18
+  xpos -886
+  ypos 626
+ }
+ Grade {
+  black -0.5
+  white 0.95
+  black_clamp false
+  name Grade21
+  xpos -836
+  ypos 623
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge8
+  xpos -590
+  ypos 623
+ }
+set Nb79d1000 [stack 0]
+push $N85bdf800
+ Dot {
+  name Dot15
+  xpos -1069
+  ypos 306
+ }
+set Nbb4e4c00 [stack 0]
+ Grade {
+  name Grade3
+  xpos -1103
+  ypos 411
+ }
+ Dot {
+  name Dot1
+  xpos -1069
+  ypos 474
+ }
+set Nbb4e4400 [stack 0]
+ Dot {
+  name Dot2
+  xpos -1159
+  ypos 474
+ }
+set Nbb4e4000 [stack 0]
+ Grade {
+  channels alpha
+  black 0.22
+  name Grade8
+  xpos -1267
+  ypos 583
+ }
+push $N58714000
+ Dot {
+  name Dot11
+  xpos -1311
+  ypos -89
+ }
+set Nbb4e5400 [stack 0]
+ Dot {
+  name Dot6
+  xpos -1598
+  ypos -89
+ }
+ Noise {
+  size {{"30 * Expression3.period"}}
+  zoffset {{this.parent.Stepper x1 0}}
+  octaves 2
+  translate {{parent.T.translate.x} {parent.T.translate.y}}
+  rotate {{parent.T.rotate}}
+  scale {{parent.T.scale}}
+  center {{parent.T.center.x} {parent.T.center.y}}
+  name Noise2
+  xpos -1632
+  ypos 231
+ }
+ Add {
+  value -0.26
+  name Add2
+  label "offset to median of noise (blur to measure)"
+  xpos -1632
+  ypos 271
+ }
+ Grade {
+  whitepoint 0.61
+  black_clamp false
+  name Grade4
+  xpos -1632
+  ypos 330
+ }
+ Grade {
+  multiply 0.06
+  black_clamp false
+  name Grade5
+  xpos -1632
+  ypos 587
+ }
+push $Nbb4e4c00
+ Invert {
+  name Invert2
+  xpos -1347
+  ypos 481
+ }
+push $N58715000
+ Expression {
+  temp_name0 dist
+  temp_expr0 "sqrt( (r - center.x)*(r - center.x) + (g - center.y)*(g-center.y))"
+  expr0 sin(dist/period)
+  expr1 sin(dist/period+phaseoffset)
+  name Expression3
+  xpos -1476
+  ypos 231
+  addUserKnob {20 User}
+  addUserKnob {12 center}
+  center {0 3000}
+  addUserKnob {7 period t "reciprocal frequence (size)" R 0 10}
+  period 3
+  addUserKnob {7 phaseoffset}
+  phaseoffset -1.17539815
+ }
+ Clamp {
+  minimum -0.5
+  mix 0.66
+  name Clamp1
+  xpos -1476
+  ypos 280
+ }
+ Expression {
+  expr0 r-g
+  expr1 r-g
+  name Expression4
+  xpos -1476
+  ypos 327
+ }
+ Grade {
+  blackpoint -0.84
+  black_clamp false
+  name Grade7
+  xpos -1476
+  ypos 360
+ }
+ Grade {
+  multiply 0.5
+  black_clamp false
+  name Grade16
+  xpos -1476
+  ypos 384
+ }
+push $Nbb4e5400
+ Noise {
+  size {{Expression3.period}}
+  zoffset {{parent.Noise2.zoffset-447}}
+  octaves 1
+  translate {{parent.T.translate.x} {parent.T.translate.y}}
+  rotate {{parent.T.rotate}}
+  scale {{parent.T.scale}}
+  center {{parent.T.center.x} {parent.T.center.y}}
+  name Noise1
+  xpos -1345
+  ypos 231
+ }
+ Blur {
+  size 1.3
+  name Blur2
+  xpos -1345
+  ypos 275
+ }
+ Add {
+  value -0.28
+  name Add1
+  label "offset to median of noise (blur to measure)"
+  xpos -1345
+  ypos 330
+ }
+ Multiply {
+  value 2
+  name Multiply2
+  xpos -1345
+  ypos 424
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -1481
+  ypos 432
+ }
+ Grade {
+  inputs 1+1
+  black 0.5
+  white {{black}}
+  black_clamp false
+  name Grade6
+  xpos -1481
+  ypos 485
+ }
+push $Nbb4e4400
+ Invert {
+  name Invert1
+  xpos -1103
+  ypos 517
+ }
+ Grade {
+  blackpoint -0.02
+  name Grade9
+  xpos -1103
+  ypos 549
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge5
+  xpos -1481
+  ypos 549
+ }
+ Merge2 {
+  inputs 2+1
+  operation plus
+  name Merge1
+  tile_color 0xff0000ff
+  xpos -1481
+  ypos 587
+  disable true
+ }
+push $Nbb4e4000
+ Dot {
+  name Dot3
+  xpos -1159
+  ypos 629
+ }
+ Grade {
+  black -0.5
+  white 0.95
+  black_clamp false
+  name Grade10
+  xpos -1269
+  ypos 626
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos -1481
+  ypos 626
+ }
+set Nbc719400 [stack 0]
+ Dissolve {
+  inputs 2
+  which 0.345
+  name Dissolve2
+  xpos -1030
+  ypos 971
+ }
+push $Nb79d1000
+ Dot {
+  name Dot20
+  xpos -853
+  ypos 1058
+ }
+push $Nbc719400
+ Dot {
+  name Dot14
+  xpos -1127
+  ypos 1067
+ }
+push 0
+ Switch {
+  inputs 4
+  which {{"parent.hatch + 2 * parent.crosshatch"}}
+  name Switch1
+  xpos -1030
+  ypos 1095
+ }
+push $N85bde800
+ Dot {
+  name Dot24
+  xpos -358
+  ypos 1039
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.Texture}}
+  name Dissolve1
+  xpos -392
+  ypos 1091
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  xpos -392
+  ypos 1143
+ }
+ Output {
+  name Output1
+  xpos -392
+  ypos 1293
+ }
+ Transform {
+  inputs 0
+  translate {{parent.T.translate.x} {parent.T.translate.y}}
+  rotate {{"parent.T.rotate - parent.hatchrot"}}
+  scale {{parent.T.scale.w} {parent.T.scale.h}}
+  center {{parent.T.center.x} {parent.T.center.y}}
+  name T1
+  xpos -794
+  ypos 147
+ }
+push $Nbb4e4400
+push $Nbc719400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge11
+  xpos -1481
+  ypos 753
+ }
+ Premult {
+  name Premult2
+  xpos -1481
+  ypos 783
+ }
+push $Nbc719400
+push $Nb79d1000
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge9
+  xpos -1030
+  ypos 759
+ }
+ Grade {
+  multiply 0.5
+  name Grade2
+  xpos -1030
+  ypos 807
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Area where chalk is needed"
+  xpos -968
+  ypos -217
+ }
+end_group
