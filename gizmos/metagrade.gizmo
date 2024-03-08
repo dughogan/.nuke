@@ -1,5 +1,5 @@
-#! C:/Program Files/Nuke13.0v4/nuke-13.0.4.dll -nx
-version 13.0 v4
+#! C:/Program Files/Nuke15.0v4/nuke-15.0.4.dll -nx
+version 15.0 v4
 Group {
  name MetaGrade
  inputs 2
@@ -58,13 +58,13 @@ Group {
   ypos 659
   number 1
  }
-set Na65bdc00 [stack 0]
+set N14ce4000 [stack 0]
  Dot {
   name Dot7
   xpos 580
   ypos 789
  }
-set Na65bd800 [stack 0]
+set N14ce4400 [stack 0]
  Input {
   inputs 0
   name primary
@@ -76,7 +76,7 @@ set Na65bd800 [stack 0]
   xpos -81
   ypos -108
  }
-set Na65bd000 [stack 0]
+set N14ce4c00 [stack 0]
  Shuffle {
   red black
   green black
@@ -96,14 +96,14 @@ set Na65bd000 [stack 0]
   xpos 448
   ypos 526
  }
-set Na65bc800 [stack 0]
+set N14ce5400 [stack 0]
  Dot {
   name Dot3
   xpos 294
   ypos 526
  }
-set Na65bc400 [stack 0]
-push $Na65bd000
+set N14ce5800 [stack 0]
+push $N14ce4c00
  Merge2 {
   inputs 2
   operation from
@@ -118,7 +118,7 @@ push $Na65bd000
   xpos -81
   ypos 583
  }
-set Na64cb800 [stack 0]
+set N14d08000 [stack 0]
  Dot {
   name Dot8
   tile_color 0xff
@@ -128,8 +128,8 @@ set Na64cb800 [stack 0]
   xpos -5
   ypos 735
  }
-push $Na65bdc00
-push $Na65bc800
+push $N14ce4000
+push $N14ce5400
  Switch {
   inputs 2
   which {{!aov_grade.mask}}
@@ -137,8 +137,8 @@ push $Na65bc800
   xpos 414
   ypos 659
  }
-push $Na64cb800
-push $Na65bc400
+push $N14d08000
+push $N14ce5800
  Copy {
   inputs 2
   from0 rgba.alpha
@@ -186,7 +186,7 @@ push $Na65bc400
   xpos 294
   ypos 836
  }
-set Na64c9c00 [stack 0]
+set N14d09c00 [stack 0]
  Dot {
   name copyfrom_dot
   tile_color 0xff
@@ -197,7 +197,7 @@ set Na64c9c00 [stack 0]
   xpos 158
   ypos 1151
  }
-push $Na65bd800
+push $N14ce4400
  Shuffle {
   in alpha
   green red
@@ -227,7 +227,7 @@ push $Na65bd800
     }
   font_size_values {{0 47 1 47 2 47 3 47 4 47 5 47 6 47 7 47 8 47 9 47 10 47 11 47 12 47 13 47 14 47 15 47}
     }
-  font {{ Roboto : Bold : Roboto-Bold.ttf : 0 }}
+  font {{ Arial : Regular : arial.ttf : 0 }}
   font_size 47
   center {1024 778}
   cursor_initialised true
@@ -242,7 +242,7 @@ push $Na65bd800
   xpos 129
   ypos 1284
  }
-set N7b8d1000 [stack 0]
+set N14d3ac00 [stack 0]
  Transform {
   translate {10 10}
   center {179.5 31.5}
@@ -263,17 +263,18 @@ set N7b8d1000 [stack 0]
   xpos 129
   ypos 1402
  }
-push $Na64c9c00
+push $N14d09c00
  Merge2 {
   inputs 2
   maskChannelMask none
   name Merge5
+  selected true
   xpos 260
   ypos 1402
   disable {{parent.iso_check}}
  }
-push $Na64c9c00
-push $Na64cb800
+push $N14d09c00
+push $N14d08000
  Merge2 {
   inputs 2
   operation plus
@@ -322,11 +323,13 @@ push $Na64cb800
   xpos 260
   ypos 1784
  }
-push $N7b8d1000
+push $N14d3ac00
  Viewer {
   frame_range 1-100
   colour_sample_bbox {-0.3030303121 -0.002525252523 -0.2979798019 0.002525252523}
   input_process false
+  monitorOutNDISenderName "Nuke - untitled - Viewer1"
+  monitorOutOutputTransform rec709
   name Viewer1
   xpos -55
   ypos 1219
