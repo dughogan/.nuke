@@ -1,0 +1,93 @@
+#! /usr/local/Nuke7.0v8/Nuke7.0 -nx
+version 7.0 v8
+Gizmo {
+ inputs 2
+ tile_color 0x919657ff
+ addUserKnob {20 User}
+ addUserKnob {41 time_offset l "time offset (frames)" T TimeOffset1.time_offset}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 817
+  ypos -513
+ }
+ Dot {
+  name Dot109
+  xpos 851
+  ypos -369
+ }
+set Nd441dd0 [stack 0]
+ Dot {
+  name Dot105
+  xpos 851
+  ypos -311
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 1129
+  ypos -515
+  number 1
+ }
+ Dot {
+  name Dot108
+  xpos 1163
+  ypos -433
+ }
+set Ne0801e0 [stack 0]
+ Dot {
+  name Dot107
+  xpos 1054
+  ypos -433
+ }
+set Ne074830 [stack 0]
+ TimeOffset {
+  time_offset 1
+  name TimeOffset1
+  xpos 922
+  ypos -436
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  maskChannelMask none
+  name Merge126
+  xpos 922
+  ypos -314
+ }
+push $Nd441dd0
+push $Ne074830
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  maskChannelMask none
+  name Merge127
+  xpos 1020
+  ypos -372
+ }
+push $Ne0801e0
+ Merge2 {
+  inputs 2
+  operation from
+  maskChannelMask none
+  name Merge128
+  xpos 1130
+  ypos -372
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge129
+  xpos 1129
+  ypos -314
+ }
+ Output {
+  name Output1
+  xpos 1129
+  ypos -251
+ }
+end_group

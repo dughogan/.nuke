@@ -1,0 +1,262 @@
+#! /usr/local/Nuke9.0v5/libnuke-9.0.5.so -nx
+version 9.0 v5
+Gizmo {
+ inputs 2
+ tile_color 0xffdc49ff
+ note_font "Bitstream Vera Sans"
+ mapsize {0.15 0.15}
+ addUserKnob {20 User}
+ addUserKnob {20 info n 1}
+ info 0
+ addUserKnob {26 info_label l "" +STARTLINE T "author: Ed Whetstone\nupdated: 2/24/2014\n\nluminance-based wrap weighted towards edges"}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {7 betterGlowTolerance l tolerance}
+ betterGlowTolerance 0.5
+ addUserKnob {26 ""}
+ addUserKnob {7 glow_size l size R 0 500}
+ glow_size 60
+ addUserKnob {7 spread}
+ spread 0.5
+ addUserKnob {7 glow_weight l weight}
+ glow_weight 0.5
+ addUserKnob {26 ""}
+ addUserKnob {26 gradeLBL l "" +STARTLINE T "glow intensity\n"}
+ addUserKnob {41 multiply l intensity T Grade1.multiply}
+ addUserKnob {41 saturation T ColorCorrect1.saturation}
+ addUserKnob {41 white l color T Grade1.white}
+ addUserKnob {26 ""}
+ addUserKnob {6 effect_only +STARTLINE}
+}
+ Input {
+  inputs 0
+  name FG
+  xpos -413
+  ypos 364
+ }
+set N30ae0440 [stack 0]
+ Dot {
+  name Dot5
+  xpos -379
+  ypos 802
+ }
+set N1c41afe0 [stack 0]
+ Dot {
+  name Dot7
+  xpos -379
+  ypos 1196
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 0
+  ypos 124
+  number 1
+ }
+set N89499c0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 249
+  ypos 128
+ }
+ Saturation {
+  saturation 0
+  maskChannelMask none
+  name Saturation1
+  xpos 215
+  ypos 189
+ }
+set N1ca19a00 [stack 0]
+ ColorCorrect {
+  maskChannelMask none
+  name ColorCorrect3
+  xpos 215
+  ypos 220
+ }
+ Clamp {
+  maskChannelMask none
+  name Clamp1
+  xpos 215
+  ypos 251
+ }
+ Grade {
+  gamma {{parent.Constant1.color.a+.02}}
+  white_clamp true
+  maskChannelMask none
+  name Grade2
+  xpos 215
+  ypos 296
+ }
+ Dot {
+  name Dot2
+  xpos 249
+  ypos 332
+ }
+push $N89499c0
+push $N1ca19a00
+ Merge2 {
+  inputs 2
+  operation divide
+  output rgb
+  maskChannelMask none
+  name Merge2
+  xpos 0
+  ypos 189
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output rgb
+  maskChannelMask none
+  name Merge1
+  xpos 0
+  ypos 329
+ }
+push $N30ae0440
+ Merge2 {
+  inputs 2
+  operation out
+  output rgb
+  maskChannelMask none
+  name Merge3
+  xpos 0
+  ypos 364
+ }
+ Clamp {
+  maskChannelMask none
+  name Clamp4
+  xpos 0
+  ypos 388
+ }
+set N11488140 [stack 0]
+ Blur {
+  size {{parent.glow_size i}}
+  name Blur4
+  label Wide
+  xpos -119
+  ypos 463
+ }
+ Grade {
+  multiply {{"(1-parent.glow_weight) * 2" i}}
+  maskChannelMask none
+  name Grade36
+  xpos -119
+  ypos 523
+ }
+push $N11488140
+ Blur {
+  size {{"Blur4.size * parent.spread" i}}
+  name Blur5
+  label Middle
+  xpos 0
+  ypos 463
+ }
+ Grade {
+  multiply {{"parent.glow_weight > .5 ? (1 - parent.glow_weight) + .5 : (parent.glow_weight) + .5" i}}
+  maskChannelMask none
+  name Grade54
+  xpos 0
+  ypos 523
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge30
+  xpos 0
+  ypos 569
+ }
+push $N11488140
+ Blur {
+  size {{"Blur5.size * parent.spread" i}}
+  name Blur6
+  label Tight
+  xpos 107
+  ypos 463
+ }
+ Grade {
+  multiply {{"(parent.glow_weight) * 2"}}
+  maskChannelMask none
+  name Grade98
+  xpos 107
+  ypos 523
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge32
+  xpos 107
+  ypos 569
+ }
+ Multiply {
+  value 0.33
+  maskChannelMask none
+  name Multiply1
+  xpos 107
+  ypos 630
+ }
+ ColorCorrect {
+  maskChannelMask none
+  name ColorCorrect1
+  xpos 107
+  ypos 734
+ }
+ Grade {
+  white {1 1 1 1}
+  gamma 0.94
+  maskChannelMask none
+  name Grade1
+  xpos 107
+  ypos 799
+ }
+push $N1c41afe0
+ Merge2 {
+  inputs 2
+  operation in
+  output rgb
+  maskChannelMask none
+  name Merge4
+  xpos -302
+  ypos 799
+ }
+set N30bf35d0 [stack 0]
+push $N30bf35d0
+push $N1c41afe0
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask none
+  name Merge33
+  xpos -302
+  ypos 907
+ }
+ Switch {
+  inputs 2
+  which {{parent.effect_only}}
+  name Switch2
+  xpos 107
+  ypos 907
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  tile_color 0x9e4d6d00
+  xpos 107
+  ypos 1193
+ }
+ Output {
+  name Output1
+  xpos 107
+  ypos 1252
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0 0 0 {parent.betterGlowTolerance}}
+  name Constant1
+  xpos 365
+  ypos 273
+ }
+end_group
