@@ -1,0 +1,274 @@
+#! C:/Program Files/Nuke15.1v2/nuke-15.1.2.dll -nx
+version 15.1 v2
+Gizmo {
+ addUserKnob {20 User}
+ addUserKnob {41 radius T Expression2.radius}
+ addUserKnob {41 translate T T.translate}
+ addUserKnob {41 rotate T T.rotate}
+ addUserKnob {41 scale T T.scale}
+ addUserKnob {41 center T T.center}
+ addUserKnob {6 invert +STARTLINE}
+ addUserKnob {41 gamma T Grade88.gamma}
+ addUserKnob {7 Texture l "Texture mix"}
+ Texture 1
+ addUserKnob {41 softendotscale T Grade2.softendotscale}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -1048
+  ypos -240
+ }
+ Dot {
+  name Dot13
+  xpos -1014
+  ypos -189
+ }
+set N5b6f3800 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -1137
+  ypos -192
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression10
+  xpos -1137
+  ypos -42
+ }
+ Expression {
+  temp_name0 ex
+  temp_expr0 "r - T.center.x - T.translate.x"
+  temp_name1 why
+  temp_expr1 "g -T.center.y - T.translate.y"
+  temp_name2 rx
+  temp_expr2 "crrot* ex - srrot * why"
+  temp_name3 ry
+  temp_expr3 " srrot * ex + crrot *why"
+  expr0 "rx / T.scale.w+ T.center.x"
+  expr1 "ry /T.scale.h + T.center.y"
+  name Expression5
+  xpos -1137
+  ypos 26
+  addUserKnob {20 User}
+  addUserKnob {7 rrot}
+  rrot {{"-T.rotate * 3.1415926535 / 180.0"}}
+  addUserKnob {7 crrot}
+  crrot {{cos(rrot)}}
+  addUserKnob {7 srrot}
+  srrot {{sin(rrot)}}
+ }
+set N5b6f3000 [stack 0]
+ Dot {
+  name Dot16
+  xpos -1344
+  ypos 29
+ }
+ Grade {
+  white {1 1 1 1}
+  multiply {0.00048828125 0.0006426735219 1 1}
+  name Grade11
+  xpos -1378
+  ypos 63
+ }
+ CheckerBoard2 {
+  inputs 0
+  name CheckerBoard1
+  xpos -1518
+  ypos -193
+ }
+set N56c70400 [stack 0]
+ Dot {
+  name Dot17
+  xpos -1484
+  ypos 119
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos -1378
+  ypos 110
+ }
+push $N5b6f3800
+ Dot {
+  name Dot39
+  xpos -924
+  ypos -189
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -958
+  ypos -89
+ }
+set N56c71400 [stack 0]
+ Dot {
+  name Dot1
+  xpos -923
+  ypos -26
+ }
+set N56c71800 [stack 0]
+ Add {
+  value -0.5
+  name Add2
+  tile_color 0xff5555ff
+  xpos -958
+  ypos 327
+ }
+push $N5b6f3000
+ Expression {
+  temp_name0 xx
+  temp_expr0 r
+  temp_name1 yy
+  temp_expr1 g
+  temp_name2 why
+  temp_expr2 "((yy/1.73205/ radius - floor(yy/1.73205/radius))-.5)*1.73205"
+  temp_name3 ex
+  temp_expr3 "(xx /radius - floor(xx/radius))-.5"
+  expr0 "sqrt(ex*ex+ why*why)"
+  channel1 {-rgba.red rgba.green -rgba.blue none}
+  name Expression2
+  xpos -1137
+  ypos 81
+  addUserKnob {20 User}
+  addUserKnob {7 radius R 0 100}
+  radius 10.5
+  addUserKnob {7 rot l rotation R 0 360}
+  rot {{T.rotate}}
+  addUserKnob {7 sr l "" +STARTLINE}
+  sr {{sin(rot*pi/180)}}
+  addUserKnob {7 cr l "" +STARTLINE}
+  cr {{cos(rot*pi/180)}}
+ }
+set N5ad1e000 [stack 0]
+ Transform {
+  translate {{"-Expression2.radius*T.scale.w/2*Expression2.cr - Expression2.radius*T.scale.h/2*1.73205 * Expression2.sr"} {"-Expression2.radius*T.scale.w/2*Expression2.sr + Expression2.radius*T.scale.h/2*1.73205 * Expression2.cr"}}
+  center {2400 1800}
+  name Transform1
+  xpos -1234
+  ypos 215
+ }
+push $N5ad1e000
+ Merge2 {
+  inputs 2
+  operation min
+  name Merge25
+  xpos -1137
+  ypos 277
+ }
+ Grade {
+  whitepoint 0.5773502692
+  white_clamp true
+  name Grade26
+  label "max = 0.5/sqrt(.75)"
+  xpos -1137
+  ypos 318
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle18
+  xpos -1137
+  ypos 363
+ }
+set N5ad1f000 [stack 0]
+ Invert {
+  name Invert4
+  xpos -1185
+  ypos 434
+ }
+push $N5ad1f000
+ Switch {
+  inputs 2
+  which {{parent.invert}}
+  name Switch1
+  xpos -1128
+  ypos 486
+ }
+ Grade {
+  gamma 2
+  name Grade88
+  xpos -1128
+  ypos 597
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge28
+  xpos -959
+  ypos 597
+ }
+ Grade {
+  blackpoint {{0.5-softendot}}
+  whitepoint {{0.5+softendot}}
+  white_clamp true
+  name Grade2
+  xpos -959
+  ypos 648
+  addUserKnob {20 User}
+  addUserKnob {7 softendotscale R 0 4}
+  softendotscale 2
+  addUserKnob {7 softendot}
+  softendot {{1/max(Expression2.radius,1)*softendotscale}}
+ }
+push $N56c71800
+ Dot {
+  name Dot3
+  xpos -769
+  ypos -26
+ }
+ Dot {
+  name Dot2
+  xpos -769
+  ypos 704
+ }
+set N80c6e800 [stack 0]
+ Dissolve {
+  inputs 2
+  which {{parent.Texture}}
+  name Dissolve1
+  xpos -959
+  ypos 695
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle27
+  xpos -963
+  ypos 764
+ }
+ Output {
+  name Output1
+  xpos -963
+  ypos 817
+ }
+push $N56c70400
+ Transform {
+  translate {38 6}
+  rotate 11.15796471
+  scale 1.8
+  center {4051 2562}
+  name T
+  xpos -1322
+  ypos -169
+ }
+push $N80c6e800
+push $N56c71400
+ Viewer {
+  inputs 2
+  frame_range 1-87
+  translate {0.02700000256 0.02600000054}
+  rotate 90
+  name Viewer1
+  xpos -1375
+  ypos 175
+ }
+end_group

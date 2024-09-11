@@ -1,0 +1,385 @@
+Group {
+ name rfxCardProject1
+ tile_color 0x5c6377ff
+ label "frame: \[value frameHold]"
+ selected true
+ addUserKnob {20 cardProjectTab l CardProject}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {3 frameHold l "projection frame"}
+ frameHold 101
+ addUserKnob {68 eye l "projection eye" M {Left Right "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {4 view l output M {"grid overlay" "3D check" "projected mask" patch merged "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {6 disableMask l "disable mask" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {12 centerPoint l "center point"}
+ centerPoint {960 409}
+ addUserKnob {22 sampleCenterPt l "sample center point" -STARTLINE T "import nk_cardProject as cp\ncp.sampleCenterPt()"}
+ addUserKnob {26 ""}
+ addUserKnob {20 cardGroup l "card options" n 1}
+ addUserKnob {41 file_menu l " " T CardProject_Card.file_menu}
+ addUserKnob {41 snap_menu l "" -STARTLINE T CardProject_Card.snap_menu}
+ addUserKnob {41 xform_order l "transform order" T CardProject_Card.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T CardProject_Card.rot_order}
+ addUserKnob {41 translate T CardProject_Card.translate}
+ addUserKnob {41 rotate T CardProject_Card.rotate}
+ addUserKnob {41 scaling l scale T CardProject_Card.scaling}
+ addUserKnob {41 uniform_scale l "uniform scale" T CardProject_Card.uniform_scale}
+ addUserKnob {41 skew T CardProject_Card.skew}
+ addUserKnob {41 pivot T CardProject_Card.pivot}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 p2pointsGroup l "position to points options" n 1}
+ p2pointsGroup 0
+ addUserKnob {41 P_channel l "surface point" T PositionToPoints1.P_channel}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {26 ProjectionText l "Projection Options"}
+ addUserKnob {6 DisableCrop l "disable projection crop" +STARTLINE}
+ addUserKnob {26 ScanlineText l "Scanline Options" T ""}
+ addUserKnob {26 ScanlineLine l "" -STARTLINE}
+ addUserKnob {41 overscan T ScanlineRender1.overscan}
+ addUserKnob {41 antialiasing T ScanlineRender1.antialiasing}
+ addUserKnob {41 filter T ScanlineRender1.filter}
+ addUserKnob {41 samples T ScanlineRender1.samples}
+ addUserKnob {26 CustomGeoText l "Custom Geo"}
+ addUserKnob {6 customGeoCheck l "use custom geo" +STARTLINE}
+ addUserKnob {41 file T ReadGeo1.file}
+}
+ Grid {
+  inputs 0
+  maskChannelMask none
+  name Grid1
+  xpos -106
+  ypos 19
+ }
+ Input {
+  inputs 0
+  name projCam
+  xpos -125
+  ypos -171
+  number 3
+ }
+ FrameHold {
+  first_frame {{parent.frameHold}}
+  name FrameHold2
+  label "frame hold\ninput"
+  xpos -125
+  ypos -90
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -233
+  ypos -490
+  number 1
+ }
+set N15b0eb60 [stack 0]
+ Dot {
+  name Dot15
+  xpos -199
+  ypos -259
+ }
+ Input {
+  inputs 0
+  name bty
+  xpos 26
+  ypos -1222
+ }
+ AddChannels {
+  channels P
+  name AddChannels1
+  xpos 26
+  ypos -1157
+ }
+ Dot {
+  name Dot5
+  xpos 60
+  ypos -1079
+ }
+set N15b25470 [stack 0]
+ Unpremult {
+  channels depth
+  name Unpremult1
+  xpos 26
+  ypos -1037
+ }
+ Dot {
+  name Dot13
+  xpos 60
+  ypos -937
+ }
+set N15b32170 [stack 0]
+ OneView {
+  view right
+  name OneView2
+  label "\[value view]"
+  xpos 77
+  ypos -876
+ }
+push $N15b32170
+ OneView {
+  name OneView1
+  label "\[value view]"
+  xpos -22
+  ypos -874
+ }
+ Switch {
+  inputs 2
+  which {{parent.eye}}
+  name Switch1
+  label "view input"
+  xpos 26
+  ypos -818
+ }
+ FrameHold {
+  first_frame {{parent.frameHold}}
+  name FrameHold1
+  label "frame hold \ninput"
+  xpos 26
+  ypos -733
+ }
+ Dot {
+  name Dot14
+  xpos 60
+  ypos -635
+ }
+set N15b57930 [stack 0]
+ Dot {
+  name Dot10
+  xpos 60
+  ypos -582
+ }
+set N15b5c400 [stack 0]
+ Dot {
+  name Dot11
+  xpos 162
+  ypos -582
+ }
+ Dot {
+  name Dot12
+  xpos 162
+  ypos -357
+ }
+push $N15b0eb60
+push $N15b57930
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name Merge1
+  xpos -109
+  ypos -490
+ }
+push $N15b5c400
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos 26
+  ypos -540
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy1
+  xpos 26
+  ypos -496
+ }
+ Premult {
+  channels all
+  name Premult2
+  xpos 26
+  ypos -443
+ }
+ Switch {
+  inputs 2
+  which {{parent.disableMask}}
+  name Switch5
+  label "disable mask\ninput"
+  xpos 26
+  ypos -372
+ }
+ Switch {
+  inputs 2
+  which {{parent.view==2?1:0}}
+  name Switch6
+  label "project Mask"
+  xpos 26
+  ypos -268
+ }
+ Project3D {
+  inputs 2
+  crop {{!parent.DisableCrop.left}}
+  name Project3D1
+  xpos 26
+  ypos -72
+ }
+ Switch {
+  inputs 2
+  which {{parent.view==0?1:0}}
+  name Switch2
+  label "grid input"
+  xpos 26
+  ypos 13
+ }
+set N15bb1030 [stack 0]
+ ReadGeo2 {
+  name ReadGeo1
+  xpos -95
+  ypos 106
+ }
+push $N15bb1030
+ Card2 {
+  image_aspect false
+  uniform_scale 1000
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name CardProject_Card
+  label "Set Z value!"
+  selected true
+  xpos 26
+  ypos 96
+ }
+ Switch {
+  inputs 2
+  which {{parent.customGeoCheck}}
+  name Switch8
+  label "custom geo input"
+  xpos 26
+  ypos 177
+ }
+set N15c02240 [stack 0]
+push $N15b25470
+ Dot {
+  name Dot9
+  xpos 214
+  ypos -1079
+ }
+set N15c09a50 [stack 0]
+ Dot {
+  name Dot6
+  xpos 381
+  ypos -1079
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode textured
+  P_channel P
+  name PositionToPoints1
+  xpos 347
+  ypos -33
+ }
+ Scene {
+  inputs 2
+  name Scene1
+  xpos 357
+  ypos 162
+ }
+ Dot {
+  name Dot7
+  xpos 381
+  ypos 676
+ }
+ Input {
+  inputs 0
+  name stereoCam
+  xpos -120
+  ypos 267
+  number 2
+ }
+push $N15c02240
+push 0
+ ScanlineRender {
+  inputs 3
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos 26
+  ypos 267
+ }
+ Dot {
+  name Dot1
+  xpos 60
+  ypos 338
+ }
+set N15c4e7d0 [stack 0]
+ Dot {
+  name Dot8
+  xpos -29
+  ypos 338
+ }
+ Dot {
+  name Dot2
+  xpos -29
+  ypos 480
+ }
+set N15c57b40 [stack 0]
+ Dot {
+  name Dot4
+  xpos -29
+  ypos 596
+ }
+push $N15c57b40
+push $N15c4e7d0
+push $N15c09a50
+ Dot {
+  name Dot3
+  xpos 214
+  ypos 415
+ }
+ Merge2 {
+  inputs 2
+  also_merge all
+  maskChannelMask none
+  name Merge2
+  label "also merge all"
+  xpos 26
+  ypos 406
+ }
+ Switch {
+  inputs 2
+  which {{parent.view==3?1:0}}
+  name Switch4
+  label "output patch\ninput"
+  xpos 26
+  ypos 465
+ }
+ Premult {
+  channels depth
+  name Premult1
+  xpos 26
+  ypos 529
+ }
+ Switch {
+  inputs 2
+  which {{parent.view==2?1:0}}
+  name Switch7
+  label "project Mask"
+  xpos 26
+  ypos 587
+ }
+ Switch {
+  inputs 2
+  which {{parent.view==1?1:0}}
+  name Switch3
+  label "position to points\ninput"
+  xpos 26
+  ypos 661
+ }
+ Output {
+  name Output1
+  xpos 26
+  ypos 812
+ }
+end_group
+ 

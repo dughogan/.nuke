@@ -1,0 +1,624 @@
+#! C:/Program Files/Nuke15.1v2/nuke-15.1.2.dll -nx
+version 15.1 v2
+Gizmo {
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() in ('sizingSelect', 'showPanel'):\n    operation = n\['sizingSelect'].value()\n    if operation == 'absolute':\n        n\['resScaling'].setVisible(False)\n        n\['res'].setVisible(True)\n        n\['info'].setVisible(True)\n\n    elif operation == 'relative':\n        n\['resScaling'].setVisible(True)\n        n\['res'].setVisible(False)\n        n\['info'].setVisible(False)"
+ tile_color 0xffff82ff
+ gl_color 0xffffbfff
+ label "internal res \[value RepTile1.tiles.w] x \[value RepTile1.tiles.h]\noutput res \[value Reformat3.width] x \[value Reformat3.height]"
+ addUserKnob {20 Controls}
+ addUserKnob {4 pixel t "4x4 has an additional black space of 1px around the edges" M {3x3 4x4}}
+ pixel 4x4
+ addUserKnob {4 sizingSelect l "output sizing" t "Determines if the output is based on an absolute resolution or a sizing relative to the resolution of the input." M {absolute relative}}
+ addUserKnob {26 sep00 l "  " T ""}
+ addUserKnob {14 res l resolution t "Sets the desired target resolution.\nMake sure the provided footage is already in the right aspect ratio!\n\nNOTE: the end-result will be three or four times as big, depending on the pixel setting. This is to emulate how pixels would behave on a real CRT" R 0 100}
+ res {640 480}
+ addUserKnob {26 info l "" +STARTLINE T "<b>note</b>: this resolution should have the same aspect ratio as the input!"}
+ addUserKnob {7 resScaling l "relative scaling" t "Determines the relative scaling to the input resolution. The resulting internal resolution is listed in the label of this node.\n\nNOTE: the end-result will be three or four times as big, depending on the pixel setting. This is to emulate how pixels would behave on a real CRT" +HIDDEN}
+ resScaling 0.1
+ addUserKnob {26 sep01 l " " t " " T ""}
+ addUserKnob {18 expComp l "exposure compensation" t "Because each pixel is split into its RGB components, the resulting image is around 2/3 darker than the original input; this operation tries to compensate this." R 1 3}
+ expComp 3
+ addUserKnob {6 expComp_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 sep02 l "  " T ""}
+ addUserKnob {6 simpleglow l "simple glow |" t "Adds a very simple glow on the image, to pull it together a bit more" +STARTLINE}
+ simpleglow true
+ addUserKnob {7 glow_smp l size -STARTLINE R 0 5}
+ glow_smp 3
+ addUserKnob {7 glow_amp l amp t "Amplifies the added glow.\n" -STARTLINE R 0 5}
+ glow_amp 1
+ addUserKnob {6 offsetpix l "offset pixel rows" t "Offsets every other line by half a pixel" +STARTLINE}
+ addUserKnob {26 CREDIT t "pixelCRT v1.0\n(c) 2021 lucas pfaff" -STARTLINE +INVISIBLE T "pixelCRT v1.0\n(c) 2021 lucas pfaff"}
+}
+ Reformat {
+  inputs 0
+  format "8 4 0 0 8 4 1 pixel3"
+  name Reformat10
+  xpos -374
+  ypos 26
+ }
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle9
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos -374
+  ypos 85
+ }
+ Crop {
+  box {4 0 8 4}
+  name Crop11
+  xpos -374
+  ypos 135
+ }
+ Crop {
+  box {0 0 8 4}
+  name Crop12
+  xpos -374
+  ypos 171
+ }
+ Crop {
+  box {1 0 7 3}
+  reformat true
+  crop false
+  name Crop3x3
+  xpos -374
+  ypos 233
+  disable {{pixel}}
+ }
+ Group {
+  name RepTile2
+  tile_color 0x5a305ff
+  xpos -374
+  ypos 313
+  addUserKnob {20 User l Controls}
+  addUserKnob {14 tiles l "number of tiles" R 0 100}
+  tiles {{"(sizingSelect == 0 ? (res.w) : (NoOp2.width)) / 2"} {"sizingSelect == 0 ? (res.h) : (NoOp2.height)"}}
+  addUserKnob {6 mirrorw l "mirror vertical" t "Check to mirror your tiles on the vertical axis" +STARTLINE}
+  addUserKnob {6 mirrorh l "mirror horizontal" t "Check to mirror your tiles on the horizontal axis" -STARTLINE}
+  addUserKnob {6 reformat_out l "reformat to source" t "Reformat to input format without cropping the image or bounding box." +STARTLINE}
+  addUserKnob {26 credit l INVISIBLE t "RepTile v1.0\n(c)2015 lucas pfaff" +INVISIBLE T "RepTile v1.0\n(c)2015 lucas pfaff"}
+ }
+  Input {
+   inputs 0
+   name img
+   xpos -480
+   ypos -562
+  }
+  Reformat {
+   type scale
+   scale {{tiles.w} {tiles.h}}
+   resize distort
+   filter impulse
+   name Reformat1
+   xpos -480
+   ypos -511
+  }
+  Tile {
+   rows {{tiles.h}}
+   mirrorRows {{mirrorh}}
+   columns {{tiles.w}}
+   mirrorCols {{mirrorw}}
+   filter impulse
+   name Tile1
+   xpos -480
+   ypos -450
+  }
+  Mirror2 {
+   flip {{mirrorh}}
+   flop {{mirrorw}}
+   name Mirror2_1
+   xpos -480
+   ypos -394
+   disable {{reformat_out-1}}
+  }
+  Reformat {
+   type scale
+   scale {{1/parent.Reformat1.scale} {1/parent.Reformat1.scale}}
+   resize none
+   pbb true
+   name Reformat2
+   xpos -480
+   ypos -346
+   disable {{reformat_out-1}}
+  }
+  Output {
+   name Output1
+   xpos -480
+   ypos -304
+  }
+ end_group
+ Dot {
+  name Dot11
+  xpos -340
+  ypos 376
+ }
+ Reformat {
+  inputs 0
+  format "4 4 0 0 4 4 1 pixel2"
+  name Reformat7
+  xpos 35
+  ypos -417
+ }
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle5
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos 35
+  ypos -359
+ }
+ Dot {
+  name Dot1
+  xpos 69
+  ypos -301
+ }
+set Nc54db400 [stack 0]
+ Dot {
+  name Dot19
+  xpos 183
+  ypos -301
+ }
+set Nc54db800 [stack 0]
+ Dot {
+  name Dot2
+  xpos 273
+  ypos -301
+ }
+ Crop {
+  box {0 3 4 4}
+  name Crop8
+  xpos 239
+  ypos -146
+ }
+ Dot {
+  name Dot3
+  xpos 273
+  ypos 82
+ }
+push $Nc54db800
+ Crop {
+  box {0 0 4 1}
+  name Crop1
+  xpos 149
+  ypos -107
+ }
+ Dot {
+  name Dot18
+  xpos 183
+  ypos 12
+ }
+push $Nc54db400
+ Crop {
+  box {0 0 1 4}
+  name Crop6
+  xpos 35
+  ypos -260
+ }
+ Dot {
+  name Dot5
+  xpos 69
+  ypos -206
+ }
+set Nc54fb400 [stack 0]
+ Dot {
+  name Dot7
+  xpos -49
+  ypos -206
+ }
+set Nc54fb800 [stack 0]
+ Shuffle {
+  red black
+  blue black
+  alpha black
+  name greenPixel
+  tile_color 0x7fff00ff
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos -83
+  ypos -150
+ }
+ Transform {
+  translate {1 0}
+  center {336 432}
+  shutteroffset centred
+  name Transform4
+  xpos -83
+  ypos -104
+ }
+ Dot {
+  name Dot9
+  xpos -49
+  ypos -66
+ }
+push 0
+push $Nc54fb800
+ Dot {
+  name Dot6
+  xpos -169
+  ypos -206
+ }
+ Shuffle {
+  green black
+  blue black
+  alpha black
+  name redPixel
+  tile_color 0xff0027ff
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos -203
+  ypos -146
+ }
+ Dot {
+  name Dot8
+  xpos -169
+  ypos -46
+ }
+push $Nc54fb400
+ Shuffle {
+  red black
+  green black
+  alpha black
+  name bluePixel
+  tile_color 0x9fffff
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos 35
+  ypos -143
+ }
+ Transform {
+  translate {2 0}
+  center {336 432}
+  shutteroffset centred
+  name Transform5
+  xpos 35
+  ypos -99
+ }
+ Merge2 {
+  inputs 3+1
+  name Merge4
+  xpos 35
+  ypos -49
+ }
+ Grade {
+  inputs 1+1
+  white 0.2
+  name Grade3
+  label "\[value channels]\nedge darkening"
+  xpos 35
+  disable true
+ }
+ Grade {
+  inputs 1+1
+  white 0.5
+  name Grade5
+  label "\[value channels]\nedge darkening"
+  xpos 35
+  ypos 70
+ }
+ Crop {
+  box {0 1 4 4}
+  name Crop9
+  xpos 35
+  ypos 127
+ }
+ Crop {
+  box {0 1 3 4}
+  reformat true
+  crop false
+  name Crop3x3_1
+  xpos 35
+  ypos 169
+  disable {{pixel}}
+ }
+ Group {
+  name RepTile1
+  tile_color 0x5a305ff
+  xpos 35
+  ypos 207
+  addUserKnob {20 User l Controls}
+  addUserKnob {14 tiles l "number of tiles" R 0 100}
+  tiles {{"sizingSelect == 0 ? (res.w) : (NoOp2.width)"} {"sizingSelect == 0 ? (res.h) : (NoOp2.height)"}}
+  addUserKnob {6 mirrorw l "mirror vertical" t "Check to mirror your tiles on the vertical axis" +STARTLINE}
+  addUserKnob {6 mirrorh l "mirror horizontal" t "Check to mirror your tiles on the horizontal axis" -STARTLINE}
+  addUserKnob {6 reformat_out l "reformat to source" t "Reformat to input format without cropping the image or bounding box." +STARTLINE}
+  addUserKnob {26 credit l INVISIBLE t "RepTile v1.0\n(c)2015 lucas pfaff" +INVISIBLE T "RepTile v1.0\n(c)2015 lucas pfaff"}
+ }
+  Input {
+   inputs 0
+   name img
+   xpos -480
+   ypos -562
+  }
+  Reformat {
+   type scale
+   scale {{tiles.w} {tiles.h}}
+   resize distort
+   filter impulse
+   name Reformat1
+   xpos -480
+   ypos -511
+  }
+  Tile {
+   rows {{tiles.h}}
+   mirrorRows {{mirrorh}}
+   columns {{tiles.w}}
+   mirrorCols {{mirrorw}}
+   filter impulse
+   name Tile1
+   xpos -480
+   ypos -450
+  }
+  Mirror2 {
+   flip {{mirrorh}}
+   flop {{mirrorw}}
+   name Mirror2_1
+   xpos -480
+   ypos -394
+   disable {{reformat_out-1}}
+  }
+  Reformat {
+   type scale
+   scale {{1/parent.Reformat1.scale} {1/parent.Reformat1.scale}}
+   resize none
+   pbb true
+   name Reformat2
+   xpos -480
+   ypos -346
+   disable {{reformat_out-1}}
+  }
+  Output {
+   name Output1
+   xpos -480
+   ypos -304
+  }
+ end_group
+ Dot {
+  name Dot10
+  xpos 69
+  ypos 238
+ }
+set Nb28d1000 [stack 0]
+ Dot {
+  name Dot13
+  xpos 69
+  ypos 303
+ }
+ Expression {
+  expr3 r+g+b
+  name Expression1
+  xpos 222
+  ypos 300
+ }
+push $Nb28d1000
+ Input {
+  inputs 0
+  name img
+  xpos 400
+  ypos -229
+ }
+ Dot {
+  name Dot17
+  xpos 434
+  ypos -163
+ }
+set Nb28f6000 [stack 0]
+ Reformat {
+  type scale
+  scale {{resScaling}}
+  name Reformat2
+  label "relative sizing"
+  xpos 445
+  ypos -109
+ }
+ NoOp {
+  name NoOp2
+  xpos 445
+  ypos -57
+  addUserKnob {20 User}
+  addUserKnob {14 resOut l "" +STARTLINE R 0 100}
+  resOut {{width} {height}}
+ }
+push $Nb28f6000
+ Reformat {
+  type "to box"
+  box_width {{res.w}}
+  box_height {{res.h}}
+  box_fixed true
+  center false
+  filter impulse
+  name Reformat1
+  label "\[value res.w] x \[value res.h]\nabsolute sizing"
+  xpos 343
+  ypos -112
+ }
+ Switch {
+  inputs 2
+  which {{sizingSelect}}
+  name Switch2
+  xpos 396
+  ypos 25
+ }
+ Grade {
+  black_clamp false
+  name concatenationBreaker
+  label "\[value channels]"
+  xpos 396
+  ypos 79
+ }
+set Nb28f7800 [stack 0]
+ Reformat {
+  type scale
+  scale 4
+  filter impulse
+  name Reformat4x4
+  xpos 334
+  ypos 136
+ }
+push $Nb28f7800
+ Reformat {
+  type scale
+  scale 3
+  filter impulse
+  name Reformat3x3
+  xpos 448
+  ypos 139
+ }
+ Switch {
+  inputs 2
+  which {{pixel}}
+  name Switch1
+  xpos 396
+  ypos 189
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge5
+  xpos 396
+  ypos 235
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 mask.a
+  name Copy1
+  xpos 396
+  ypos 296
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 forward.v
+  name Copy2
+  xpos 396
+  ypos 369
+ }
+ IDistort {
+  uv forward
+  uv_scale 2
+  name IDistort2
+  xpos 396
+  ypos 416
+  disable {{1-offsetpix x26 0}}
+ }
+ Grade {
+  multiply {{expComp} {expComp} {expComp} {expComp}}
+  name Grade4
+  label "\[value channels]"
+  xpos 396
+  ypos 465
+ }
+ Dot {
+  name Dot4
+  xpos 430
+  ypos 544
+ }
+set Nb2976000 [stack 0]
+ Dot {
+  name Dot12
+  xpos 250
+  ypos 544
+ }
+set Nb2976400 [stack 0]
+ Dot {
+  name Dot15
+  xpos 95
+  ypos 544
+ }
+ Shuffle {
+  in mask
+  in2 rgba
+  name Shuffle1
+  label "\[value red]/\[value green]/\[value blue]/\[value alpha]"
+  xpos 61
+  ypos 579
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 61
+  ypos 615
+ }
+ Grade {
+  channels rgba
+  multiply 0.3
+  name Grade1
+  label "\[value channels]"
+  xpos 61
+  ypos 653
+ }
+ Blur {
+  size 2
+  name Blur2
+  label "\[value size]"
+  xpos 61
+  ypos 685
+ }
+ Dot {
+  name Dot16
+  xpos 95
+  ypos 774
+ }
+push $Nb2976400
+ Blur {
+  size {{glow_smp}}
+  name Blur1
+  label "\[value size]"
+  xpos 216
+  ypos 626
+ }
+ Grade {
+  white {{glow_amp}}
+  name Grade6
+  label "\[value channels]"
+  xpos 216
+  ypos 686
+ }
+ Grade {
+  inputs 1+1
+  white 0.5
+  name Grade2
+  label "\[value channels]"
+  xpos 216
+  ypos 767
+ }
+ Dot {
+  name Dot14
+  xpos 250
+  ypos 845
+ }
+push $Nb2976000
+ Blur {
+  size 1
+  name Blur3
+  label "\[value size]"
+  xpos 396
+  ypos 671
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask mask.a
+  name Merge6
+  xpos 396
+  ypos 842
+  disable {{1-simpleglow}}
+ }
+ Reformat {
+  type scale
+  resize none
+  center false
+  filter impulse
+  black_outside true
+  name Reformat3
+  xpos 396
+  ypos 956
+ }
+ Output {
+  name Output1
+  xpos 396
+  ypos 1173
+ }
+end_group
