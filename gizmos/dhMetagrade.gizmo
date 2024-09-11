@@ -1,0 +1,337 @@
+#! C:/Program Files/Nuke15.0v4/nuke-15.0.4.dll -nx
+version 15.0 v4
+Group {
+ name MetaGrade
+ inputs 2
+ knobChanged "if nuke.thisKnob().name() == 'inputChange':\n    n = nuke.thisNode()\n    chk = n\['mask_chk'].value()\n    grade = nuke.toNode('aov_grade')\n    n.knobs()\['maskChannelMask'].setVisible(chk)\n    n.knobs()\['maskChannelInput'].setVisible(not chk)\n    if not chk: n\['maskChannelMask'].setValue('none')\n    if chk: n\['maskChannelInput'].setValue('none')"
+ tile_color 0x4a93a8ff
+ gl_color 0xff4c4cff
+ label "\[value grade_name]"
+ note_font "DejaVu Sans"
+ note_font_color 0xffffffff
+ addUserKnob {20 Grade}
+ addUserKnob {1 grade_name l "Label Me!"}
+ addUserKnob {26 ""}
+ addUserKnob {41 blackpoint T aov_grade.blackpoint}
+ addUserKnob {41 whitepoint T aov_grade.whitepoint}
+ addUserKnob {41 black l lift T aov_grade.black}
+ addUserKnob {41 white l gain T aov_grade.white}
+ addUserKnob {41 multiply T aov_grade.multiply}
+ addUserKnob {41 add l offset T aov_grade.add}
+ addUserKnob {41 gamma T aov_grade.gamma}
+ addUserKnob {41 saturation T Saturation1.saturation}
+ addUserKnob {26 "" l "  "}
+ addUserKnob {26 mask_text l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE +HIDDEN T aov_grade.maskChannelMask}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T aov_grade.maskChannelInput}
+ addUserKnob {6 isMaskPreview l "Preview Mask" -STARTLINE}
+ addUserKnob {41 invert_mask l invert -STARTLINE T aov_grade.invert_mask}
+ addUserKnob {26 ""}
+ addUserKnob {41 unpremult l "(un)premult by" T aov_grade.unpremult}
+ addUserKnob {41 invert_unpremult l invert -STARTLINE T aov_grade.invert_unpremult}
+ addUserKnob {26 test l "" +STARTLINE}
+ addUserKnob {41 mix T aov_grade.mix}
+ addUserKnob {6 mask_chk l INVISIBLE +INVISIBLE +STARTLINE}
+ mask_chk {{"\[exists input1]"}}
+ addUserKnob {20 Light_masks l Pass(es)}
+ addUserKnob {22 add_light l "add pass" T "import nk_maovg\nnk_maovg.addLight()" +STARTLINE}
+ addUserKnob {26 div4 l "" -STARTLINE T ::}
+ addUserKnob {22 add_light_thru l " " +INVISIBLE T "import nk_maovg\nnk_maovg.addLight(thru=True)" +STARTLINE}
+ addUserKnob {22 addsearch l search -STARTLINE T "import nk_maovg\nnk_maovg.addFromSearch()"}
+ addUserKnob {22 sampleadd l sample -STARTLINE +INVISIBLE T "import nk_maovg\nnk_maovg.addFromSample()"}
+ addUserKnob {12 sample_pos l :: -STARTLINE}
+ sample_pos {689 534}
+ addUserKnob {26 ""}
+ addUserKnob {6 lightview_chk l "show passes" +STARTLINE}
+ addUserKnob {6 iso_check l Solo -STARTLINE}
+ addUserKnob {22 muteall_btn l "mute ALL" -STARTLINE T "dlinks = \[d for d in nuke.thisNode().knobs() if '_disable_lnk' in d]\n\nfor d in dlinks:\n    nuke.thisNode()\[d].setValue(True)"}
+ addUserKnob {22 unmuteall_btn l "UN-mute ALL" -STARTLINE T "dlinks = \[d for d in nuke.thisNode().knobs() if '_disable_lnk' in d]\n\nfor d in dlinks:\n    nuke.thisNode()\[d].setValue(False)"}
+ addUserKnob {26 div3 l "" -STARTLINE T ::}
+ addUserKnob {22 clearall l " CLEAR ALL" -STARTLINE T "rmbs = \[r for r in nuke.thisNode().knobs() if '_rmb' in r]\n\nfor r in rmbs:\n    nuke.thisNode()\[r].execute()"}
+ addUserKnob {22 clearMutedBtn l "Clear Muted" -STARTLINE T "import nuke_artist_tools.plutonium.gizmos.rfx_grade\nnuke_artist_tools.plutonium.gizmos.rfx_grade.clear_muted()"}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 546
+  ypos 659
+  number 1
+ }
+set N14ce4000 [stack 0]
+ Dot {
+  name Dot7
+  xpos 580
+  ypos 789
+ }
+set N14ce4400 [stack 0]
+ Input {
+  inputs 0
+  name primary
+  xpos -115
+  ypos -159
+ }
+ Dot {
+  name Dot1
+  xpos -81
+  ypos -108
+ }
+set N14ce4c00 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos 414
+  ypos -112
+ }
+ Dot {
+  name builder_dot
+  tile_color 0xff
+  label "build above here"
+  note_font "Bitstream Vera Sans Bold"
+  note_font_size 20
+  note_font_color 0xffffffff
+  xpos 448
+  ypos 526
+ }
+set N14ce5400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 294
+  ypos 526
+ }
+set N14ce5800 [stack 0]
+push $N14ce4c00
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  maskChannelMask none
+  name Merge1
+  xpos -115
+  ypos 523
+ }
+ Dot {
+  name Dot2
+  xpos -81
+  ypos 583
+ }
+set N14d08000 [stack 0]
+ Dot {
+  name Dot8
+  tile_color 0xff
+  label "\n\nAvoid Grading Mask"
+  note_font "Bitstream Vera Sans Bold"
+  note_font_size 22
+  xpos -5
+  ypos 735
+ }
+push $N14ce4000
+push $N14ce5400
+ Switch {
+  inputs 2
+  which {{!aov_grade.mask}}
+  name Switch3
+  xpos 414
+  ypos 659
+ }
+push $N14d08000
+push $N14ce5800
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy1
+  xpos 260
+  ypos 574
+ }
+ Grade {
+  inputs 1+1
+  channels all
+  maskChannelMask none
+  unpremult rgba.alpha
+  name aov_grade
+  xpos 260
+  ypos 653
+ }
+ Copy {
+  inputs 2
+  from0 {{{aov_grade.maskChannelInput}}}
+  to0 {{{aov_grade.maskChannelInput}}}
+  maskChannelMask none
+  name Copy2
+  xpos 260
+  ypos 726
+ }
+ Saturation {
+  inputs 1+1
+  channels all
+  maskChannelMask {{{aov_grade.maskChannelMask}}}
+  maskChannelInput {{{aov_grade.maskChannelInput}}}
+  inject {{parent.aov_grade.inject}}
+  invert_mask {{parent.aov_grade.invert_mask}}
+  fringe {{parent.aov_grade.fringe}}
+  unpremult {{{parent.aov_grade.unpremult}}}
+  invert_unpremult {{parent.aov_grade.invert_unpremult}}
+  mix {{parent.aov_grade.mix}}
+  name Saturation1
+  xpos 260
+  ypos 780
+ }
+ Dot {
+  name Dot4
+  xpos 294
+  ypos 836
+ }
+set N14d09c00 [stack 0]
+ Dot {
+  name copyfrom_dot
+  tile_color 0xff
+  label "graded lights"
+  note_font "Bitstream Vera Sans Bold"
+  note_font_size 20
+  note_font_color 0xffffffff
+  xpos 158
+  ypos 1151
+ }
+push $N14ce4400
+ Shuffle {
+  in alpha
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos 546
+  ypos 1683
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "396 63 0 0 396 63 1 "
+  name Constant1
+  xpos 129
+  ypos 1212
+ }
+ Text2 {
+  font_size_toolbar 47
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "Showing Pass(es)"
+  old_message {{83 104 111 119 105 110 103 32 80 97 115 115 40 101 115 41}
+    }
+  box {8.5 5 389.5 55.5}
+  transforms {{0 2}
+    }
+  font_size_values {{0 47 1 47 2 47 3 47 4 47 5 47 6 47 7 47 8 47 9 47 10 47 11 47 12 47 13 47 14 47 15 47}
+    }
+  font {{ Arial : Regular : arial.ttf : 0 }}
+  font_size 47
+  center {1024 778}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{8.500015259 55}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+    }
+  color {1 0 0 1}
+  name Text1
+  xpos 129
+  ypos 1284
+ }
+set N14d3ac00 [stack 0]
+ Transform {
+  translate {10 10}
+  center {179.5 31.5}
+  name Transform1
+  xpos 129
+  ypos 1356
+ }
+ Reformat {
+  inputs 0
+  name Reformat2
+  xpos 19
+  ypos 1402
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge4
+  xpos 129
+  ypos 1402
+ }
+push $N14d09c00
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Merge5
+  selected true
+  xpos 260
+  ypos 1402
+  disable {{parent.iso_check}}
+ }
+push $N14d09c00
+push $N14d08000
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  maskChannelMask none
+  name Merge2
+  xpos -115
+  ypos 833
+ }
+ Dot {
+  name Dot5
+  xpos -81
+  ypos 857
+ }
+ Dot {
+  name copy_dot
+  tile_color 0xff
+  label "copy lights back"
+  note_font "Bitstream Vera Sans Bold"
+  note_font_size 20
+  note_font_color 0xffffffff
+  xpos -81
+  ypos 1546
+ }
+ Dot {
+  name Dot6
+  xpos -81
+  ypos 1599
+ }
+ Switch {
+  inputs 2
+  which {{parent.lightview_chk}}
+  name Switch2
+  xpos 260
+  ypos 1596
+ }
+ Switch {
+  inputs 2
+  which {{parent.isMaskPreview}}
+  name Switch1
+  xpos 260
+  ypos 1683
+ }
+ Output {
+  name Output2
+  xpos 260
+  ypos 1784
+ }
+push $N14d3ac00
+ Viewer {
+  frame_range 1-100
+  colour_sample_bbox {-0.3030303121 -0.002525252523 -0.2979798019 0.002525252523}
+  input_process false
+  monitorOutNDISenderName "Nuke - untitled - Viewer1"
+  monitorOutOutputTransform rec709
+  name Viewer1
+  xpos -55
+  ypos 1219
+ }
+end_group

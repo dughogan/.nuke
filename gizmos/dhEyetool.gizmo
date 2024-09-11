@@ -1,0 +1,1458 @@
+#! C:/Program Files/Nuke12.0v7/nuke-12.0.7.dll -nx
+version 12.0 v7
+Gizmo {
+ inputs 2
+ knobChanged "\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"glint_mode\" and k.value() == 1:\n    n\[\"glint_position_user\"].setVisible(False)\nelse:\n    n\[\"glint_position_user\"].setVisible(True)')\n"
+ addUserKnob {20 glint_tab l Glint/Caustic}
+ addUserKnob {52 test -STARTLINE +INVISIBLE T "code = \"\"\"\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"glint_mode\" and k.value() == 1:\n    n\[\"glint_position_user\"].setVisible(False)\nelse:\n    n\[\"glint_position_user\"].setVisible(True)')\n\"\"\"\nnuke.selectedNode()\[\"knobChanged\"].setValue(code)"}
+ addUserKnob {26 info l "" +STARTLINE T "Needs a UV and Normals pass"}
+ addUserKnob {26 ""}
+ addUserKnob {4 glint_mode l Glint M {Rendered Synthetic "" "" ""}}
+ addUserKnob {6 solo_1 l enable -STARTLINE}
+ addUserKnob {4 caustic_mode l Caustic M {Rendered Synthetic "" ""}}
+ addUserKnob {6 solo_2 l enable -STARTLINE}
+ addUserKnob {68 rfl_mode l Reflection M {Synthetic Rendered Both "" ""}}
+ rfl_mode Rendered
+ addUserKnob {6 solo_3 l enable -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 glint_caustic_synth l "Synthetic Options" n 1}
+ glint_caustic_synth 0
+ addUserKnob {41 glint_position_user l "Glint Angle" T Glint_variable.glint_position_user}
+ addUserKnob {41 glint_distance_user l "Glint Distance" T Glint_variable.glint_distance_user}
+ addUserKnob {41 glint_size_user l "Glint Size" T Glint_variable.glint_size_user}
+ addUserKnob {41 multiply l "Glint Brightness" T glint_grade.multiply}
+ addUserKnob {26 ""}
+ addUserKnob {41 caustic_highlight_size l "Caustic Size" T Caustic_variable.caustic_highlight_size}
+ addUserKnob {41 multiply_1 l "Caustic Brightness" T caustic_grade1.multiply}
+ addUserKnob {26 ""}
+ addUserKnob {41 xRotation_slider l "Synthetic X Position" T synthetic_reflection.xRotation_slider}
+ addUserKnob {41 yRotation_slider l "Synthetic Y Position" T synthetic_reflection.yRotation_slider}
+ addUserKnob {41 zRotation_slider l "Synthetic Z Position" T synthetic_reflection.zRotation_slider}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {6 effect_only l "effect only" +STARTLINE}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode15
+  tile_color 0x8e8e3800
+  label "Main Shape"
+  note_font_size 42
+  xpos -455
+  ypos -682
+  bdwidth 269
+  bdheight 428
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode56
+  tile_color 0x8e8e3800
+  label "Caustic Shape"
+  note_font_size 42
+  xpos 697
+  ypos -665
+  bdwidth 287
+  bdheight 504
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode58
+  tile_color 0x7171c600
+  label "Original or \nSynthetic"
+  note_font_size 24
+  xpos -933
+  ypos 376
+  bdwidth 241
+  bdheight 150
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode60
+  tile_color 0x8e388e00
+  label "Create mask"
+  note_font_size 42
+  xpos -869
+  ypos -719
+  bdwidth 342
+  bdheight 174
+ }
+ NoOp {
+  inputs 0
+  name Glint_variable
+  xpos -316
+  ypos -565
+  addUserKnob {20 User}
+  addUserKnob {7 glint_distance_user R 0 200}
+  glint_distance_user 140
+  addUserKnob {7 glint_position_user R 0 360}
+  glint_position_user 64
+  addUserKnob {7 glint_size_user R 0 10}
+  glint_size_user 0.7
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote6
+  label "Mask Erode"
+  xpos -905
+  ypos -385
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote3
+  label "Glint size"
+  xpos -343
+  ypos -476
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label "Glint distance"
+  xpos -339
+  ypos -404
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote5
+  label "Glint position"
+  xpos -344
+  ypos -342
+ }
+ NoOp {
+  inputs 0
+  name synthetic_motion_controls
+  xpos -597
+  ypos 818
+  addUserKnob {20 User}
+  addUserKnob {7 synthetic_motion R 0 10}
+  synthetic_motion 1
+  addUserKnob {7 synthetic_motion_offset}
+  synthetic_motion_offset -0.5
+ }
+ Input {
+  inputs 0
+  name Image
+  xpos 1041
+  ypos -1365
+ }
+ Dot {
+  name Dot66
+  xpos 1075
+  ypos -978
+ }
+set N596b9000 [stack 0]
+ Dot {
+  name Dot75
+  xpos -775
+  ypos -998
+ }
+set N596b8c00 [stack 0]
+ Dot {
+  name Dot48
+  xpos -775
+  ypos -681
+ }
+set N596b8800 [stack 0]
+ Dot {
+  name Dot49
+  xpos -676
+  ypos -681
+ }
+set N596b8400 [stack 0]
+ Dot {
+  name Dot2
+  xpos -583
+  ypos -681
+ }
+add_layer {iris iris.red iris.green iris.blue iris.alpha}
+ Shuffle {
+  in iris
+  red black
+  blue black
+  alpha green
+  name IrisMask_shuffle
+  selected true
+  xpos -617
+  ypos -657
+ }
+ Dot {
+  name Dot3
+  xpos -583
+  ypos -572
+ }
+push $N596b8400
+add_layer {pupil pupil.red pupil.green pupil.blue pupil.alpha}
+ Shuffle {
+  in pupil
+  green black
+  blue black
+  alpha red
+  name PupilMask_shuffle
+  xpos -710
+  ypos -658
+ }
+ Dot {
+  name Dot50
+  xpos -676
+  ypos -615
+ }
+push $N596b8800
+add_layer {sclera sclera.red sclera.green sclera.blue sclera.alpha}
+ Shuffle {
+  in sclera
+  red black
+  green black
+  alpha blue
+  name ScleraMask_shuffle
+  xpos -809
+  ypos -656
+ }
+ Merge2 {
+  inputs 2
+  operation disjoint-over
+  maskChannelMask none
+  name Merge13
+  xpos -809
+  ypos -619
+ }
+ Merge2 {
+  inputs 2
+  operation disjoint-over
+  maskChannelMask none
+  name Merge1
+  xpos -809
+  ypos -576
+ }
+ Dot {
+  name Dot33
+  xpos -775
+  ypos -538
+ }
+set N5974c000 [stack 0]
+ Dot {
+  name Dot20
+  xpos -775
+  ypos -497
+ }
+set N5958bc00 [stack 0]
+ Dot {
+  name Dot24
+  xpos -1137
+  ypos -497
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos -1171
+  ypos 191
+ }
+set N5958b400 [stack 0]
+ Dot {
+  name Dot32
+  xpos 1274
+  ypos 195
+ }
+ Dot {
+  name Dot52
+  xpos 1274
+  ypos 931
+ }
+set N5958ac00 [stack 0]
+ Dot {
+  name Dot30
+  xpos 1274
+  ypos 1446
+ }
+push $N596b9000
+ Dot {
+  name Dot53
+  xpos 1075
+  ypos 333
+ }
+set N5958a400 [stack 0]
+ Dot {
+  name Dot16
+  xpos 607
+  ypos 333
+ }
+set N5958a000 [stack 0]
+ Dot {
+  name Dot15
+  xpos -572
+  ypos 333
+ }
+set N595a5c00 [stack 0]
+ Dot {
+  name Dot78
+  xpos -873
+  ypos 333
+ }
+set N595a5800 [stack 0]
+ Dot {
+  name Dot56
+  xpos -1758
+  ypos 333
+ }
+set N595a5400 [stack 0]
+ Dot {
+  name Dot27
+  xpos -2112
+  ypos 333
+ }
+set N595a5000 [stack 0]
+add_layer {specular_direct specular_direct.red specular_direct.green specular_direct.blue}
+ Shuffle {
+  in specular_direct
+  name DirSpec_shuffle
+  xpos -2146
+  ypos 381
+ }
+ Dot {
+  name Dot31
+  xpos -2112
+  ypos 491
+ }
+push $N595a5000
+ Dot {
+  name Dot25
+  xpos -2207
+  ypos 333
+ }
+set N595a4400 [stack 0]
+add_layer {specular_indirect specular_indirect.red specular_indirect.green specular_indirect.blue}
+ Shuffle {
+  in specular_indirect
+  name inDirSpec_shuffle
+  xpos -2241
+  ypos 381
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge7
+  xpos -2241
+  ypos 487
+ }
+ Dot {
+  name Dot10
+  xpos -2207
+  ypos 566
+ }
+set N59481800 [stack 0]
+push $N5958b400
+ Dot {
+  name Dot19
+  xpos -1137
+  ypos 451
+ }
+ Dilate {
+  size -0.5
+  maskChannelMask none
+  name Dilate1
+  xpos -1733
+  ypos 441
+ }
+ EdgeBlur {
+  size 1.5
+  maskChannelMask none
+  name EdgeBlur1
+  xpos -1856
+  ypos 441
+ }
+ Input {
+  inputs 0
+  name Env_Map
+  xpos -2007
+  ypos -134
+  number 1
+ }
+push $N595a5400
+ Dot {
+  name Dot18
+  xpos -1758
+  ypos 139
+ }
+ Group {
+  inputs 2
+  name synthetic_reflection
+  xpos -2007
+  ypos 135
+  addUserKnob {20 User}
+  addUserKnob {20 rotation_grp l Rotation n 1}
+  addUserKnob {7 xRotation_slider l X R 0 360}
+  addUserKnob {7 yRotation_slider l Y R 0 360}
+  yRotation_slider 360
+  addUserKnob {7 zRotation_slider l Z R 0 360}
+  zRotation_slider 20
+  addUserKnob {20 endGroup_1 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {7 globalBlur_slider l "Global Blur" R 0 100}
+  globalBlur_slider 41
+  addUserKnob {26 ""}
+ }
+  Input {
+   inputs 0
+   name Util
+   xpos 576
+   ypos 892
+  }
+add_layer {N N.X N.Y N.Z N.red N.green N.blue N.alpha}
+  Shuffle {
+   in N
+   name Shuffle_Normal
+   selected true
+   xpos 576
+   ypos 942
+  }
+  Expression {
+   temp_name0 radius
+   temp_expr0 ".5/pi*acos(b)/sqrt(r*r + g*g)"
+   expr0 "0.5 + (r*radius)"
+   expr1 "0.5 + (g*radius)"
+   expr2 0
+   name AngularMapProjection
+   tile_color 0xffff
+   xpos 576
+   ypos 989
+  }
+  Input {
+   inputs 0
+   name envMap
+   xpos 304
+   ypos 356
+   number 1
+  }
+  Mirror {
+   Horizontal true
+   name flip_horizontal
+   xpos 304
+   ypos 395
+  }
+  Reformat {
+   type "to box"
+   box_width {{width}}
+   box_height {{width}}
+   box_fixed true
+   resize distort
+   pbb true
+   name Reformat_square
+   xpos 304
+   ypos 471
+  }
+set N594aec00 [stack 0]
+  Reformat {
+   type "to box"
+   box_width 4096
+   box_height 4096
+   box_fixed true
+   filter Notch
+   name Reformat_4k_square
+   xpos 304
+   ypos 497
+  }
+set N594ae400 [stack 0]
+  Dot {
+   name Dot34
+   xpos 607
+   ypos 501
+  }
+  Expression {
+   expr0 (pi+atan(cx,cy))/(2*pi)
+   expr1 sqrt((cx**2)+(cy**2))
+   expr2 0
+   name polar_expression
+   tile_color 0xffff
+   xpos 573
+   ypos 723
+  }
+  Reformat {
+   type "to box"
+   format "4000 2000 0 0 4000 2000 1 "
+   box_width 4000
+   box_height 4000
+   box_fixed true
+   name Reformat4
+   xpos 573
+   ypos 749
+  }
+set N59355400 [stack 0]
+  Dot {
+   name Dot41
+   xpos 607
+   ypos 785
+  }
+push $N59355400
+push $N594ae400
+  Reformat {
+   type scale
+   scale {2 1}
+   name Reformat_scalex2
+   xpos 304
+   ypos 523
+  }
+  Expression {
+   expr0 cos(2*PI*x/size.w+PI/2)*sin(PI*(y/size.h))
+   expr1 cos(PI*(1-y/size.h))
+   expr2 cos(2*PI*x/size.w)*sin(PI*(y/size.h))
+   name Expression1
+   tile_color 0xffff
+   label "latlong unit sphere"
+   xpos 304
+   ypos 549
+   postage_stamp true
+   addUserKnob {20 User}
+   addUserKnob {14 size R 0 100}
+   size {{input.width} {input.height}}
+  }
+  Reformat {
+   type "to box"
+   format "4000 2000 0 0 4000 2000 1 "
+   box_width 4000
+   box_height 2000
+   box_fixed true
+   name Reformat_4kx2k
+   xpos 304
+   ypos 633
+  }
+  Group {
+   name bake_rotation_matrix
+   help "Use this for rotating xyz vector data such as P and N."
+   xpos 304
+   ypos 659
+   addUserKnob {20 RotationMatrix}
+   addUserKnob {13 rot l rotation t "Link to say axis' or camera's rotate.\nYaw = y axis.\nPitch = x axis.\nRoll = z axis."}
+   rot {-90 -90 90}
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos -304
+    ypos -17
+   }
+   ColorMatrix {
+    matrix {
+        {{cos(radians(yrot))} 0 {-sin(radians(yrot))}}
+        {0 1 0}
+        {{sin(radians(yrot))} 0 {cos(radians(yrot))}}
+      }
+    name ColorMatrix14
+    label "yrot (yaw)"
+    xpos -304
+    ypos 28
+    addUserKnob {20 "" l User}
+    addUserKnob {7 yrot l "y rotation" R -90 90}
+    yrot {{parent.rot.y}}
+   }
+   ColorMatrix {
+    matrix {
+        {1 0 0}
+        {0 {cos(radians(xrot))} {sin(radians(xrot))}}
+        {0 {-sin(radians(xrot))} {cos(radians(xrot))}}
+      }
+    name ColorMatrix15
+    label "xrot (pitch)\n"
+    xpos -304
+    ypos 71
+    addUserKnob {20 "" l User}
+    addUserKnob {7 xrot l "x rotation" R -90 90}
+    xrot {{parent.rot.x}}
+   }
+   ColorMatrix {
+    matrix {
+        {{cos(radians(zrot))} {sin(radians(zrot))} 0}
+        {{-sin(radians(zrot))} {cos(radians(zrot))} 0}
+        {0 0 1}
+      }
+    name ColorMatrix13
+    label "zrot (roll)"
+    xpos -304
+    ypos 165
+    addUserKnob {20 "" l User}
+    addUserKnob {7 zrot l "z rotation" R -90 90}
+    zrot {{parent.rot.z}}
+   }
+   Output {
+    name Output1
+    xpos -304
+    ypos 280
+   }
+  end_group
+  Group {
+   name user_rotation_matrix
+   help "Use this for rotating xyz vector data such as P and N."
+   tile_color 0xff0000ff
+   xpos 304
+   ypos 685
+   addUserKnob {20 RotationMatrix}
+   addUserKnob {13 rot l rotation}
+   rot {{parent.xRotation_slider} {parent.yRotation_slider} {parent.zRotation_slider}}
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos -304
+    ypos -17
+   }
+   ColorMatrix {
+    matrix {
+        {{cos(radians(yrot))} 0 {-sin(radians(yrot))}}
+        {0 1 0}
+        {{sin(radians(yrot))} 0 {cos(radians(yrot))}}
+      }
+    name ColorMatrix14
+    label "yrot (yaw)"
+    xpos -304
+    ypos 89
+    addUserKnob {20 "" l User}
+    addUserKnob {7 yrot l "y rotation" R -90 90}
+    yrot {{parent.rot.y}}
+   }
+   ColorMatrix {
+    matrix {
+        {1 0 0}
+        {0 {cos(radians(xrot))} {sin(radians(xrot))}}
+        {0 {-sin(radians(xrot))} {cos(radians(xrot))}}
+      }
+    name ColorMatrix15
+    label "xrot (pitch)\n"
+    xpos -304
+    ypos 127
+    addUserKnob {20 "" l User}
+    addUserKnob {7 xrot l "x rotation" R -90 90}
+    xrot {{parent.rot.x}}
+   }
+   ColorMatrix {
+    matrix {
+        {{cos(radians(zrot))} {sin(radians(zrot))} 0}
+        {{-sin(radians(zrot))} {cos(radians(zrot))} 0}
+        {0 0 1}
+      }
+    name ColorMatrix13
+    label "zrot (roll)"
+    xpos -304
+    ypos 165
+    addUserKnob {20 "" l User}
+    addUserKnob {7 zrot l "z rotation" R -90 90}
+    zrot {{parent.rot.z}}
+   }
+   Output {
+    name Output1
+    xpos -304
+    ypos 280
+   }
+  end_group
+  Expression {
+   temp_name0 u
+   temp_expr0 0.5*(1+atan(b,r)/pi)
+   temp_name1 v
+   temp_expr1 acos(-g)/pi
+   expr0 u
+   expr1 v
+   expr2 0
+   channel3 {none none none -rgba.alpha}
+   name spherical_projection_expression
+   tile_color 0xffff
+   xpos 304
+   ypos 711
+  }
+push $N594aec00
+  Dot {
+   name Dot42
+   xpos 494
+   ypos 475
+  }
+  STMap {
+   inputs 2
+   uv rgb
+   filter Mitchell
+   name STMap13
+   xpos 460
+   ypos 705
+  }
+  STMap {
+   inputs 2
+   uv rgb
+   filter Mitchell
+   name STMap12
+   xpos 460
+   ypos 743
+  }
+  CopyBBox {
+   inputs 2
+   name CopyBBoxEnvMapAngular
+   xpos 460
+   ypos 781
+  }
+  Blur {
+   channels rgba
+   size {{parent.globalBlur_slider}}
+   name GlobalBlur
+   tile_color 0xff0000ff
+   xpos 460
+   ypos 807
+  }
+  Dot {
+   name Dot43
+   xpos 494
+   ypos 1058
+  }
+  STMap {
+   inputs 2
+   channels rgba
+   uv rgb
+   filter Mitchell
+   name STMap24
+   xpos 576
+   ypos 1054
+  }
+  Matrix {
+   channels rgba
+   matrix {
+       {1 2 1}
+       {2 4 2}
+       {1 2 1}
+     }
+   normalize true
+   name MatrixAntialiasing
+   tile_color 0xff0000ff
+   xpos 576
+   ypos 1157
+   disable true
+  }
+set N5921ac00 [stack 0]
+  Reformat {
+   resize fit
+   filter Mitchell
+   name ReformatOutput
+   xpos 576
+   ypos 1216
+  }
+  Output {
+   name Output2
+   xpos 576
+   ypos 1369
+  }
+push $N5921ac00
+  Viewer {
+   frame_range 1-100
+   name Viewer1
+   xpos 458
+   ypos 1157
+  }
+ end_group
+ Saturation {
+  maskChannelMask none
+  name SyntheticRfl_saturation
+  xpos -2007
+  ypos 186
+ }
+ Grade {
+  maskChannelMask none
+  name SyntheticRfl_grade
+  xpos -2007
+  ypos 224
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  maskChannelMask none
+  name Merge3
+  xpos -2007
+  ypos 447
+ }
+ Dot {
+  name Dot12
+  xpos -1973
+  ypos 566
+ }
+set N5925b000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge2
+  xpos -2125
+  ypos 562
+ }
+push $N59481800
+ Dot {
+  name Dot4
+  xpos -2207
+  ypos 606
+ }
+push $N5925b000
+ Dot {
+  name Dot5
+  xpos -1973
+  ypos 606
+ }
+ Switch {
+  inputs 3
+  which {{rfl_mode}}
+  name rfl_mode_switch
+  xpos -2125
+  ypos 602
+ }
+ Dot {
+  name Dot21
+  xpos -2091
+  ypos 791
+ }
+set N59089c00 [stack 0]
+ Switch {
+  which {{!parent.solo_3}}
+  name Switch2
+  xpos -2125
+  ypos 1106
+ }
+ Dot {
+  name Dot28
+  xpos -2091
+  ypos 1348
+ }
+push $N595a5c00
+ Dot {
+  name Dot17
+  xpos -572
+  ypos 682
+ }
+set N59089000 [stack 0]
+push $N5958bc00
+ Expression {
+  channel0 rgba
+  expr0 r+g+b
+  channel1 rgb
+  name Expression1
+  xpos -809
+  ypos -460
+ }
+ Clamp {
+  maskChannelMask none
+  name Clamp4
+  xpos -809
+  ypos -131
+ }
+push $N596b8c00
+ Dot {
+  name Dot58
+  xpos -924
+  ypos -998
+ }
+add_layer {UV UV.red UV.green UV.blue UV.X UV.Y UV.Z}
+ Shuffle {
+  in {UV.red UV.green UV.blue -UV.X}
+  name Shuffle7
+  xpos -958
+  ypos -747
+ }
+set N59088000 [stack 0]
+ Dot {
+  name Dot97
+  xpos -924
+  ypos -422
+ }
+set N590adc00 [stack 0]
+ Dot {
+  name Dot98
+  xpos -1035
+  ypos -422
+ }
+ Dot {
+  name Dot96
+  xpos -1035
+  ypos -176
+ }
+push $N590adc00
+ Constant {
+  inputs 0
+  channels rgb
+  format "2048 2048 0 0 2048 2048 1 square_2K"
+  name Glint_constant
+  xpos -445
+  ypos -599
+ }
+ AdjBBox {
+  numpixels 1024
+  name AdjBBox1
+  xpos -445
+  ypos -527
+ }
+ Flare {
+  position {0 0}
+  radius {0 0 15}
+  size_mult {{Glint_variable.glint_size_user}}
+  inner_color 1
+  corners 4
+  sharpness 0.75
+  corners_angle 45
+  name Glint_Flare
+  xpos -445
+  ypos -479
+ }
+ Crop {
+  box {{-(parent.Glint_Flare.radius.2+5)*Glint_Flare.size_mult} {-(parent.Glint_Flare.radius.2+5)*Glint_Flare.size_mult} {(parent.Glint_Flare.radius.2+5)*Glint_Flare.size_mult} {(parent.Glint_Flare.radius.2+5)*Glint_Flare.size_mult}}
+  name Glint_Crop
+  xpos -445
+  ypos -444
+ }
+ Transform {
+  translate {1024 {1024+Glint_variable.glint_distance_user}}
+  name Glint_Distance
+  xpos -445
+  ypos -408
+ }
+ Transform {
+  rotate {{Glint_variable.glint_position_user}}
+  center {1024 1024}
+  name Glint_position
+  xpos -445
+  ypos -345
+ }
+ Clamp {
+  channels rgba
+  maximum_enable false
+  name Clamp2
+  xpos -445
+  ypos -290
+ }
+ Shuffle {
+  red black
+  green black
+  alpha black
+  name Shuffle20
+  xpos -620
+  ypos -290
+ }
+ STMap {
+  inputs 2
+  channels rgb
+  uv rgb
+  filter Mitchell
+  name Glint_mapping
+  xpos -958
+  ypos -290
+ }
+ Blur {
+  size 1.3
+  name Glint_blur
+  xpos -958
+  ypos -241
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox2
+  xpos -958
+  ypos -180
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name Glint_Mask
+  xpos -958
+  ypos -125
+ }
+push $N5974c000
+ Dot {
+  name Dot9
+  xpos -673
+  ypos -538
+ }
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle1
+  xpos -707
+  ypos -500
+ }
+push $N59088000
+ Dot {
+  name Dot47
+  xpos 601
+  ypos -723
+ }
+ Dot {
+  name Dot70
+  xpos 601
+  ypos -182
+ }
+set N58ecb000 [stack 0]
+ Dot {
+  name Dot71
+  xpos 491
+  ypos -182
+ }
+ Dot {
+  name Dot72
+  xpos 491
+  ypos -14
+ }
+push $N58ecb000
+ Constant {
+  inputs 0
+  channels rgb
+  format "2048 2048 0 0 2048 2048 1 square_2K"
+  name Caustic_constant
+  xpos 735
+  ypos -593
+ }
+ AdjBBox {
+  numpixels 1024
+  name AdjBBox2
+  xpos 735
+  ypos -521
+ }
+ Dot {
+  name Dot67
+  xpos 769
+  ypos -477
+ }
+set N58eedc00 [stack 0]
+ Flare {
+  position {0 0}
+  radius {0 0 150}
+  size_mult {{Caustic_variable.caustic_shadow_size}}
+  inner_color 1
+  corners 4
+  sharpness 0.75
+  corners_angle 45
+  name Caustic_Shadow_Flare
+  xpos 735
+  ypos -451
+ }
+ Crop {
+  box {{-(parent.Caustic_Shadow_Flare.radius.2+5)*Caustic_Shadow_Flare.size_mult} {-(parent.Caustic_Shadow_Flare.radius.2+5)*Caustic_Shadow_Flare.size_mult} {(parent.Caustic_Shadow_Flare.radius.2+5)*Caustic_Shadow_Flare.size_mult} {(parent.Caustic_Shadow_Flare.radius.2+5)*Caustic_Shadow_Flare.size_mult}}
+  name Caustic_Shadow_Crop
+  xpos 735
+  ypos -416
+ }
+ Transform {
+  translate {1024 {parent.Glint_Distance.translate.y}}
+  black_outside false
+  name Transform3
+  xpos 735
+  ypos -374
+ }
+ Shuffle {
+  green black
+  blue black
+  alpha black
+  name Shuffle15
+  xpos 735
+  ypos -324
+ }
+push $N58eedc00
+ Dot {
+  name Dot68
+  xpos 899
+  ypos -477
+ }
+ Flare {
+  position {0 0}
+  radius {0 0 150}
+  size_mult {{Caustic_variable.caustic_highlight_size}}
+  inner_color 1
+  corners 4
+  sharpness 0.75
+  corners_angle 45
+  name Caustic_HighLights_Flare
+  xpos 865
+  ypos -451
+ }
+ Crop {
+  box {{-(parent.Caustic_HighLights_Flare.radius.2+5)*Caustic_HighLights_Flare.size_mult} {-(parent.Caustic_HighLights_Flare.radius.2+5)*Caustic_HighLights_Flare.size_mult} {(parent.Caustic_HighLights_Flare.radius.2+5)*Caustic_HighLights_Flare.size_mult} {(parent.Caustic_HighLights_Flare.radius.2+5)*Caustic_HighLights_Flare.size_mult}}
+  name Caustic_HighLights_Crop
+  xpos 865
+  ypos -417
+ }
+ Transform {
+  translate {1024 {parent.Glint_Distance.translate.y-Caustic_variable.caustic_distance}}
+  black_outside false
+  name Transform4
+  xpos 865
+  ypos -373
+ }
+ Shuffle {
+  red black
+  blue black
+  alpha black
+  name Shuffle16
+  xpos 865
+  ypos -323
+ }
+ Dot {
+  name Dot69
+  xpos 899
+  ypos -276
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge21
+  xpos 735
+  ypos -280
+ }
+ Transform {
+  rotate {{parent.Glint_position.rotate}}
+  center {1024 1024}
+  name Transform5
+  xpos 735
+  ypos -221
+ }
+ Dot {
+  name Dot22
+  xpos 769
+  ypos -130
+ }
+ STMap {
+  inputs 2
+  channels rgb
+  uv rgb
+  filter Mitchell
+  name Caustic_mapping
+  xpos 567
+  ypos -134
+ }
+ Blur {
+  size 3.8
+  name Caustic_blur
+  xpos 567
+  ypos -81
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 567
+  ypos -18
+ }
+ Dot {
+  name Dot76
+  xpos 601
+  ypos 30
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name Caustic_Mask
+  xpos -707
+  ypos 6
+ }
+ Merge2 {
+  inputs 2
+  maskChannelMask none
+  name Glint_Caustic_merge
+  xpos -958
+  ypos 6
+ }
+ Dot {
+  name Dot6
+  xpos -924
+  ypos 102
+ }
+ Dot {
+  name Dot7
+  xpos -763
+  ypos 102
+ }
+set N594f4000 [stack 0]
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Glint_select
+  xpos -797
+  ypos 242
+ }
+push $N595a5800
+add_layer {glint glint.red glint.green glint.blue}
+ Shuffle {
+  in glint
+  name Glint_shuffle
+  xpos -907
+  ypos 462
+ }
+ Switch {
+  inputs 2
+  which {{glint_mode}}
+  name Glint_mode_switch
+  xpos -797
+  ypos 462
+ }
+ Grade {
+  white 2.15
+  maskChannelMask none
+  name glint_grade
+  xpos -797
+  ypos 578
+ }
+add_layer {motionvector motionvector.red motionvector.green motionvector.blue motionvector.alpha}
+ ShuffleCopy {
+  inputs 2
+  in {motionvector.red motionvector.green motionvector.blue -motionvector.alpha}
+  red red
+  green green
+  blue blue
+  out {motionvector.red motionvector.green motionvector.blue -motionvector.alpha}
+  name glint_motion_shuffle
+  xpos -797
+  ypos 678
+ }
+ VectorBlur {
+  uv motionvector
+  maskChannelMask none
+  name glint_motionBlur
+  xpos -797
+  ypos 704
+ }
+set N5951c800 [stack 0]
+ Dot {
+  name Dot26
+  xpos -1057
+  ypos 714
+ }
+ Switch {
+  which {{!parent.solo_1 x102 0.38}}
+  name Switch3
+  xpos -1091
+  ypos 1032
+ }
+ Dot {
+  name Dot14
+  xpos -1057
+  ypos 1141
+ }
+push $N59089000
+push $N594f4000
+ Dot {
+  name Dot8
+  xpos -291
+  ypos 102
+ }
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name CausticHighlight_select
+  xpos -325
+  ypos 157
+ }
+push $N5951c800
+ Switch {
+  which {{!parent.solo_1 x102 0.38}}
+  name Switch5
+  xpos -797
+  ypos 822
+ }
+push $N59089c00
+ Dot {
+  name Dot23
+  xpos -2308
+  ypos 791
+ }
+ Switch {
+  which {{!parent.solo_3}}
+  name Switch7
+  xpos -2342
+  ypos 863
+ }
+push $N595a4400
+ Dot {
+  name Dot1
+  xpos -2486
+  ypos 333
+ }
+ Dot {
+  name Dot13
+  xpos -2486
+  ypos 931
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Synthetic_plus
+  xpos -2342
+  ypos 927
+ }
+set N58c0bc00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Glint_plus
+  xpos -797
+  ypos 927
+ }
+ Dot {
+  name Dot11
+  xpos -390
+  ypos 931
+ }
+set N58c0b400 [stack 0]
+add_layer {diffuse_albedo diffuse_albedo.red diffuse_albedo.green diffuse_albedo.blue}
+ Shuffle {
+  in diffuse_albedo
+  name Albedo_shufle1
+  xpos -424
+  ypos 476
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name CausticHighlight_mask
+  xpos -325
+  ypos 476
+ }
+push $N5958a000
+add_layer {caustic caustic.red caustic.green caustic.blue}
+ Shuffle {
+  in caustic
+  name Glint_shuffle1
+  xpos 573
+  ypos 589
+ }
+ Switch {
+  inputs 2
+  which {{caustic_mode}}
+  name Caustic_mode_switch
+  xpos -325
+  ypos 589
+ }
+ Grade {
+  maskChannelMask none
+  name caustic_grade1
+  xpos -325
+  ypos 631
+ }
+set N58c0a000 [stack 0]
+ ShuffleCopy {
+  inputs 2
+  in {motionvector.red motionvector.green motionvector.blue -motionvector.alpha}
+  red red
+  green green
+  blue blue
+  out {motionvector.red motionvector.green motionvector.blue -motionvector.alpha}
+  name caustic_motion_shuffle
+  xpos -325
+  ypos 678
+ }
+ VectorBlur {
+  uv motionvector
+  maskChannelMask none
+  name caustic_motionBlur
+  xpos -325
+  ypos 720
+ }
+set N58c3d800 [stack 0]
+ Dot {
+  name Dot29
+  xpos -16
+  ypos 730
+ }
+ Switch {
+  which {{!parent.solo_2}}
+  name Switch4
+  xpos -50
+  ypos 1039
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge5
+  xpos -50
+  ypos 1137
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge6
+  xpos -50
+  ypos 1344
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name Merge8
+  xpos -50
+  ypos 1442
+ }
+ Dot {
+  name Dot34
+  xpos -16
+  ypos 1670
+ }
+push $N5958ac00
+push $N58c3d800
+ Switch {
+  which {{!parent.solo_2}}
+  name Switch6
+  xpos -325
+  ypos 830
+ }
+push $N58c0b400
+ Merge2 {
+  inputs 2
+  operation plus
+  maskChannelMask none
+  name Merge4
+  xpos -325
+  ypos 927
+ }
+push $N5958a400
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge20
+  xpos 1041
+  ypos 927
+ }
+ Switch {
+  inputs 2
+  which {{parent.effect_only}}
+  name Switch1
+  xpos 1041
+  ypos 1666
+ }
+ Output {
+  name Output1
+  xpos 1041
+  ypos 1918
+ }
+push $N58c0bc00
+push $N58c0a000
+ Viewer {
+  inputs 2
+  frame 85
+  frame_range 101-101
+  name Viewer1
+  xpos -873
+  ypos 2339
+ }
+ NoOp {
+  inputs 0
+  name Caustic_variable
+  xpos 866
+  ypos -554
+  addUserKnob {20 User}
+  addUserKnob {7 glint_distance l glint_position R 0 1000}
+  glint_distance {{parent.Glint_Distance.translate.y}}
+  addUserKnob {7 caustic_distance R 0 1000}
+  caustic_distance {{(glint_distance-1024)*2}}
+  addUserKnob {7 caustic_shadow_size R 0 10}
+  caustic_shadow_size 3
+  addUserKnob {7 caustic_highlight_size R 0 10}
+  caustic_highlight_size 1.65
+ }
+end_group

@@ -1,0 +1,685 @@
+#! C:/Program Files/Nuke13.0v4/nuke-13.0.4.dll -nx
+version 13.0 v4
+Gizmo {
+ inputs 2
+ tile_color 0x1f2121ff
+ gl_color 0xff4c4cff
+ addUserKnob {20 User l Atmo}
+ addUserKnob {4 choose_preview l "Preview: " M {"Final Image" Depth Fog Diffusion "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 depth_channel l "Depth Channel" T Depth_Copy.from0}
+ addUserKnob {26 ""}
+ addUserKnob {26 lbl l "Atmo Range"}
+ addUserKnob {78 near_value l near n 1}
+ near_value 40.3536987
+ addUserKnob {12 near_dropper l " :: " -STARTLINE}
+ near_dropper {1121 20}
+ addUserKnob {78 far_value l far n 1}
+ far_value 5979.015137
+ addUserKnob {12 far_dropper l " :: " -STARTLINE}
+ far_dropper {649 595}
+ addUserKnob {22 set_range_python l "Set Range" T "from __future__ import with_statement\n\nn = nuke.thisNode()\nnear = n\['near_value']\nfar = n\['far_value']\nnear_coord = n\['near_dropper']\nfar_coord = n\['far_dropper']\n\nwith n:\n\tdepth_sample = nuke.toNode('DepthSampler')\n\tfar_sample = depth_sample.sample('red', far_coord.getValue(0), far_coord.getValue(1))\n\tnear_sample = depth_sample.sample('red', near_coord.getValue(0), near_coord.getValue(1))\n\nif near.isAnimated():\n\tnear.setValueAt(near_sample, nuke.frame())\nelse:\n\tnear.setValue(near_sample)\n\nif far.isAnimated():\n\tfar.setValueAt(far_sample, nuke.frame())\nelse:\n\tfar.setValue(far_sample)" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {20 master l "@b;master" n 1}
+ master 0
+ addUserKnob {6 premulted l premultiply +STARTLINE}
+ addUserKnob {6 use_near_fog l "Use Near Fog Color?" +STARTLINE}
+ addUserKnob {41 color_1 l "near fog color" T Constant2.color}
+ addUserKnob {41 color l "far fog color" T Constant1.color}
+ addUserKnob {41 operation l "fog operation" T Merge3.operation}
+ addUserKnob {41 mix l "fog amount" T Merge3.mix}
+ addUserKnob {41 gamma_1 l "fog falloff" T Grade1.gamma}
+ addUserKnob {6 mask_fog l "mask fog" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 diff_grp l diffusion n 1}
+ diff_grp 0
+ addUserKnob {41 multiply_1 l amount T Diffusion.multiply}
+ addUserKnob {41 contrast_1 l contrast T Diffusion.contrast}
+ addUserKnob {41 betterGlowTolerance l tolerance T Diffusion.betterGlowTolerance}
+ addUserKnob {26 ""}
+ addUserKnob {41 glow_size l size T Diffusion.glow_size}
+ addUserKnob {41 spread T Diffusion.spread}
+ addUserKnob {41 glow_weight l weight T Diffusion.glow_weight}
+ addUserKnob {26 gradeLBL l "" +STARTLINE}
+ addUserKnob {41 saturation_1 l saturation T Diffusion.saturation}
+ addUserKnob {41 white l color T Diffusion.white}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+}
+ BackdropNode {
+  inputs 0
+  name "Atmo Colors"
+  tile_color 0x5f7a8701
+  gl_color 0x5f7a8701
+  label "Atmo Colors"
+  note_font "Arial Black"
+  note_font_size 35
+  xpos 840
+  ypos -985
+  bdwidth 320
+  bdheight 325
+ }
+ Input {
+  inputs 0
+  name IMG
+  xpos 68
+  ypos -1039
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 68
+  ypos -873
+  disable {{1-parent.premulted}}
+ }
+set N56779c00 [stack 0]
+push $N56779c00
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy6
+  xpos 68
+  ypos -787
+ }
+set N56779800 [stack 0]
+push $N56779800
+ Copy {
+  inputs 2
+  from0 depth.Z
+  to0 depth.Z
+  maskChannelMask none
+  name Depth_Copy
+  xpos 68
+  ypos -711
+ }
+set N56779400 [stack 0]
+ Shuffle {
+  in depth
+  green red
+  blue red
+  alpha red
+  name Shuffle5
+  xpos 175
+  ypos -705
+ }
+ NoOp {
+  name DepthSampler
+  xpos 288
+  ypos -705
+  addUserKnob {20 User}
+  addUserKnob {7 sval R 0 1000}
+ }
+push $N56779400
+ Dot {
+  name Dot3
+  xpos 102
+  ypos -599
+ }
+set N56778800 [stack 0]
+ Dot {
+  name Dot7
+  xpos -719
+  ypos -599
+ }
+ Dot {
+  name Dot8
+  xpos -719
+  ypos 529
+ }
+set N56713c00 [stack 0]
+ Dot {
+  name Dot25
+  xpos -719
+  ypos 1143
+ }
+push $N56778800
+ Shuffle {
+  in depth
+  name Shuffle1
+  xpos 665
+  ypos -603
+ }
+ Grade {
+  blackpoint {{parent.near_value}}
+  whitepoint {{parent.far_value}}
+  gamma 0.49
+  maskChannelMask none
+  name Grade1
+  label "Near / Far"
+  note_font_size 30
+  xpos 665
+  ypos -537
+ }
+set N56713000 [stack 0]
+ Dot {
+  name Dot12
+  xpos 699
+  ypos -397
+ }
+set N56712c00 [stack 0]
+ Dot {
+  name Dot1
+  xpos 699
+  ypos -342
+ }
+set N56712800 [stack 0]
+ Input {
+  inputs 0
+  name mask
+  xpos 1251
+  ypos -354
+  number 1
+ }
+ Dot {
+  name Dot9
+  xpos 1285
+  ypos -253
+ }
+ Dot {
+  name Dot32
+  xpos 1285
+  ypos -127
+ }
+ Dot {
+  name Dot31
+  xpos 1285
+  ypos -41
+ }
+push $N56712c00
+ Constant {
+  inputs 0
+  channels rgb
+  color {0.1037315503 0.1262382567 0.2352067679 0}
+  name Constant2
+  xpos 1031
+  ypos -914
+ }
+ Reformat {
+  name Reformat1
+  xpos 1031
+  ypos -842
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0.1910087764 0.1813456118 0.3600000143 1}
+  name Constant1
+  xpos 890
+  ypos -820
+ }
+ Reformat {
+  name Reformat3
+  xpos 890
+  ypos -748
+ }
+set N56710400 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.use_near_fog}}
+  name Switch3
+  xpos 1031
+  ypos -748
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy7
+  xpos 1031
+  ypos -407
+ }
+ Invert {
+  channels alpha
+  maskChannelMask none
+  name Invert1
+  xpos 1031
+  ypos -369
+ }
+ Premult {
+  name Premult5
+  xpos 1031
+  ypos -331
+ }
+ Dot {
+  name Dot30
+  xpos 1065
+  ypos -298
+ }
+push $N56713000
+push $N56710400
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy4
+  xpos 890
+  ypos -515
+ }
+ Premult {
+  name Premult4
+  xpos 890
+  ypos -328
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask none
+  name Merge8
+  xpos 890
+  ypos -302
+ }
+ Premult {
+  name Premult6
+  xpos 890
+  ypos -71
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  maskChannelMask none
+  name Merge11
+  xpos 890
+  ypos -45
+  disable {{1-parent.mask_fog}}
+ }
+ Dot {
+  name Dot26
+  xpos 924
+  ypos 348
+ }
+set N566cd000 [stack 0]
+push $N56778800
+ Merge2 {
+  inputs 2
+  operation screen
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask none
+  mix 0.375
+  name Merge3
+  xpos 41
+  ypos 344
+ }
+ Dot {
+  name Dot27
+  xpos 75
+  ypos 391
+ }
+set N566cc800 [stack 0]
+ Group {
+  inputs 2
+  name Diffusion
+  tile_color 0xffdc49ff
+  note_font "Bitstream Vera Sans"
+  xpos 665
+  ypos 388
+  mapsize {0.15 0.15}
+  addUserKnob {20 User}
+  addUserKnob {20 info n 1}
+  info 0
+  addUserKnob {26 info_label l "" +STARTLINE T "author: Ed Whetstone\nupdated: 9/18/2013\n\nglow based on luminance instead of RGB"}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {26 contrastLBL l "" +STARTLINE T "pre-glow contrast\n"}
+  addUserKnob {41 contrast T ColorCorrect3.contrast}
+  addUserKnob {26 ""}
+  addUserKnob {7 betterGlowTolerance l tolerance}
+  betterGlowTolerance 0.5
+  addUserKnob {26 ""}
+  addUserKnob {7 glow_size l size R 0 500}
+  glow_size 50
+  addUserKnob {7 spread}
+  spread 0.4
+  addUserKnob {7 glow_weight l weight}
+  glow_weight 0.5
+  addUserKnob {26 ""}
+  addUserKnob {26 gradeLBL l "" +STARTLINE T "glow intensity\n"}
+  addUserKnob {41 multiply l intensity T Grade1.multiply}
+  addUserKnob {41 saturation T ColorCorrect1.saturation}
+  addUserKnob {41 white l color T Grade1.white}
+  addUserKnob {26 ""}
+  addUserKnob {41 from0 l "mask channel" T Copy1.from0}
+  addUserKnob {6 mskchckinvert l invert? -STARTLINE}
+  mskchckinvert true
+  addUserKnob {41 size l dilate T Dilate1.size}
+  addUserKnob {26 ""}
+  addUserKnob {6 effect_only +STARTLINE}
+  effect_only {{"parent.choose_preview == 7"}}
+ }
+  Input {
+   inputs 0
+   name mask
+   xpos -144
+   ypos -245
+   number 1
+  }
+  Constant {
+   inputs 0
+   name Constant2
+   xpos -292
+   ypos -215
+  }
+  Switch {
+   inputs 2
+   which {{"\[exists parent.input1.label]"}}
+   name Switch1
+   xpos -144
+   ypos -192
+  }
+set N56667800 [stack 0]
+push $N56667800
+  Copy {
+   inputs 2
+   from0 rgba.red
+   to0 rgba.alpha
+   maskChannelMask none
+   name Copy1
+   xpos -144
+   ypos -122
+  }
+  Invert {
+   channels alpha
+   maskChannelMask none
+   mix {{parent.mskchckinvert}}
+   name Invert1
+   xpos -144
+   ypos 11
+  }
+  Dilate {
+   channels alpha
+   maskChannelMask none
+   name Dilate1
+   xpos -144
+   ypos 64
+  }
+  Input {
+   inputs 0
+   name color
+   xpos 0
+   ypos -245
+  }
+set N56666800 [stack 0]
+  Dot {
+   name Dot20
+   xpos 34
+   ypos -26
+  }
+set N56666400 [stack 0]
+  Grade {
+   inputs 1+1
+   multiply 0
+   mix {{"\[exists parent.input1.label]"}}
+   name Grade4
+   xpos 0
+   ypos 70
+  }
+set N56666000 [stack 0]
+  Dot {
+   name Dot25
+   xpos 34
+   ypos 128
+  }
+set N56665c00 [stack 0]
+  Dot {
+   name Dot1
+   xpos 249
+   ypos 128
+  }
+  Saturation {
+   saturation 0
+   maskChannelMask none
+   name Saturation1
+   xpos 215
+   ypos 189
+  }
+set N56665400 [stack 0]
+  ColorCorrect {
+   maskChannelMask none
+   name ColorCorrect3
+   xpos 215
+   ypos 220
+  }
+  Grade {
+   gamma {{parent.Constant1.color.a+.02}}
+   white_clamp true
+   maskChannelMask none
+   name Grade2
+   xpos 215
+   ypos 257
+  }
+  Dot {
+   name Dot2
+   xpos 249
+   ypos 332
+  }
+push $N56665c00
+push $N56665400
+  Merge2 {
+   inputs 2
+   operation divide
+   output rgb
+   maskChannelMask none
+   name Merge2
+   xpos 0
+   ypos 189
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   output rgb
+   maskChannelMask none
+   name Merge1
+   xpos 0
+   ypos 329
+  }
+  Clamp {
+   maskChannelMask none
+   name Clamp4
+   xpos 0
+   ypos 388
+  }
+set N565f7800 [stack 0]
+  Blur {
+   size {{parent.glow_size i}}
+   name Blur4
+   label Wide
+   xpos -119
+   ypos 463
+  }
+  Grade {
+   multiply {{"(1-parent.glow_weight) * 2" i}}
+   maskChannelMask none
+   name Grade36
+   xpos -119
+   ypos 523
+  }
+push $N565f7800
+  Blur {
+   size {{"Blur4.size * parent.spread" i}}
+   name Blur5
+   label Middle
+   xpos 0
+   ypos 463
+  }
+  Grade {
+   multiply {{"parent.glow_weight > .5 ? (1 - parent.glow_weight) + .5 : (parent.glow_weight) + .5" i}}
+   maskChannelMask none
+   name Grade54
+   xpos 0
+   ypos 523
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   maskChannelMask none
+   name Merge30
+   xpos 0
+   ypos 569
+  }
+push $N565f7800
+  Blur {
+   size {{"Blur5.size * parent.spread" i}}
+   name Blur6
+   label Tight
+   xpos 107
+   ypos 463
+  }
+  Grade {
+   multiply {{"(parent.glow_weight) * 2"}}
+   maskChannelMask none
+   name Grade98
+   xpos 107
+   ypos 523
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   maskChannelMask none
+   name Merge32
+   xpos 107
+   ypos 569
+  }
+  Multiply {
+   value 0.33
+   maskChannelMask none
+   name Multiply1
+   xpos 107
+   ypos 595
+  }
+  ColorCorrect {
+   maskChannelMask none
+   name ColorCorrect1
+   xpos 107
+   ypos 734
+  }
+  Grade {
+   white {1 1 1 1}
+   multiply 0
+   gamma 0.94
+   maskChannelMask none
+   name Grade1
+   xpos 107
+   ypos 799
+  }
+set N565f4c00 [stack 0]
+push $N565f4c00
+push $N56666400
+  Dot {
+   name Dot37
+   xpos -184
+   ypos -26
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   maskChannelMask none
+   name Merge33
+   xpos -218
+   ypos 799
+  }
+  Switch {
+   inputs 2
+   which {{parent.effect_only}}
+   name Switch2
+   xpos 107
+   ypos 892
+  }
+  Output {
+   name Output1
+   xpos 107
+   ypos 971
+  }
+  Constant {
+   inputs 0
+   channels rgb
+   color {0 0 0 {parent.betterGlowTolerance}}
+   name Constant1
+   xpos 364
+   ypos 234
+  }
+push $N56666000
+push $N56666800
+  Viewer {
+   inputs 2
+   frame_range 1-60
+   input_process false
+   name Viewer1
+   xpos -423
+   ypos 691
+  }
+ end_group
+ Dot {
+  name Dot40
+  xpos 699
+  ypos 450
+ }
+set N5656f000 [stack 0]
+push $N566cd000
+ Dot {
+  name Dot37
+  xpos 924
+  ypos 1026
+ }
+push $N56712800
+push $N5656f000
+push $N566cc800
+ Switch {
+  inputs 2
+  which {{"parent.multiply_1 > 0"}}
+  name Switch2
+  xpos 41
+  ypos 446
+ }
+push $N56713c00
+ Copy {
+  inputs 2
+  from0 -rgba.alpha
+  to0 -rgba.alpha
+  channels rgb
+  maskChannelMask none
+  name Copy5
+  xpos 41
+  ypos 513
+ }
+set N5656e400 [stack 0]
+ Switch {
+  inputs 4
+  which {{parent.choose_preview}}
+  name Switch1
+  xpos 41
+  ypos 1022
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  maskChannelMask none
+  name Copy8
+  xpos 41
+  ypos 1133
+ }
+ Premult {
+  name Premult7
+  xpos 41
+  ypos 1253
+  disable {{1-parent.premulted}}
+ }
+ Output {
+  name Output1
+  xpos 41
+  ypos 1398
+ }
+push $N5656e400
+ Viewer {
+  frame_range 101-101
+  name Viewer1
+  selected true
+  xpos -173
+  ypos 1461
+ }
+end_group
