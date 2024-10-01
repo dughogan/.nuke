@@ -34,10 +34,10 @@ class PongGamePanel(QtWidgets.QWidget):
         self.paddle2_y = 0
 
         # AI paddle speed factor (less than 1 to make it slower than the player)
-        self.ai_speed_factor = 1.4  # AI paddle moves at 90% of player's paddle speed
+        self.ai_speed_factor = 1.5  # AI paddle moves at 90% of player's paddle speed
 
         # AI reaction time (increase to make AI react slower)
-        self.ai_reaction_time = 20  # AI reacts every 30ms
+        self.ai_reaction_time = 17  # AI reacts every 30ms
 
         # AI paddle speed (will be set in update_game_dimensions)
         self.ai_paddle_speed = 0
